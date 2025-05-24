@@ -31,6 +31,7 @@ pnpm-lock.yaml
 .DS_Store
 Thumbs.db
 lost+found/
+.envbuilder.tmp/
 
 # Generados por el contenedor de desarrollo
 # Debe arreglarse desde la plantilla de terraform
