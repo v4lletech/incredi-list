@@ -1,7 +1,9 @@
+const UserRepository = require('@users/domain/repositories/UserRepository');
 const User = require('@users/domain/entities/User');
 
-class InMemoryUserRepository {
+class InMemoryUserRepository extends UserRepository {
     constructor() {
+        super();
         this._users = new Map();
     }
 
@@ -11,6 +13,7 @@ class InMemoryUserRepository {
             name: user.name,
             communicationType: user.communicationType
         });
+        return user;
     }
 
     async findById(id) {
