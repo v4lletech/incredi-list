@@ -1,4 +1,4 @@
-import { CreateUserHandler } from '../CreateUserHandler';
+import { CreateUserHandler } from '@users/application/handlers/CreateUserHandler';
 import { InMemoryUserRepository } from '@users/infrastructure/repositories/InMemoryUserRepository';
 import { User } from '@users/domain/entities/User';
 import { CommunicationTypeValue } from '@users/domain/value-objects/CommunicationType';

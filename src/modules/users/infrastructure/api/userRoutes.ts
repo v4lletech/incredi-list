@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { UserContainer } from '../container';
+import { UserContainer } from '@users/infrastructure/container';
 
 const router = Router();
 const container = new UserContainer();

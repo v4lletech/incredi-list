@@ -1,4 +1,4 @@
-import { InMemoryUserRepository } from './repositories/InMemoryUserRepository';
+import { InMemoryUserRepository } from '@users/infrastructure/repositories/InMemoryUserRepository';
 import { CreateUserHandler } from '@users/application/handlers/CreateUserHandler';
 import { ListUsersHandler } from '@users/application/handlers/ListUsersHandler';
 

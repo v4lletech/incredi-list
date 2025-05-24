@@ -1,5 +1,5 @@
-import { ListUsersHandler } from '../ListUsersHandler';
-import { CreateUserHandler } from '../CreateUserHandler';
+import { ListUsersHandler } from '@users/application/handlers/ListUsersHandler';
+import { CreateUserHandler } from '@users/application/handlers/CreateUserHandler';
 import { InMemoryUserRepository } from '@users/infrastructure/repositories/InMemoryUserRepository';
 import { CommunicationTypeValue } from '@users/domain/value-objects/CommunicationType';
 

@@ -1,7 +1,7 @@
-import { UserName } from '../value-objects/UserName';
-import { CommunicationType, CommunicationTypeValue } from '../value-objects/CommunicationType';
-import { UserCreatedEvent } from '../events/UserCreatedEvent';
-import { eventBus } from '../events/EventBus';
+import { UserName } from '@users/domain/value-objects/UserName';
+import { CommunicationType, CommunicationTypeValue } from '@users/domain/value-objects/CommunicationType';
+import { UserCreatedEvent } from '@users/domain/events/UserCreatedEvent';
+import { eventBus } from '@users/domain/events/EventBus';
 
 export class User {
     private readonly _id: string;

@@ -1,5 +1,5 @@
-import { DomainEvent } from './DomainEvent';
-import { User } from '../entities/User';
+import { DomainEvent } from '@users/domain/events/DomainEvent';
+import { User } from '@users/domain/entities/User';
 
 export class UserCreatedEvent extends DomainEvent {
     private readonly _user: User;
