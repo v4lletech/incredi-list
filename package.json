@@ -1,0 +1,18 @@
+{
+  "name": "my-express-app",
+  "version": "1.0.0",
+  "description": "Aplicación Node.js con Express",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Antonio Valle <antonio@v4lle.tech>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
