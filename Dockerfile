@@ -14,6 +14,8 @@ RUN getent group node \
 USER node
 WORKDIR /workspaces
 COPY --chown=node:node . /workspaces
+RUN pwd
+RUN ls -l
 RUN npm install
 
 EXPOSE 3000
