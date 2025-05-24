@@ -3,6 +3,16 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3080;
 
+// Initialize welcome module
+require('@welcome/application/handlers/UserCreatedEventHandler');
+
+// Middleware
+app.use(express.json());
+
+// Routes
+const userRoutes = require('@users/interfaces/api/userRoutes');
+app.use('/api/users', userRoutes);
+
 // Ruta raíz: responde "Hello World!"
 app.get('/', (req, res) => {
   res.send('Hello World, es magia!');

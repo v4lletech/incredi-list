@@ -8,7 +8,8 @@
       "vscode": {
         "extensions": [
           "dbaeumer.vscode-eslint",
-          "esbenp.prettier-vscode"
+          "esbenp.prettier-vscode",
+          "rechoapi.echoapi-for-vscode"
         ],
         "settings": {                      // Mueve aquí tus settings
           "terminal.integrated.shell.linux": "/bin/bash"

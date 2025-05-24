@@ -4,15 +4,21 @@
   "description": "Aplicación Node.js con Express",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node -r module-alias/register index.js",
+    "dev": "nodemon -r module-alias/register index.js"
   },
   "author": "Antonio Valle <antonio@v4lle.tech>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "module-alias": "^2.2.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
+  },
+  "_moduleAliases": {
+    "@users": "src/modules/users",
+    "@welcome": "src/modules/welcome"
   }
 }
