@@ -10,7 +10,7 @@ require('@welcome/application/handlers/UserCreatedEventHandler');
 app.use(express.json());
 
 // Routes
-const userRoutes = require('@users/interfaces/api/userRoutes');
+const userRoutes = require('@users/infrastructure/api/userRoutes');
 app.use('/api/users', userRoutes);
 
 // Ruta raíz: responde "Hello World!"
