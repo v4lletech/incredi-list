@@ -2,39 +2,34 @@
   "name": "incredi-list",
   "version": "1.0.0",
   "description": "Aplicación Node.js con Express",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node -r module-alias/register index.js",
-    "dev": "nodemon -r module-alias/register index.js",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "tsc",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:watch": "jest --watch"
   },
+  "keywords": [],
   "author": "Antonio Valle <antonio@v4lle.tech>",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
     "module-alias": "^2.2.3",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.5",
+    "@types/uuid": "^9.0.7",
     "jest": "^29.7.0",
-    "nodemon": "^2.0.22"
+    "ts-jest": "^29.1.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
   },
   "_moduleAliases": {
-    "@users": "src/modules/users",
-    "@welcome": "src/modules/welcome"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "^@users/(.*)$": "<rootDir>/src/modules/users/$1",
-      "^@welcome/(.*)$": "<rootDir>/src/modules/welcome/$1"
-    },
-    "testEnvironment": "node",
-    "coverageDirectory": "coverage",
-    "collectCoverageFrom": [
-      "src/**/*.js",
-      "!src/**/*.test.js"
-    ]
+    "@users": "dist/modules/users",
+    "@welcome": "dist/modules/welcome"
   }
 }

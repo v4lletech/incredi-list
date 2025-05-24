@@ -1,13 +1,14 @@
-const CreateUserHandler = require('@users/application/handlers/CreateUserHandler');
-const MockUserRepository = require('@users/infrastructure/repositories/__mocks__/InMemoryUserRepository');
-const User = require('@users/domain/entities/User');
+import { CreateUserHandler } from '@users/application/handlers/CreateUserHandler';
+import { InMemoryUserRepository } from '@users/infrastructure/repositories/InMemoryUserRepository';
+import { User } from '@users/domain/entities/User';
+import { CommunicationTypeValue } from '@users/domain/value-objects/CommunicationType';
 
 describe('CreateUserHandler', () => {
-    let handler;
-    let repository;
+    let handler: CreateUserHandler;
+    let repository: InMemoryUserRepository;
 
     beforeEach(() => {
-        repository = new MockUserRepository();
+        repository = new InMemoryUserRepository();
         handler = new CreateUserHandler(repository);
     });
 
@@ -18,7 +19,7 @@ describe('CreateUserHandler', () => {
     it('should create a new user successfully', async () => {
         // Arrange
         const name = 'John Doe';
-        const communicationType = 'EMAIL';
+        const communicationType: CommunicationTypeValue = 'EMAIL';
 
         // Act
         const user = await handler.handle(name, communicationType);
@@ -32,8 +33,8 @@ describe('CreateUserHandler', () => {
         // Verify repository state
         const savedUser = await repository.findById(user.id);
         expect(savedUser).toBeDefined();
-        expect(savedUser.name).toBe(name);
-        expect(savedUser.communicationType).toBe(communicationType);
+        expect(savedUser?.name).toBe(name);
+        expect(savedUser?.communicationType).toBe(communicationType);
     });
 
     it('should throw error when repository is invalid', () => {
@@ -41,15 +42,15 @@ describe('CreateUserHandler', () => {
         const invalidRepository = {};
 
         // Act & Assert
-        expect(() => new CreateUserHandler(invalidRepository))
+        expect(() => new CreateUserHandler(invalidRepository as any))
             .toThrow('Invalid repository instance');
     });
 
     it('should create multiple users successfully', async () => {
         // Arrange
         const users = [
-            { name: 'John Doe', communicationType: 'EMAIL' },
-            { name: 'Jane Smith', communicationType: 'SMS' }
+            { name: 'John Doe', communicationType: 'EMAIL' as CommunicationTypeValue },
+            { name: 'Jane Smith', communicationType: 'SMS' as CommunicationTypeValue }
         ];
 
         // Act
