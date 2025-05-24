@@ -1,14 +1,15 @@
-const ListUsersHandler = require('@users/application/handlers/ListUsersHandler');
-const CreateUserHandler = require('@users/application/handlers/CreateUserHandler');
-const MockUserRepository = require('@users/infrastructure/repositories/__mocks__/InMemoryUserRepository');
+import { ListUsersHandler } from '../ListUsersHandler';
+import { CreateUserHandler } from '../CreateUserHandler';
+import { InMemoryUserRepository } from '@users/infrastructure/repositories/InMemoryUserRepository';
+import { CommunicationTypeValue } from '@users/domain/value-objects/CommunicationType';
 
 describe('ListUsersHandler', () => {
-    let listHandler;
-    let createHandler;
-    let repository;
+    let listHandler: ListUsersHandler;
+    let createHandler: CreateUserHandler;
+    let repository: InMemoryUserRepository;
 
     beforeEach(() => {
-        repository = new MockUserRepository();
+        repository = new InMemoryUserRepository();
         listHandler = new ListUsersHandler(repository);
         createHandler = new CreateUserHandler(repository);
     });
@@ -27,8 +28,8 @@ describe('ListUsersHandler', () => {
 
     it('should return all users successfully', async () => {
         // Arrange
-        await createHandler.handle('John Doe', 'EMAIL');
-        await createHandler.handle('Jane Smith', 'SMS');
+        await createHandler.handle('John Doe', 'EMAIL' as CommunicationTypeValue);
+        await createHandler.handle('Jane Smith', 'SMS' as CommunicationTypeValue);
 
         // Act
         const users = await listHandler.handle();
@@ -46,7 +47,7 @@ describe('ListUsersHandler', () => {
         const invalidRepository = {};
 
         // Act & Assert
-        expect(() => new ListUsersHandler(invalidRepository))
+        expect(() => new ListUsersHandler(invalidRepository as any))
             .toThrow('Invalid repository instance');
     });
 }); 

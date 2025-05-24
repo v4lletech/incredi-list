@@ -1,10 +1,12 @@
-class UserName {
-    constructor(name) {
+export class UserName {
+    private readonly _value: string;
+
+    constructor(name: string) {
         this.validate(name);
         this._value = name;
     }
 
-    validate(name) {
+    private validate(name: string): void {
         if (!name || typeof name !== 'string') {
             throw new Error('Name must be a non-empty string');
         }
@@ -22,20 +24,18 @@ class UserName {
         }
     }
 
-    get value() {
+    get value(): string {
         return this._value;
     }
 
-    equals(other) {
+    equals(other: UserName): boolean {
         if (!(other instanceof UserName)) {
             return false;
         }
         return this._value === other._value;
     }
 
-    static create(name) {
+    static create(name: string): UserName {
         return new UserName(name);
     }
-}
-
-module.exports = UserName; 
+} 
