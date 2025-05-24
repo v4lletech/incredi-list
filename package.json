@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node -r module-alias/register index.js",
-    "dev": "nodemon -r module-alias/register index.js"
+    "dev": "nodemon -r module-alias/register index.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "author": "Antonio Valle <antonio@v4lle.tech>",
   "license": "MIT",
@@ -15,10 +18,23 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "nodemon": "^2.0.22"
   },
   "_moduleAliases": {
     "@users": "src/modules/users",
     "@welcome": "src/modules/welcome"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^@users/(.*)$": "<rootDir>/src/modules/users/$1",
+      "^@welcome/(.*)$": "<rootDir>/src/modules/welcome/$1"
+    },
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/**/*.test.js"
+    ]
   }
 }

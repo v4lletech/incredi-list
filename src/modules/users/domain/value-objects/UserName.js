@@ -9,12 +9,16 @@ class UserName {
             throw new Error('Name must be a non-empty string');
         }
 
-        if (name.length > 3) {
-            throw new Error('Name must not have more than 3 letters');
+        if (!/^[a-zA-Z\s]+$/.test(name)) {
+            throw new Error('Name must contain only letters and spaces');
         }
 
-        if (!/^[a-zA-Z]+$/.test(name)) {
-            throw new Error('Name must contain only letters');
+        if (name.length < 4) {
+            throw new Error('Name must have at least 4 characters');
+        }
+
+        if (name.length > 50) {
+            throw new Error('Name must not exceed 50 characters');
         }
     }
 

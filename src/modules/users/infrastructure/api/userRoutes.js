@@ -1,19 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const CreateUserHandler = require('@users/application/handlers/CreateUserHandler');
-const ListUsersHandler = require('@users/application/handlers/ListUsersHandler');
-const InMemoryUserRepository = require('@users/infrastructure/repositories/InMemoryUserRepository');
+const UserContainer = require('@users/infrastructure/container');
 
-// Inicializar el repositorio y los handlers
-const userRepository = new InMemoryUserRepository();
-const createUserHandler = new CreateUserHandler(userRepository);
-const listUsersHandler = new ListUsersHandler(userRepository);
+// Inicializar el container
+const container = new UserContainer();
 
 // Ruta para crear un usuario
 router.post('/', async (req, res) => {
     try {
         const { name, communicationType } = req.body;
-        const user = await createUserHandler.handle(name, communicationType);
+        const user = await container.createUserHandler.handle(name, communicationType);
         res.status(201).json(user);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -23,7 +19,7 @@ router.post('/', async (req, res) => {
 // Ruta para listar usuarios
 router.get('/', async (req, res) => {
     try {
-        const users = await listUsersHandler.handle();
+        const users = await container.listUsersHandler.handle();
         res.json(users);
     } catch (error) {
         res.status(500).json({ error: error.message });
