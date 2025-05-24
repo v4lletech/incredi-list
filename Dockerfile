@@ -18,4 +18,4 @@ RUN pwd
 RUN ls -l
 RUN npm install
 
-EXPOSE 3000
+EXPOSE 3080

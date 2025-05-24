@@ -1,5 +1,5 @@
 {
-  "name": "my-express-app",
+  "name": "incredi-list",
   "version": "1.0.0",
   "description": "Aplicación Node.js con Express",
   "main": "index.js",
