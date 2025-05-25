@@ -9,7 +9,7 @@
         "extensions": [
           "dbaeumer.vscode-eslint",
           "esbenp.prettier-vscode",
-          "rechoapi.echoapi-for-vscode"
+          "rapidapi.vscode-rapidapi-client"
         ],
         "settings": {                      // Mueve aquí tus settings
           "terminal.integrated.shell.linux": "/bin/bash"

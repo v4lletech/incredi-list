@@ -1,6 +1,6 @@
-import { DomainEvent } from '@users/domain/events/DomainEvent';
+import { DomainEvent } from './DomainEvent';
 
-type EventHandler = (event: DomainEvent) => Promise<void>;
+export type EventHandler = (event: DomainEvent) => Promise<void>;
 
 export class EventBus {
     private static instance: EventBus;
@@ -10,27 +10,25 @@ export class EventBus {
         this.handlers = new Map();
     }
 
-    static getInstance(): EventBus {
+    public static getInstance(): EventBus {
         if (!EventBus.instance) {
             EventBus.instance = new EventBus();
         }
         return EventBus.instance;
     }
 
-    subscribe(eventName: string, handler: EventHandler): void {
+    public subscribe(eventName: string, handler: EventHandler): void {
         if (!this.handlers.has(eventName)) {
             this.handlers.set(eventName, []);
         }
-        this.handlers.get(eventName)?.push(handler);
+        this.handlers.get(eventName)!.push(handler);
     }
 
-    async publish(event: DomainEvent): Promise<void> {
+    public async publish(event: DomainEvent): Promise<void> {
         const eventName = event.eventName();
         const handlers = this.handlers.get(eventName) || [];
         
-        await Promise.all(
-            handlers.map(handler => handler(event))
-        );
+        await Promise.all(handlers.map(handler => handler(event)));
     }
 }
 

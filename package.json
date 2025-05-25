@@ -8,7 +8,7 @@
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watchAll"
   },
   "keywords": [],
   "author": "Antonio Valle <antonio@v4lle.tech>",
@@ -29,7 +29,8 @@
     "typescript": "^5.3.3"
   },
   "_moduleAliases": {
-    "@users": "dist/modules/users",
-    "@welcome": "dist/modules/welcome"
+    "@users": "src/modules/users",
+    "@messages": "src/modules/messages",
+    "@shared": "src/modules/shared"
   }
 }
