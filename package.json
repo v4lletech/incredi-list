@@ -30,6 +30,7 @@
   },
   "_moduleAliases": {
     "@users": "src/modules/users",
-    "@messages": "src/modules/messages"
+    "@messages": "src/modules/messages",
+    "@shared": "src/modules/shared"
   }
 }

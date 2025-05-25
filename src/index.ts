@@ -1,7 +1,7 @@
 import express from 'express';
 import 'module-alias/register';
 import userRoutes from '@users/infrastructure/api/userRoutes';
-import { eventBus } from '@users/domain/events/EventBus';
+import { eventBus } from '@shared/domain/events/EventBus';
 import { configureMessageModule } from '@messages/infrastructure/container';
 
 const app = express();

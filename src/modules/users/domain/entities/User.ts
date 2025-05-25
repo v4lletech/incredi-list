@@ -1,23 +1,34 @@
-import { UserName } from '@users/domain/value-objects/UserName';
-import { CommunicationType, CommunicationTypeValue } from '@users/domain/value-objects/CommunicationType';
+import { v4 as uuidv4 } from 'uuid';
+import { eventBus } from '@shared/domain/events/EventBus';
 import { UserCreatedEvent } from '@users/domain/events/UserCreatedEvent';
-import { eventBus } from '@users/domain/events/EventBus';
+import { CommunicationType } from '@users/domain/value-objects/CommunicationType';
 
 export class User {
-    constructor(
-        public readonly id: string,
-        public readonly name: string,
-        public readonly communicationType: string
-    ) {}
+    private readonly _id: string;
+    private readonly _name: string;
+    private readonly _communicationType: CommunicationType;
 
-    static async create(id: string, name: string, communicationType: CommunicationTypeValue): Promise<User> {
-        const userName = UserName.create(name);
-        const commType = CommunicationType.create(communicationType);
-        const user = new User(id, userName.value, commType.value);
+    constructor(id: string, name: string, communicationType: CommunicationType) {
+        this._id = id;
+        this._name = name;
+        this._communicationType = communicationType;
+    }
 
-        const event = new UserCreatedEvent(user);
-        await eventBus.publish(event);
+    get id(): string {
+        return this._id;
+    }
 
+    get name(): string {
+        return this._name;
+    }
+
+    get communicationType(): CommunicationType {
+        return this._communicationType;
+    }
+
+    static create(name: string, communicationType: CommunicationType): User {
+        const user = new User(uuidv4(), name, communicationType);
+        eventBus.publish(new UserCreatedEvent(user));
         return user;
     }
 } 

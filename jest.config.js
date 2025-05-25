@@ -3,7 +3,8 @@ module.exports = {
   testEnvironment: 'node',
   moduleNameMapper: {
     '^@users/(.*)$': '<rootDir>/src/modules/users/$1',
-    '^@messages/(.*)$': '<rootDir>/src/modules/messages/$1'
+    '^@messages/(.*)$': '<rootDir>/src/modules/messages/$1',
+    '^@shared/(.*)$': '<rootDir>/src/modules/shared/$1'
   },
   transform: {
     '^.+\\.tsx?$': 'ts-jest'

@@ -4,8 +4,8 @@ import { UserCreatedEventHandler } from '@messages/application/events/UserCreate
 import { EmailMessageStrategy } from './strategies/EmailMessageStrategy';
 import { SmsMessageStrategy } from './strategies/SmsMessageStrategy';
 import { ConsoleMessageStrategy } from './strategies/ConsoleMessageStrategy';
-import { EventBus } from '@users/domain/events/EventBus';
-import { DomainEvent } from '@users/domain/events/DomainEvent';
+import { EventBus } from '@shared/domain/events/EventBus';
+import { DomainEvent } from '@shared/domain/events/DomainEvent';
 
 export function configureMessageModule(eventBus: EventBus): void {
   // Configurar estrategias

@@ -1,5 +1,5 @@
 import { configureMessageModule } from '@messages/infrastructure/container';
-import { EventBus } from '@users/domain/events/EventBus';
+import { EventBus } from '@shared/domain/events/EventBus';
 import { MessageService } from '@messages/domain/services/MessageService';
 import { EmailMessageStrategy } from '@messages/infrastructure/strategies/EmailMessageStrategy';
 import { SmsMessageStrategy } from '@messages/infrastructure/strategies/SmsMessageStrategy';

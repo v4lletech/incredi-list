@@ -1,33 +1,34 @@
 import { SendWelcomeMessageCommandHandler } from '@messages/application/commands/handlers/SendWelcomeMessageCommandHandler';
-import { SendWelcomeMessageCommand } from '@messages/application/commands/SendWelcomeMessageCommand';
 import { MessageService } from '@messages/domain/services/MessageService';
 import { MessageChannel } from '@messages/domain/value-objects/MessageChannel';
+import { SendWelcomeMessageCommand } from '@messages/application/commands/SendWelcomeMessageCommand';
 
 describe('SendWelcomeMessageCommandHandler', () => {
   let handler: SendWelcomeMessageCommandHandler;
-  let mockMessageService: jest.Mocked<MessageService>;
+  let messageService: jest.Mocked<MessageService>;
 
   beforeEach(() => {
-    mockMessageService = {
+    messageService = {
       sendMessage: jest.fn(),
       registerStrategy: jest.fn()
     } as any;
-    handler = new SendWelcomeMessageCommandHandler(mockMessageService);
+
+    handler = new SendWelcomeMessageCommandHandler(messageService);
   });
 
   it('should send welcome message', async () => {
-    const command = new SendWelcomeMessageCommand(
-      'user123',
-      'John Doe',
-      MessageChannel.EMAIL
-    );
+    const command: SendWelcomeMessageCommand = {
+      userId: '123',
+      userName: 'John Doe',
+      communicationType: MessageChannel.EMAIL
+    };
 
     await handler.handle(command);
 
-    expect(mockMessageService.sendMessage).toHaveBeenCalledWith(
-      MessageChannel.EMAIL,
-      '¡Bienvenido John Doe a nuestra plataforma!',
-      'user123'
-    );
+    expect(messageService.sendMessage).toHaveBeenCalledWith({
+      channel: MessageChannel.EMAIL,
+      content: 'Welcome John Doe!',
+      recipient: '123'
+    });
   });
 }); 

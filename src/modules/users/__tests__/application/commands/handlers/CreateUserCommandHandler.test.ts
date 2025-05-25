@@ -2,6 +2,7 @@ import { CreateUserCommandHandler } from '@users/application/commands/handlers/C
 import { CreateUserCommand } from '@users/application/commands/CreateUserCommand';
 import { User } from '@users/domain/entities/User';
 import { UserRepository } from '@users/domain/repositories/UserRepository';
+import { CommunicationType } from '@users/domain/value-objects/CommunicationType';
 
 describe('CreateUserCommandHandler', () => {
     let handler: CreateUserCommandHandler;
@@ -17,7 +18,7 @@ describe('CreateUserCommandHandler', () => {
 
     it('should create and save a user', async () => {
         const name = 'John Doe';
-        const communicationType = 'EMAIL';
+        const communicationType = CommunicationType.EMAIL;
         const expectedUser = new User('123', name, communicationType);
         const command = new CreateUserCommand(name, communicationType);
 

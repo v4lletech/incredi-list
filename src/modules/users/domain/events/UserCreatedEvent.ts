@@ -1,6 +1,6 @@
-import { DomainEvent } from '@users/domain/events/DomainEvent';
+import { DomainEvent } from '@shared/domain/events/DomainEvent';
 import { User } from '@users/domain/entities/User';
-import { MessageChannel } from '@messages/domain/value-objects/MessageChannel';
+import { CommunicationType } from '@users/domain/value-objects/CommunicationType';
 
 export class UserCreatedEvent extends DomainEvent {
     private readonly _user: User;
@@ -14,15 +14,15 @@ export class UserCreatedEvent extends DomainEvent {
         return this._user;
     }
 
+    eventName(): string {
+        return 'UserCreated';
+    }
+
     get payload() {
         return {
             id: this._user.id,
             name: this._user.name,
-            communicationType: this._user.communicationType as MessageChannel
+            communicationType: this._user.communicationType as CommunicationType
         };
-    }
-
-    eventName(): string {
-        return 'UserCreated';
     }
 } 

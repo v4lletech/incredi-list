@@ -1,9 +1,9 @@
-import { CommunicationTypeValue } from '@users/domain/value-objects/CommunicationType';
+import { CommunicationType } from '@users/domain/value-objects/CommunicationType';
 
 export class CreateUserCommand {
     constructor(
         public readonly name: string,
-        public readonly communicationType: CommunicationTypeValue
+        public readonly communicationType: CommunicationType
     ) {
         this.validate();
     }
@@ -17,7 +17,7 @@ export class CreateUserCommand {
             throw new Error('Communication type must be a non-empty string');
         }
 
-        const validTypes: CommunicationTypeValue[] = ['EMAIL', 'SMS', 'CONSOLE'];
+        const validTypes: CommunicationType[] = [CommunicationType.EMAIL, CommunicationType.SMS, CommunicationType.CONSOLE];
         if (!validTypes.includes(this.communicationType)) {
             throw new Error('Communication type must be one of: ' + validTypes.join(', '));
         }

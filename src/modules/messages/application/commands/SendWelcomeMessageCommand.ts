@@ -1,9 +1,7 @@
 import { MessageChannel } from '@messages/domain/value-objects/MessageChannel';
 
-export class SendWelcomeMessageCommand {
-  constructor(
-    public readonly userId: string,
-    public readonly userName: string,
-    public readonly communicationType: MessageChannel
-  ) {}
+export interface SendWelcomeMessageCommand {
+  userId: string;
+  userName: string;
+  communicationType: MessageChannel;
 } 

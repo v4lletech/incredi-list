@@ -24,7 +24,11 @@ describe('MessageService', () => {
     const message = 'Test message';
     const recipient = 'test@example.com';
 
-    await messageService.sendMessage(MessageChannel.EMAIL, message, recipient);
+    await messageService.sendMessage({
+      channel: MessageChannel.EMAIL,
+      content: message,
+      recipient
+    });
 
     expect(mockStrategy.send).toHaveBeenCalledWith(message, recipient);
   });
@@ -34,7 +38,11 @@ describe('MessageService', () => {
     const recipient = 'test@example.com';
 
     await expect(
-      messageService.sendMessage(MessageChannel.SMS, message, recipient)
+      messageService.sendMessage({
+        channel: MessageChannel.SMS,
+        content: message,
+        recipient
+      })
     ).rejects.toThrow(`No strategy registered for channel: ${MessageChannel.SMS}`);
   });
 }); 
