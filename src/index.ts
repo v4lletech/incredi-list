@@ -1,12 +1,17 @@
 import express from 'express';
 import 'module-alias/register';
 import userRoutes from '@users/infrastructure/api/userRoutes';
+import { eventBus } from '@users/domain/events/EventBus';
+import { configureMessageModule } from '@messages/infrastructure/container';
 
 const app = express();
 const port = process.env.PORT || 3080;
 
 // Middleware
 app.use(express.json());
+
+// Configurar módulos
+configureMessageModule(eventBus);
 
 // Routes
 app.use('/api/users', userRoutes);

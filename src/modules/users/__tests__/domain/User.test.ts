@@ -1,4 +1,4 @@
-import { User } from '../../domain/User';
+import { User } from '@users/domain/entities/User';
 
 describe('User', () => {
     it('should create a user with the provided properties', () => {

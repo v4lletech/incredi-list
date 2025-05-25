@@ -12,7 +12,7 @@
     "baseUrl": ".",
     "paths": {
       "@users/*": ["src/modules/users/*"],
-      "@welcome/*": ["src/modules/welcome/*"]
+      "@messages/*": ["src/modules/messages/*"]
     }
   },
   "include": ["src/**/*"],

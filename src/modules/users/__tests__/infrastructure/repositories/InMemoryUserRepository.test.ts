@@ -1,5 +1,5 @@
-import { InMemoryUserRepository } from '../../../infrastructure/repositories/InMemoryUserRepository';
-import { User } from '../../../domain/User';
+import { InMemoryUserRepository } from '@users/infrastructure/repositories/InMemoryUserRepository';
+import { User } from '@users/domain/entities/User';
 
 describe('InMemoryUserRepository', () => {
     let repository: InMemoryUserRepository;

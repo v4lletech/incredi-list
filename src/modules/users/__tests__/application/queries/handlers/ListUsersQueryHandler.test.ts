@@ -1,9 +1,10 @@
-import { ListUsersHandler } from '../../application/ListUsersHandler';
-import { User } from '../../domain/User';
-import { UserRepository } from '../../domain/UserRepository';
+import { ListUsersQueryHandler } from '@users/application/queries/handlers/ListUsersQueryHandler';
+import { ListUsersQuery } from '@users/application/queries/ListUsersQuery';
+import { User } from '@users/domain/entities/User';
+import { UserRepository } from '@users/domain/repositories/UserRepository';
 
-describe('ListUsersHandler', () => {
-    let handler: ListUsersHandler;
+describe('ListUsersQueryHandler', () => {
+    let handler: ListUsersQueryHandler;
     let mockRepository: jest.Mocked<UserRepository>;
 
     beforeEach(() => {
@@ -11,7 +12,7 @@ describe('ListUsersHandler', () => {
             save: jest.fn(),
             findAll: jest.fn()
         };
-        handler = new ListUsersHandler(mockRepository);
+        handler = new ListUsersQueryHandler(mockRepository);
     });
 
     it('should return all users from repository', async () => {
@@ -22,7 +23,7 @@ describe('ListUsersHandler', () => {
 
         mockRepository.findAll.mockResolvedValue(expectedUsers);
 
-        const result = await handler.handle();
+        const result = await handler.handle(new ListUsersQuery());
 
         expect(result).toEqual(expectedUsers);
         expect(mockRepository.findAll).toHaveBeenCalled();
