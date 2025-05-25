@@ -1,27 +1,15 @@
 import { InMemoryUserRepository } from '@users/infrastructure/repositories/InMemoryUserRepository';
-import { CreateUserHandler } from '@users/application/handlers/CreateUserHandler';
-import { ListUsersHandler } from '@users/application/handlers/ListUsersHandler';
+import { CreateUserHandler } from '@users/application/CreateUserHandler';
+import { ListUsersHandler } from '@users/application/ListUsersHandler';
 
 export class UserContainer {
-    private readonly _userRepository: InMemoryUserRepository;
-    private readonly _createUserHandler: CreateUserHandler;
-    private readonly _listUsersHandler: ListUsersHandler;
+    private readonly userRepository: InMemoryUserRepository;
+    public readonly createUserHandler: CreateUserHandler;
+    public readonly listUsersHandler: ListUsersHandler;
 
     constructor() {
-        this._userRepository = new InMemoryUserRepository();
-        this._createUserHandler = new CreateUserHandler(this._userRepository);
-        this._listUsersHandler = new ListUsersHandler(this._userRepository);
-    }
-
-    get createUserHandler(): CreateUserHandler {
-        return this._createUserHandler;
-    }
-
-    get listUsersHandler(): ListUsersHandler {
-        return this._listUsersHandler;
-    }
-
-    get userRepository(): InMemoryUserRepository {
-        return this._userRepository;
+        this.userRepository = new InMemoryUserRepository();
+        this.createUserHandler = new CreateUserHandler(this.userRepository);
+        this.listUsersHandler = new ListUsersHandler(this.userRepository);
     }
 } 

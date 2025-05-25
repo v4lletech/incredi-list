@@ -29,7 +29,7 @@
     "typescript": "^5.3.3"
   },
   "_moduleAliases": {
-    "@users": "dist/modules/users",
-    "@welcome": "dist/modules/welcome"
+    "@users": "src/modules/users",
+    "@welcome": "src/modules/welcome"
   }
 }
