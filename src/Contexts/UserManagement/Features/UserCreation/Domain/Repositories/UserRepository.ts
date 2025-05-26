@@ -1,4 +1,4 @@
-import { User } from './User';
+import { User } from '@userManagement/Features/UserCreation/Domain/Entities/User';
 
 export interface UserRepository {
     save(user: User): Promise<void>;

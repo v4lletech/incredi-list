@@ -15,11 +15,11 @@ app.use(express.json());
 const userRepository = new InMemoryUserRepository();
 const eventBus = new InMemoryEventBus();
 
-// Inicializar módulo principal
+// Inicializar módulo de aplicación
 const applicationModule = new ApplicationModule(userRepository, eventBus);
 applicationModule.initialize();
 
-// Usar rutas del módulo principal
+// Configurar rutas
 app.use(applicationModule.getRoutes());
 
 // Iniciar servidor

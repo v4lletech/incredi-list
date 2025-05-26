@@ -1,20 +1,17 @@
-import { CommandHandler } from '@shared/Domain/Common/CommandHandler';
+import { ICommandHandler } from './ICommandHandler';
 
 export class CommandBus {
-    private handlers: Map<string, CommandHandler<any>> = new Map();
+    private handlers: Map<string, ICommandHandler<any>> = new Map();
 
-    register<T>(commandName: string, handler: CommandHandler<T>): void {
+    register(commandName: string, handler: ICommandHandler<any>): void {
         this.handlers.set(commandName, handler);
     }
 
-    async dispatch<T>(command: T): Promise<void> {
-        const commandName = command.constructor.name;
-        const handler = this.handlers.get(commandName);
-
+    async dispatch(command: any): Promise<void> {
+        const handler = this.handlers.get(command.constructor.name);
         if (!handler) {
-            throw new Error(`No handler registered for command ${commandName}`);
+            throw new Error(`No handler registered for command ${command.constructor.name}`);
         }
-
-        await handler.execute(command);
+        await handler.handle(command);
     }
 } 

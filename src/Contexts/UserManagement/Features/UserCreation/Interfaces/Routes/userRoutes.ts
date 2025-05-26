@@ -1,14 +1,22 @@
 import { Router } from 'express';
-import { CreateUserController } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserController';
+import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
+import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
+import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
+import { UserCreationContainer } from '@userManagement/Features/UserCreation/Infrastructure/Container/UserCreationContainer';
 
-export const createUserRoutes = (createUserController: CreateUserController): Router => {
+export function userRoutes(
+    commandBus: CommandBus,
+    userRepository: IUserRepository,
+    eventBus: IEventBus
+): Router {
     const router = Router();
+    const container = new UserCreationContainer(userRepository, eventBus);
 
-    // POST /api/v1/users
-    router.post('/v1', (req, res) => createUserController.execute(req, res));
+    const v1Controller = container.getV1Controller();
+    const v2Controller = container.getV2Controller();
 
-    // POST /api/v2/users
-    router.post('/v2', (req, res) => createUserController.execute(req, res));
+    router.post('/v1/users', (req, res) => v1Controller.handle(req, res));
+    router.post('/v2/users', (req, res) => v2Controller.handle(req, res));
 
     return router;
-}; 
+} 

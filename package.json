@@ -14,9 +14,12 @@
   "author": "Antonio Valle <antonio@v4lle.tech>",
   "license": "MIT",
   "dependencies": {
+    "@types/inversify": "^2.0.33",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "inversify": "^7.5.1",
     "module-alias": "^2.2.3",
+    "reflect-metadata": "^0.2.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
