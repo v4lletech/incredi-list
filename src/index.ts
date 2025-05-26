@@ -1,32 +1,28 @@
 import express from 'express';
-import 'module-alias/register';
-import userRoutes from '@users/infrastructure/api/userRoutes';
-import { eventBus } from '@shared/domain/events/EventBus';
-import { configureMessageModule } from '@messages/infrastructure/container';
+import cors from 'cors';
+import { InMemoryUserRepository } from '@userManagement/Shared/Infrastructure/Persistence/InMemoryUserRepository';
+import { InMemoryEventBus } from '@shared/Infrastructure/EventBus/InMemoryEventBus';
+import { ApplicationModule } from '@shared/Infrastructure/Configuration/ApplicationModule';
 
 const app = express();
 const port = process.env.PORT || 3080;
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 
-// Configurar módulos
-configureMessageModule(eventBus);
+// Inicializar dependencias
+const userRepository = new InMemoryUserRepository();
+const eventBus = new InMemoryEventBus();
 
-// Routes
-app.use('/api/users', userRoutes);
+// Inicializar módulo de aplicación
+const applicationModule = new ApplicationModule(userRepository, eventBus);
+applicationModule.initialize();
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
+// Configurar rutas
+app.use(applicationModule.getRoutes());
 
-// Error handling middleware
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
-
+// Iniciar servidor
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+    console.log(`Servidor corriendo en http://localhost:${port}`);
 }); 

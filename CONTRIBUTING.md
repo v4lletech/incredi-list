@@ -1,124 +1,92 @@
 # Guía de Contribución
 
-## Antes de hacer cualquier cambio
+## 1. Antes de Contribuir
 
-Revisa todo el proyecto, lee los archivos, no dupliques codigo o repitas funcionalidad en donde no corresponda, no crees archivos donde no deben de ir, siempre usa esta guia de contribución.
+### 1.1 Revisión del Proyecto
+- Familiarízate con la estructura del proyecto y sus patrones de diseño
+- Revisa la documentación existente
+- Asegúrate de no duplicar funcionalidad existente
+- Sigue las convenciones de código establecidas
 
-## Estructura del Proyecto
+### 1.2 Estándares de Código
+- Usa TypeScript con configuración estricta
+- Sigue el estilo de código definido en `.prettierrc`
+- Mantén la cobertura de tests por encima del 85%
+- Documenta las clases y métodos públicos
 
+## 2. Proceso de Desarrollo
+
+### 2.1 Flujo de Trabajo
+1. Crear rama desde `main`
+2. Implementar cambios
+3. Ejecutar tests
+4. Crear Pull Request
+5. Esperar aprobación
+6. Merge a `main`
+
+### 2.2 Convenciones de Commits
 ```
-src/
-├── modules/
-│   └── users/
-│       ├── application/
-│       │   ├── commands/
-│       │   │   ├── CreateUserCommand.ts
-│       │   │   └── handlers/
-│       │   │       └── CreateUserCommandHandler.ts
-│       │   └── queries/
-│       │       ├── ListUsersQuery.ts
-│       │       └── handlers/
-│       │           └── ListUsersQueryHandler.ts
-│       ├── domain/
-│       │   ├── entities/
-│       │   │   └── User.ts
-│       │   ├── events/
-│       │   │   ├── DomainEvent.ts
-│       │   │   ├── EventBus.ts
-│       │   │   └── UserCreatedEvent.ts
-│       │   ├── repositories/
-│       │   │   └── UserRepository.ts
-│       │   └── value-objects/
-│       │       ├── UserName.ts
-│       │       └── CommunicationType.ts
-│       ├── infrastructure/
-│       │   ├── api/
-│       │   │   └── userRoutes.ts
-│       │   ├── container.ts
-│       │   └── repositories/
-│       │       └── InMemoryUserRepository.ts
-│       └── __tests__/
-│           ├── application/
-│           │   ├── commands/
-│           │   │   └── handlers/
-│           │   │       └── CreateUserCommandHandler.test.ts
-│           │   └── queries/
-│           │       └── handlers/
-│           │           └── ListUsersQueryHandler.test.ts
-│           ├── domain/
-│           │   └── User.test.ts
-│           └── infrastructure/
-│               └── repositories/
-│                   └── InMemoryUserRepository.test.ts
-└── index.ts
+tipo(scope): descripción
+
+[body]
+
+[footer]
 ```
 
-## Guías de Desarrollo
+Tipos:
+- feat: Nueva característica
+- fix: Corrección de bug
+- docs: Documentación
+- style: Formato
+- refactor: Refactorización
+- test: Tests
+- chore: Tareas de mantenimiento
 
-### 1. Estructura de Módulos
+### 2.3 Pull Requests
+- Descripción clara de cambios
+- Referencia a issues relacionados
+- Tests incluidos
+- Documentación actualizada
+- Revisión de al menos un desarrollador
 
-Cada módulo debe seguir la estructura de Clean Architecture y CQRS:
+## 3. Testing
 
-- **application/**: Contiene la lógica de aplicación
-  - **commands/**: Comandos para modificar el estado
-  - **queries/**: Consultas para leer el estado
-  - Cada comando/query debe tener su propio handler
-
-- **domain/**: Contiene la lógica de negocio
-  - **entities/**: Entidades del dominio
-  - **events/**: Eventos del dominio
-  - **repositories/**: Interfaces de repositorios
-  - **value-objects/**: Objetos de valor
-
-- **infrastructure/**: Implementaciones concretas
-  - **api/**: Controladores y rutas
-  - **repositories/**: Implementaciones de repositorios
-  - **container.ts**: Configuración de dependencias
-
-### 2. Convenciones de Código
-
-- Usar alias de módulos en lugar de rutas relativas:
-  ```typescript
-  // Correcto
-  import { User } from '@users/domain/entities/User';
-  
-  // Incorrecto
-  import { User } from '../../../domain/entities/User';
-  ```
-
-- Los nombres de archivos deben seguir el patrón PascalCase para clases y kebab-case para archivos de utilidad.
-
-### 3. Patrones de Diseño
-
-- **CQRS**: Separar comandos (modificaciones) de queries (lecturas)
-- **Repository**: Abstraer el acceso a datos
-- **Value Objects**: Encapsular reglas de negocio en objetos inmutables
-- **Domain Events**: Notificar cambios importantes en el dominio
-
-### 4. Testing
-
+### 3.1 Tests Unitarios
 - Los tests deben reflejar la misma estructura que el código fuente
 - Usar mocks para dependencias externas
 - Seguir el patrón AAA (Arrange, Act, Assert)
 
-### 5. Commits
+### 3.2 Tests de Integración
+- Probar flujos completos
+- Verificar interacciones entre componentes
+- Validar comportamiento del sistema
 
-- Usar mensajes descriptivos
-- Referenciar issues cuando sea relevante
-- Seguir el formato: `tipo(scope): descripción`
+## 4. Herramientas y Configuración
 
-### 6. Pull Requests
+### 4.1 Desarrollo
+- Node.js 18.x
+- TypeScript
+- Docker
+- VS Code con extensiones recomendadas
 
-- Crear ramas descriptivas
-- Incluir descripción clara de los cambios
-- Asegurar que todos los tests pasen
-- Solicitar review de al menos un desarrollador
+### 4.2 Testing
+- Jest
+- ts-jest
+- Supertest
 
-## Proceso de Desarrollo
+### 4.3 CI/CD
+- GitHub Actions
+- Docker
+- SonarQube
 
-1. Crear una rama desde `main`
-2. Implementar cambios siguiendo las guías
-3. Ejecutar tests: `npm test`
-4. Crear Pull Request
-5. Esperar aprobación
-6. Merge a `main` 
+## 5. Recursos Adicionales
+
+### 5.1 Documentación
+- [DDD Reference](https://martinfowler.com/bliki/DomainDrivenDesign.html)
+- [CQRS Pattern](https://martinfowler.com/bliki/CQRS.html)
+- [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html)
+
+### 5.2 Herramientas
+- [TypeScript](https://www.typescriptlang.org/)
+- [Jest](https://jestjs.io/)
+- [Docker](https://www.docker.com/)

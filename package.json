@@ -4,8 +4,8 @@
   "description": "Aplicación Node.js con Express",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "start": "node -r module-alias/register dist/index.js",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "test": "jest",
     "test:watch": "jest --watchAll"
@@ -14,11 +14,16 @@
   "author": "Antonio Valle <antonio@v4lle.tech>",
   "license": "MIT",
   "dependencies": {
+    "@types/inversify": "^2.0.33",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
+    "inversify": "^7.5.1",
     "module-alias": "^2.2.3",
+    "reflect-metadata": "^0.2.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.18",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.11",
     "@types/node": "^20.10.5",
@@ -26,11 +31,12 @@
     "jest": "^29.7.0",
     "ts-jest": "^29.1.1",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.3.3"
   },
   "_moduleAliases": {
-    "@users": "src/modules/users",
-    "@messages": "src/modules/messages",
-    "@shared": "src/modules/shared"
+    "@shared": "dist/Contexts/Shared",
+    "@userManagement": "dist/Contexts/UserManagement",
+    "@messaging": "dist/Contexts/Messaging"
   }
 }

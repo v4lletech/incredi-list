@@ -11,10 +11,11 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@users/*": ["src/modules/users/*"],
-      "@messages/*": ["src/modules/messages/*"],
-      "@shared/*": ["src/modules/shared/*"]
-    }
+      "@shared/*": ["src/Contexts/Shared/*"],
+      "@userManagement/*": ["src/Contexts/UserManagement/*"],
+      "@messaging/*": ["src/Contexts/Messaging/*"]
+    },
+    "moduleResolution": "node"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
