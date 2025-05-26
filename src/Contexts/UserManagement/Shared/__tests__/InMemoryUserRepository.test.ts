@@ -1,4 +1,4 @@
-import { InMemoryUserRepository } from '../InMemoryUserRepository';
+import { InMemoryUserRepository } from '@userManagement/Shared/Infrastructure/Persistence/InMemoryUserRepository';
 import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
 import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
 import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
