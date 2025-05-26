@@ -1,6 +1,6 @@
 import { CreateUserCommandHandler } from '@userManagement/Features/UserCreation/Application/CommandHandlers/CreateUserCommandHandler';
 import { CreateUserCommand } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserCommand';
-import { IUserRepository } from '@userManagement/Features/UserCreation/Domain/Repositories/IUserRepository';
+import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
 import { UserCreatedEvent } from '@userManagement/Features/UserCreation/Domain/Events/UserCreatedEvent';
@@ -16,7 +16,9 @@ describe('CreateUserCommandHandler', () => {
     beforeEach(() => {
         mockUserRepository = {
             save: jest.fn(),
-            findById: jest.fn()
+            findById: jest.fn(),
+            findAll: jest.fn(),
+            count: jest.fn()
         };
 
         mockEventBus = {

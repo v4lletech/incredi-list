@@ -1,5 +1,5 @@
 import { CreateUserCommandHandler } from '@userManagement/Features/UserCreation/Application/CommandHandlers/CreateUserCommandHandler';
-import { IUserRepository } from '@userManagement/Features/UserCreation/Domain/Repositories/IUserRepository';
+import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { CreateUserController } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserController';
 

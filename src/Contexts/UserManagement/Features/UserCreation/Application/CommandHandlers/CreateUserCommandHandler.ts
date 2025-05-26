@@ -1,6 +1,6 @@
 import { CommandHandler } from '@shared/Domain/Common/CommandHandler';
 import { CreateUserCommand } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserCommand';
-import { IUserRepository } from '@userManagement/Features/UserCreation/Domain/Repositories/IUserRepository';
+import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
 import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
