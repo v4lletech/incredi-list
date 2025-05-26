@@ -1,8 +1,9 @@
 import express from 'express';
 import 'module-alias/register';
-import userRoutes from '@users/infrastructure/api/userRoutes';
-import { eventBus } from '@shared/domain/events/EventBus';
-import { configureMessageModule } from '@messages/infrastructure/container';
+import { createUserRoutes } from '@userManagement/Features/UserCreation/Interfaces/Routes/userRoutes';
+import { UserCreationContainer } from '@userManagement/Features/UserCreation/Infrastructure/Container/UserCreationContainer';
+import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
+import { IUserRepository } from '@userManagement/Features/UserCreation/Domain/Repositories/IUserRepository';
 
 const app = express();
 const port = process.env.PORT || 3080;
@@ -11,22 +12,34 @@ const port = process.env.PORT || 3080;
 app.use(express.json());
 
 // Configurar módulos
-configureMessageModule(eventBus);
+const configureUserCreationModule = (
+    userRepository: IUserRepository,
+    eventBus: IEventBus
+) => {
+    const container = new UserCreationContainer(userRepository, eventBus);
+    const createUserController = container.getCreateUserController();
+    return createUserRoutes(createUserController);
+};
 
 // Routes
-app.use('/api/users', userRoutes);
+app.use('/api/users', configureUserCreationModule(
+    // Aquí se inyectarían las implementaciones concretas de IUserRepository e IEventBus
+    // Por ahora son placeholders que deberán ser implementados
+    {} as IUserRepository,
+    {} as IEventBus
+));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 // Error handling middleware
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something went wrong!' });
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 }); 

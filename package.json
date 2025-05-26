@@ -29,8 +29,7 @@
     "typescript": "^5.3.3"
   },
   "_moduleAliases": {
-    "@users": "src/modules/users",
-    "@messages": "src/modules/messages",
-    "@shared": "src/modules/shared"
+    "@shared": "dist/Contexts/Shared",
+    "@userManagement": "dist/Contexts/UserManagement"
   }
 }

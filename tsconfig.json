@@ -11,9 +11,8 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@users/*": ["src/modules/users/*"],
-      "@messages/*": ["src/modules/messages/*"],
-      "@shared/*": ["src/modules/shared/*"]
+      "@shared/*": ["src/Contexts/Shared/*"],
+      "@userManagement/*": ["src/Contexts/UserManagement/*"]
     }
   },
   "include": ["src/**/*"],
