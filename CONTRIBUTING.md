@@ -1,246 +1,92 @@
 # Guía de Contribución
 
-## 1. Antes de hacer cualquier cambio
+## 1. Antes de Contribuir
 
-Revisa todo el proyecto, lee los archivos, no dupliques codigo o repitas funcionalidad en donde no corresponda, no crees archivos donde no deben de ir, siempre usa esta guia de contribución.
+### 1.1 Revisión del Proyecto
+- Familiarízate con la estructura del proyecto y sus patrones de diseño
+- Revisa la documentación existente
+- Asegúrate de no duplicar funcionalidad existente
+- Sigue las convenciones de código establecidas
 
-## 2. Estructura del Proyecto
+### 1.2 Estándares de Código
+- Usa TypeScript con configuración estricta
+- Sigue el estilo de código definido en `.prettierrc`
+- Mantén la cobertura de tests por encima del 85%
+- Documenta las clases y métodos públicos
 
-### Contexto General
-- **Contextos Acotados**: Cada contexto acotado (Bounded Context) representa un dominio específico del negocio con su propio modelo y lenguaje ubicuo. Por ejemplo, en un sistema de comercio electrónico, podríamos tener contextos como "Ordering" (gestión de pedidos) e "Inventory" (gestión de inventario).
-- **Por Características**: Dentro de cada contexto, las funcionalidades (features) se agrupan para mantener el código relacionado con una funcionalidad en un solo lugar, facilitando el desarrollo y mantenimiento.
-- **CQRS**: Separa las operaciones de escritura (Commands) de las operaciones de lectura (Queries). Esto permite optimizar los modelos de datos para cada caso, con un modelo de escritura enfocado en la lógica de negocio y un modelo de lectura optimizado para consultas.
-- **Event Sourcing**: En lugar de almacenar el estado actual de los agregados, se almacenan los eventos que describen los cambios de estado. El estado actual se reconstruye aplicando estos eventos.
+## 2. Proceso de Desarrollo
 
-### Estructura de Directorios Híbrida
-La estructura que se propone organiza el proyecto por **Contextos Acotados**, y dentro de cada contexto, se agrupa por **Características**. Cada característica incluye los elementos necesarios para implementar CQRS (Commands, Queries, Handlers) y Event Sourcing (Eventos, Aggregados, Event Store).
+### 2.1 Flujo de Trabajo
+1. Crear rama desde `main`
+2. Implementar cambios
+3. Ejecutar tests
+4. Crear Pull Request
+5. Esperar aprobación
+6. Merge a `main`
 
-A continuación, se detalla el **árbol de directorios** de la estructura híbrida de **Domain-Driven Design (DDD)** con **Contextos Acotados**, organización por **Características**, **CQRS**, **Event Sourcing** y soporte para **Feature Flags**. Para cada directorio, se explica su **propósito** y las **clases o responsabilidades** que contiene.
+### 2.2 Convenciones de Commits
+```
+tipo(scope): descripción
 
----
+[body]
 
-### Árbol de Directorios
-```plaintext
-project/
-├── src/
-│   ├── Contexts/
-│   │   ├── Ordering/
-│   │   │   ├── Features/
-│   │   │   │   ├── OrderCreation/
-│   │   │   │   │   ├── Domain/
-│   │   │   │   │   │   ├── Aggregates/
-│   │   │   │   │   │   │   ├── OrderAggregate
-│   │   │   │   │   │   ├── Entities/
-│   │   │   │   │   │   │   ├── OrderItem
-│   │   │   │   │   │   ├── ValueObjects/
-│   │   │   │   │   │   │   ├── Money
-│   │   │   │   │   │   ├── Events/
-│   │   │   │   │   │   │   ├── OrderCreatedEvent
-│   │   │   │   │   │   │   ├── OrderItemAddedEvent
-│   │   │   │   │   │   ├── Repositories/
-│   │   │   │   │   │   │   ├── IOrderEventStore
-│   │   │   │   │   ├── Application/
-│   │   │   │   │   │   ├── Commands/
-│   │   │   │   │   │   │   ├── CreateOrderCommand
-│   │   │   │   │   │   │   ├── AddItemToOrderCommand
-│   │   │   │   │   │   ├── CommandHandlers/
-│   │   │   │   │   │   │   ├── CreateOrderCommandHandler
-│   │   │   │   │   │   ├── Queries/
-│   │   │   │   │   │   │   ├── GetOrderDetailsQuery
-│   │   │   │   │   │   ├── QueryHandlers/
-│   │   │   │   │   │   │   ├── GetOrderDetailsQueryHandler
-│   │   │   │   │   │   ├── DTOs/
-│   │   │   │   │   │   │   ├── OrderDetailsDTO
-│   │   │   │   │   ├── Infrastructure/
-│   │   │   │   │   │   ├── EventStore/
-│   │   │   │   │   │   │   ├── OrderEventStore
-│   │   │   │   │   │   ├── ReadModel/
-│   │   │   │   │   │   │   ├── OrderReadModel
-│   │   │   │   │   │   ├── Projections/
-│   │   │   │   │   │   │   ├── OrderProjection
-│   │   │   │   │   ├── Interfaces/
-│   │   │   │   │   │   ├── Controllers/
-│   │   │   │   │   │   │   ├── OrdersController
-│   │   │   │   ├── OrderCancellation/
-│   │   │   │   │   ├── Domain/
-│   │   │   │   │   │   ├── Events/
-│   │   │   │   │   │   │   ├── OrderCancelledEvent
-│   │   │   │   │   ├── Application/
-│   │   │   │   │   │   ├── Commands/
-│   │   │   │   │   │   │   ├── CancelOrderCommand
-│   │   │   │   │   │   ├── CommandHandlers/
-│   │   │   │   │   │   │   ├── CancelOrderCommandHandler
-│   │   │   ├── Shared/
-│   │   │   │   ├── Domain/
-│   │   │   │   │   ├── Common/
-│   │   │   │   │   │   ├── DomainEvent
-│   │   │   │   ├── Infrastructure/
-│   │   │   │   │   ├── EventBus/
-│   │   │   │   │   │   ├── IEventBus
-│   │   │   │   │   │   ├── InMemoryEventBus
-│   │   │   │   │   ├── FeatureFlags/
-│   │   │   │   │   │   ├── IFeatureFlagService
-│   │   │   │   │   │   ├── FeatureFlagService
-│   │   │   │   │   │   ├── Configurations/
-│   │   │   │   │   │   │   ├── FeatureFlagConfig.json
-│   │   ├── Inventory/
-│   │   │   ├── Features/
-│   │   │   │   ├── StockManagement/
-│   │   │   │   │   ├── Domain/
-│   │   │   │   │   │   ├── Aggregates/
-│   │   │   │   │   │   │   ├── ProductAggregate
-│   │   │   │   │   │   ├── Events/
-│   │   │   │   │   │   │   ├── StockUpdatedEvent
-│   │   │   │   │   ├── Application/
-│   │   │   │   │   │   ├── Commands/
-│   │   │   │   │   │   │   ├── UpdateStockCommand
-│   │   │   │   │   │   ├── Queries/
-│   │   │   │   │   │   │   ├── GetStockQuery
-│   │   │   │   │   │   ├── QueryHandlers/
-│   │   │   │   │   │   │   ├── GetStockQueryHandler
-│   │   │   │   │   ├── Infrastructure/
-│   │   │   │   │   │   ├── EventStore/
-│   │   │   │   │   │   │   ├── ProductEventStore
-│   │   │   │   │   │   ├── ReadModel/
-│   │   │   │   │   │   │   ├── ProductReadModel
-│   │   │   │   │   │   ├── Projections/
-│   │   │   │   │   │   │   ├── ProductProjection
-│   │   ├── Shared/
-│   │   │   ├── Events/
-│   │   │   │   ├── IntegrationEvents/
-│   │   │   │   │   ├── OrderPlacedIntegrationEvent
-│   │   │   ├── Utilities/
-│   │   │   │   ├── EventSerializer
+[footer]
 ```
 
----
+Tipos:
+- feat: Nueva característica
+- fix: Corrección de bug
+- docs: Documentación
+- style: Formato
+- refactor: Refactorización
+- test: Tests
+- chore: Tareas de mantenimiento
 
-### Explicación de la Estructura y su Relación con CQRS y Event Sourcing
+### 2.3 Pull Requests
+- Descripción clara de cambios
+- Referencia a issues relacionados
+- Tests incluidos
+- Documentación actualizada
+- Revisión de al menos un desarrollador
 
-#### 1. Resumen de Responsabilidades
-- **Contextos Acotados (`Contexts`)**: Separar dominios independientes (`Ordering`, `Inventory`).
-- **Características (`Features`)**: Agrupar código por funcionalidad dentro de cada contexto (`OrderCreation`, `OrderCancellation`, `StockManagement`).
-- **Dominio (`Domain`)**: Modelar la lógica de negocio pura (`Aggregates`, `Entities`, `ValueObjects`, `Events`, `Repositories`).
-- **Aplicación (`Application`)**: Orquestar casos de uso con CQRS (`Commands`, `Queries`, `CommandHandlers`, `QueryHandlers`, `DTOs`).
-- **Infraestructura (`Infrastructure`)**: Implementar detalles técnicos (`EventStore`, `ReadModel`, `Projections`).
-- **Interfaces (`Interfaces`)**: Exponer la funcionalidad al mundo exterior (`Controllers`).
-- **Feature Flags (`FeatureFlags`)**: Controlar la activación/desactivación de funcionalidades, aplicado principalmente en `CommandHandlers` y `QueryHandlers`.
-- **Compartido (`Shared`)**: Proveer abstracciones y utilidades reutilizables (`DomainEvent`, `EventBus`, `IntegrationEvents`, `EventSerializer`).
+## 3. Testing
 
-#### 2. Convenciones de Código
-
-- Usar alias de módulos en lugar de rutas relativas:
-  ```typescript
-  // Correcto
-  import { User } from '@users/domain/entities/User';
-  
-  // Incorrecto
-  import { User } from '../../../domain/entities/User';
-
-#### 3. **Integración Segura de Feature Flags**
-Para incorporar feature flags de manera segura en un proyecto con CQRS y Event Sourcing, considera las siguientes prácticas:
-
-- **Ubicar las Feature Flags en la Capa de Aplicación**:
-  - Las feature flags deben residir principalmente en la capa de **Application** (por ejemplo, en `CommandHandlers` o `QueryHandlers`), ya que esta capa orquesta la lógica de negocio y decide si una funcionalidad debe ejecutarse.
-  - Evita colocar lógica de feature flags en el dominio (`Domain`), ya que esto introduciría preocupaciones técnicas en la lógica pura del negocio, violando los principios de DDD.
-  - Ejemplo: En un `CreateOrderCommandHandler`, verifica la feature flag antes de ejecutar la lógica del comando.
-
-- **Usar un Servicio de Feature Flags**:
-  - Implementa un servicio centralizado (por ejemplo, `IFeatureFlagService`) para gestionar las flags. Este servicio puede integrarse con herramientas como LaunchDarkly, Unleash o una solución interna basada en una base de datos o archivo de configuración.
-  - Coloca este servicio en la carpeta `Shared/Infrastructure` para que sea accesible por todos los contextos.
-
-- **Soportar Event Sourcing**:
-  - En un sistema con Event Sourcing, las feature flags no deben alterar los eventos ya generados, ya que estos son inmutables. Por ejemplo, si una funcionalidad está desactivada, el `CommandHandler` debe evitar generar eventos relacionados con esa funcionalidad.
-  - Para las proyecciones, las feature flags pueden controlar si ciertos eventos contribuyen a los modelos de lectura (`ReadModel`). Por ejemplo, una proyección puede ignorar eventos relacionados con una funcionalidad desactivada.
-
-- **Soportar CQRS**:
-  - En el lado de **Commands**, usa feature flags para decidir si un comando debe procesarse. Por ejemplo, si la funcionalidad de cancelación de pedidos está desactivada, el `CancelOrderCommandHandler` puede devolver un error o ignorar el comando.
-  - En el lado de **Queries**, usa feature flags para filtrar datos en el `ReadModel`. Por ejemplo, si una nueva funcionalidad de descuentos está desactivada, el `GetOrderDetailsQueryHandler` puede excluir los datos de descuentos del resultado.
-
-- **Persistencia y Consistencia**:
-  - Asegúrate de que las feature flags no rompan la consistencia del dominio. Por ejemplo, si una funcionalidad está desactivada, no debe dejar el sistema en un estado inválido (como un pedido creado sin eventos correspondientes).
-  - Usa transacciones o validaciones en los `CommandHandlers` para garantizar que los eventos generados sean consistentes con el estado de las flags.
-
-- **Pruebas y Seguridad**:
-  - Prueba exhaustivamente los flujos con las feature flags activadas y desactivadas para evitar errores inesperados.
-  - Implementa un mecanismo de fallback para manejar casos donde el servicio de feature flags no esté disponible (por ejemplo, un valor predeterminado en la configuración).
-  - Gestiona las feature flags con cuidado para evitar que se filtren datos sensibles a usuarios no autorizados.
-
-
-#### 4. **Consideraciones para Event Sourcing**
-- **Evitar eventos innecesarios**: Si una funcionalidad está desactivada, el `CommandHandler` debe evitar generar eventos relacionados. Por ejemplo, si la funcionalidad de cancelación de pedidos está desactivada, el `CancelOrderCommandHandler` no debe generar un `OrderCancelledEvent`.
-- **Proyecciones condicionales**: En las proyecciones (`OrderProjection`), puedes usar feature flags para decidir si ciertos eventos contribuyen al `ReadModel`.
-
-#### 5. **Gestión de Feature Flags**
-- **Herramientas**: Usa herramientas como LaunchDarkly, Unleash o Flagsmith para gestionar feature flags dinámicamente. Estas herramientas permiten configurar flags por usuario, entorno o porcentaje de rollout.
-- **Configuración estática**: Para proyectos más simples, puedes usar un archivo de configuración (`FeatureFlagConfig.json`) o variables de entorno.
-- **Ciclo de vida**: Define un ciclo de vida claro para las feature flags (creación, activación, desactivación, eliminación) para evitar acumular flags obsoletas.
-
----
-
-### ¿Dónde Aplicar Feature Flags?
-- **Por Características (Recomendado)**:
-  - Aplica feature flags en los `CommandHandlers` y `QueryHandlers` de cada carpeta de características (por ejemplo, `OrderCreation`, `OrderCancellation`).
-  - Ejemplo: Usa una flag `OrderCreation` para habilitar/deshabilitar la creación de pedidos, o `OrderDetailsDiscounts` para controlar si se muestran descuentos en las consultas.
-  - **Por qué**: La estructura por características ya agrupa el código relacionado, por lo que es natural aplicar flags a este nivel. Además, permite un control más granular y alinea con el principio de modularidad.
-
-- **A nivel de Contextos**:
-  - Aplica feature flags en la capa de infraestructura compartida (por ejemplo, `EventBus` o `IntegrationEvents`) para controlar interacciones entre contextos.
-  - Ejemplo: Una flag `OrderInventoryIntegration` para habilitar/deshabilitar el envío de eventos de integración entre `Ordering` e `Inventory`.
-  - **Por qué**: Útil para funcionalidades que abarcan todo un contexto o que afectan la comunicación entre contextos, como en arquitecturas de microservicios.
-
----
-
-### Ventajas y Desventajas
-#### Ventajas:
-- **Despliegue seguro**: Permite probar nuevas funcionalidades sin afectar a todos los usuarios.
-- **Flexibilidad**: Facilita pruebas A/B, rollouts progresivos y reversiones rápidas.
-- **Alineación con la estructura**: Las feature flags se integran naturalmente en la capa de aplicación, respetando la separación de responsabilidades.
-
-#### Desventajas:
-- **Complejidad adicional**: Gestionar múltiples flags puede complicar el código si no se manejan bien.
-- **Riesgo de inconsistencias**: Si no se sincronizan correctamente, las flags pueden generar estados inconsistentes (por ejemplo, eventos generados pero no proyectados).
-- **Mantenimiento**: Las flags obsoletas deben eliminarse para evitar deuda técnica.
-
----
-
-## 3. Patrones de Diseño Utilizados
-
-- **CQRS**: Separar comandos (modificaciones) de queries (lecturas)
-- **Repository**: Abstraer el acceso a datos
-- **Value Objects**: Encapsular reglas de negocio en objetos inmutables
-- **Domain Events**: Notificar cambios importantes en el dominio
-- **Inversion of Control**: (IoC) el contenedor decide cuando invocar o crear una clase
-- **Dependency Injection**: (DI) Permite pasar dependencias a una clase dessde el exterior, en lugar de iniciarlas internamente
-
-
-## 4. Testing
-
+### 3.1 Tests Unitarios
 - Los tests deben reflejar la misma estructura que el código fuente
 - Usar mocks para dependencias externas
 - Seguir el patrón AAA (Arrange, Act, Assert)
 
-## 5. Commits
+### 3.2 Tests de Integración
+- Probar flujos completos
+- Verificar interacciones entre componentes
+- Validar comportamiento del sistema
 
-- Usar mensajes descriptivos
-- Referenciar issues cuando sea relevante
-- Seguir el formato: `tipo(scope): descripción`
+## 4. Herramientas y Configuración
 
-## 6. Pull Requests
+### 4.1 Desarrollo
+- Node.js 18.x
+- TypeScript
+- Docker
+- VS Code con extensiones recomendadas
 
-- Crear ramas descriptivas
-- Incluir descripción clara de los cambios
-- Asegurar que todos los tests pasen
-- Solicitar review de al menos un desarrollador
+### 4.2 Testing
+- Jest
+- ts-jest
+- Supertest
 
-## 7. Proceso de Desarrollo
+### 4.3 CI/CD
+- GitHub Actions
+- Docker
+- SonarQube
 
-1. Crear una rama desde `main`
-2. Implementar cambios siguiendo las guías
-3. Ejecutar tests: `npm test`
-4. Crear Pull Request
-5. Esperar aprobación
-6. Merge a `main` 
+## 5. Recursos Adicionales
 
-## 8. Conclusión
-Para integrar **feature flags** de forma segura en una arquitectura DDD con CQRS y Event Sourcing, colócalas principalmente en la capa de **Application** (en `CommandHandlers` y `QueryHandlers`) y, ocasionalmente, en la infraestructura para interacciones entre contextos. Prefiere aplicarlas **a nivel de características** para mayor granularidad, reservando el nivel de contextos para funcionalidades más amplias o integraciones. Usa un servicio centralizado (`IFeatureFlagService`) para gestionar las flags y asegúrate de que no rompan la consistencia del dominio ni generen eventos innecesarios en el Event Store.
+### 5.1 Documentación
+- [DDD Reference](https://martinfowler.com/bliki/DomainDrivenDesign.html)
+- [CQRS Pattern](https://martinfowler.com/bliki/CQRS.html)
+- [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html)
+
+### 5.2 Herramientas
+- [TypeScript](https://www.typescriptlang.org/)
+- [Jest](https://jestjs.io/)
+- [Docker](https://www.docker.com/)
