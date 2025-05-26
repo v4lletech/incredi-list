@@ -19,13 +19,11 @@ export class ListUsersQueryHandler {
         // Aplicar paginación
         const paginatedUsers = allUsers.slice(skip, skip + limit);
 
-        const userDTOs = paginatedUsers
-            .filter(user => user.id !== undefined)
-            .map(user => new UserDTO(
-                user.id!,
-                user.name,
-                user.communicationType
-            ));
+        const userDTOs = paginatedUsers.map(user => new UserDTO(
+            user.id.value,
+            user.name.value,
+            user.communicationType.value
+        ));
 
         return new ListUsersResponseDTO(
             userDTOs,

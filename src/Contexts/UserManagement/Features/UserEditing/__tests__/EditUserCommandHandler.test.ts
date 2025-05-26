@@ -1,15 +1,13 @@
 import { EditUserCommandHandler } from '../Application/CommandHandlers/EditUserCommandHandler';
 import { EditUserCommand } from '../Application/Commands/EditUserCommand';
-import { IUserRepository, User } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
-import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
+import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
+import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
 import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
 import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
 import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
-import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
-import { InvalidInputError } from '@userManagement/Features/UserEditing/Domain/Errors/InvalidInputError';
 import { UserNotFoundError } from '@userManagement/Features/UserEditing/Domain/Errors/UserNotFoundError';
-import { InvalidUserNameError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserNameError';
-import { InvalidCommunicationTypeError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidCommunicationTypeError';
+import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
+import { UserEditedEvent } from '../Domain/Events/UserEditedEvent';
 
 describe('EditUserCommandHandler', () => {
     let handler: EditUserCommandHandler;
@@ -33,78 +31,75 @@ describe('EditUserCommandHandler', () => {
         handler = new EditUserCommandHandler(mockUserRepository, mockEventBus);
     });
 
-    it('should update an existing user', async () => {
-        const userId = UserId.create('123');
-        const userName = UserName.create('John Doe');
-        const communicationType = CommunicationType.create('EMAIL');
-        const existingUserAggregate = UserAggregate.create(userId, userName, communicationType);
-        const existingUser: User = {
-            id: existingUserAggregate.id.value,
-            name: existingUserAggregate.name.value,
-            communicationType: existingUserAggregate.communicationType.value
-        };
+    it('debería editar un usuario existente', async () => {
+        // Arrange
+        const userId = UserId.create('1');
+        const existingUser = UserAggregate.create(
+            userId,
+            UserName.create('John Doe'),
+            CommunicationType.create('EMAIL')
+        );
 
         mockUserRepository.findById.mockResolvedValue(existingUser);
-        mockUserRepository.update.mockResolvedValue({
-            id: '123',
-            name: 'Jane Doe',
-            communicationType: 'SMS'
-        });
+        mockUserRepository.update.mockResolvedValue(existingUser);
 
-        const command = new EditUserCommand('123', 'Jane Doe', 'SMS');
+        // Act
+        const command = new EditUserCommand('1', 'Jane Smith', 'SMS');
         await handler.execute(command);
 
-        expect(mockUserRepository.findById).toHaveBeenCalledWith('123');
-        expect(mockUserRepository.update).toHaveBeenCalledWith(
-            '123',
-            {
-                id: '123',
-                name: 'Jane Doe',
-                communicationType: 'SMS'
-            }
-        );
-        expect(mockEventBus.publish).toHaveBeenCalled();
+        // Assert
+        expect(mockUserRepository.findById).toHaveBeenCalledWith(userId);
+        expect(mockUserRepository.update).toHaveBeenCalledWith(userId, expect.any(UserAggregate));
+        expect(mockEventBus.publish).toHaveBeenCalledWith([expect.any(UserEditedEvent)]);
     });
 
-    it('should throw error when user not found', async () => {
+    it('debería lanzar error cuando el usuario no existe', async () => {
+        // Arrange
         mockUserRepository.findById.mockResolvedValue(null);
 
-        const command = new EditUserCommand('123', 'Jane Doe', 'SMS');
-        await expect(handler.execute(command)).rejects.toThrow('Usuario no encontrado');
+        // Act & Assert
+        const command = new EditUserCommand('1', 'Jane Smith', 'SMS');
+        await expect(handler.execute(command)).rejects.toThrow(UserNotFoundError);
+        expect(mockUserRepository.update).not.toHaveBeenCalled();
+        expect(mockEventBus.publish).not.toHaveBeenCalled();
     });
 
-    it('should handle validation errors', async () => {
-        const userId = UserId.create('123');
-        const userName = UserName.create('John Doe');
-        const communicationType = CommunicationType.create('EMAIL');
-        const existingUserAggregate = UserAggregate.create(userId, userName, communicationType);
-        const existingUser: User = {
-            id: existingUserAggregate.id.value,
-            name: existingUserAggregate.name.value,
-            communicationType: existingUserAggregate.communicationType.value
-        };
+    it('debería mantener los valores originales cuando no se proporcionan nuevos valores', async () => {
+        // Arrange
+        const userId = UserId.create('1');
+        const existingUser = UserAggregate.create(
+            userId,
+            UserName.create('John Doe'),
+            CommunicationType.create('EMAIL')
+        );
 
         mockUserRepository.findById.mockResolvedValue(existingUser);
+        mockUserRepository.update.mockResolvedValue(existingUser);
 
-        const command = new EditUserCommand('123', '', 'INVALID');
-        await expect(handler.execute(command)).rejects.toThrow();
+        // Act
+        const command = new EditUserCommand('1', undefined, undefined);
+        await handler.execute(command);
+
+        // Assert
+        expect(mockUserRepository.update).toHaveBeenCalledWith(userId, expect.any(UserAggregate));
+        expect(mockEventBus.publish).toHaveBeenCalledWith([expect.any(UserEditedEvent)]);
     });
 
-    it('should handle repository errors', async () => {
-        const userId = UserId.create('123');
-        const userName = UserName.create('John Doe');
-        const communicationType = CommunicationType.create('EMAIL');
-        const existingUserAggregate = UserAggregate.create(userId, userName, communicationType);
-        const existingUser: User = {
-            id: existingUserAggregate.id.value,
-            name: existingUserAggregate.name.value,
-            communicationType: existingUserAggregate.communicationType.value
-        };
+    it('debería manejar errores del repositorio', async () => {
+        // Arrange
+        const userId = UserId.create('1');
+        const existingUser = UserAggregate.create(
+            userId,
+            UserName.create('John Doe'),
+            CommunicationType.create('EMAIL')
+        );
 
         mockUserRepository.findById.mockResolvedValue(existingUser);
-        mockUserRepository.update.mockRejectedValue(new Error('Database error'));
+        const error = new Error('Error al actualizar usuario');
+        mockUserRepository.update.mockRejectedValue(error);
 
-        const command = new EditUserCommand('123', 'Jane Doe', 'SMS');
-        await expect(handler.execute(command)).rejects.toThrow('Database error');
+        // Act & Assert
+        const command = new EditUserCommand('1', 'Jane Smith', 'SMS');
+        await expect(handler.execute(command)).rejects.toThrow('Error al actualizar usuario');
     });
 }); 

@@ -52,7 +52,7 @@ describe('EditUserController', () => {
 
     it('debería manejar error de entrada inválida', async () => {
         // Arrange
-        const error = new InvalidInputError('Todos los campos son requeridos');
+        const error = new InvalidInputError('El ID es requerido');
         mockCommandHandler.execute.mockRejectedValue(error);
 
         // Act
@@ -107,9 +107,16 @@ describe('EditUserController', () => {
         await controller.handle(mockRequest as Request, mockResponse as Response);
 
         // Assert
-        expect(mockStatus).toHaveBeenCalledWith(500);
+        expect(mockCommandHandler.execute).toHaveBeenCalledWith(
+            expect.objectContaining({
+                id: '123',
+                name: undefined,
+                communicationType: undefined
+            })
+        );
+        expect(mockStatus).toHaveBeenCalledWith(200);
         expect(mockJson).toHaveBeenCalledWith({
-            error: 'Error interno del servidor'
+            message: 'Usuario actualizado exitosamente'
         });
     });
 
@@ -127,9 +134,9 @@ describe('EditUserController', () => {
         await controller.handle(mockRequest as Request, mockResponse as Response);
 
         // Assert
-        expect(mockStatus).toHaveBeenCalledWith(500);
+        expect(mockStatus).toHaveBeenCalledWith(400);
         expect(mockJson).toHaveBeenCalledWith({
-            error: 'Error interno del servidor'
+            error: 'El ID es requerido'
         });
     });
 }); 

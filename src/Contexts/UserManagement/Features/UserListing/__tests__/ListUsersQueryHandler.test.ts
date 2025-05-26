@@ -22,30 +22,52 @@ describe('ListUsersQueryHandler', () => {
         handler = new ListUsersQueryHandler(mockUserRepository);
     });
 
-    it('should return paginated users', async () => {
+    it('debería listar usuarios con paginación', async () => {
+        // Arrange
         const users = [
-            { id: '1', name: 'User 1', communicationType: 'EMAIL' },
-            { id: '2', name: 'User 2', communicationType: 'SMS' }
+            UserAggregate.create(
+                UserId.create('1'),
+                UserName.create('John Doe'),
+                CommunicationType.create('EMAIL')
+            ),
+            UserAggregate.create(
+                UserId.create('2'),
+                UserName.create('Jane Smith'),
+                CommunicationType.create('SMS')
+            ),
+            UserAggregate.create(
+                UserId.create('3'),
+                UserName.create('Bob Wilson'),
+                CommunicationType.create('CONSOLE')
+            )
         ];
 
         mockUserRepository.findAll.mockResolvedValue(users);
 
-        const query = new ListUsersQuery(1, 10);
+        // Act
+        const query = new ListUsersQuery(1, 2);
         const result = await handler.execute(query);
 
+        // Assert
         expect(result.users).toHaveLength(2);
-        expect(result.total).toBe(2);
+        expect(result.total).toBe(3);
         expect(result.page).toBe(1);
-        expect(result.limit).toBe(10);
-        expect(result.totalPages).toBe(1);
+        expect(result.limit).toBe(2);
+        expect(result.totalPages).toBe(2);
+        expect(result.users[0].id).toBe('1');
+        expect(result.users[0].name).toBe('John Doe');
+        expect(result.users[0].communicationType).toBe('EMAIL');
     });
 
-    it('should handle empty results', async () => {
+    it('debería manejar lista vacía de usuarios', async () => {
+        // Arrange
         mockUserRepository.findAll.mockResolvedValue([]);
 
+        // Act
         const query = new ListUsersQuery(1, 10);
         const result = await handler.execute(query);
 
+        // Assert
         expect(result.users).toHaveLength(0);
         expect(result.total).toBe(0);
         expect(result.page).toBe(1);
@@ -53,33 +75,38 @@ describe('ListUsersQueryHandler', () => {
         expect(result.totalPages).toBe(0);
     });
 
-    it('should handle pagination correctly', async () => {
-        const users = Array.from({ length: 25 }, (_, i) => ({
-            id: `${i + 1}`,
-            name: `User ${i + 1}`,
-            communicationType: 'EMAIL'
-        }));
+    it('debería manejar errores del repositorio', async () => {
+        // Arrange
+        const error = new Error('Error al obtener usuarios');
+        mockUserRepository.findAll.mockRejectedValue(error);
+
+        // Act & Assert
+        const query = new ListUsersQuery(1, 10);
+        await expect(handler.execute(query)).rejects.toThrow('Error al obtener usuarios');
+    });
+
+    it('debería aplicar paginación correctamente', async () => {
+        // Arrange
+        const users = Array.from({ length: 15 }, (_, i) => 
+            UserAggregate.create(
+                UserId.create(`${i + 1}`),
+                UserName.create(`User ${i + 1}`),
+                CommunicationType.create('EMAIL')
+            )
+        );
 
         mockUserRepository.findAll.mockResolvedValue(users);
 
-        const query = new ListUsersQuery(2, 10);
+        // Act
+        const query = new ListUsersQuery(2, 5);
         const result = await handler.execute(query);
 
-        expect(result.users).toHaveLength(10);
-        expect(result.total).toBe(25);
+        // Assert
+        expect(result.users).toHaveLength(5);
+        expect(result.total).toBe(15);
         expect(result.page).toBe(2);
-        expect(result.limit).toBe(10);
+        expect(result.limit).toBe(5);
         expect(result.totalPages).toBe(3);
-    });
-
-    it('debería manejar errores del repositorio', async () => {
-        // Arrange
-        const error = new Error('Error de base de datos');
-        mockUserRepository.findAll.mockRejectedValue(error);
-
-        const query = new ListUsersQuery(1, 10);
-
-        // Act & Assert
-        await expect(handler.execute(query)).rejects.toThrow('Error de base de datos');
+        expect(result.users[0].id).toBe('6');
     });
 }); 

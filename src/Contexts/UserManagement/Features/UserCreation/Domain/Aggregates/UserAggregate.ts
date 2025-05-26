@@ -4,6 +4,12 @@ import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/
 import { UserCreatedEvent } from '@userManagement/Features/UserCreation/Domain/Events/UserCreatedEvent';
 import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
 
+export interface UserDTO {
+    id: string;
+    name: string;
+    communicationType: string;
+}
+
 export class UserAggregate extends AggregateRoot {
     private readonly _id: UserId;
     private readonly _name: UserName;
@@ -22,6 +28,21 @@ export class UserAggregate extends AggregateRoot {
         return user;
     }
 
+    public static fromDTO(dto: UserDTO): UserAggregate {
+        const id = UserId.create(dto.id);
+        const name = UserName.create(dto.name);
+        const communicationType = CommunicationType.create(dto.communicationType);
+        return this.create(id, name, communicationType);
+    }
+
+    public toDTO(): UserDTO {
+        return {
+            id: this._id.value,
+            name: this._name.value,
+            communicationType: this._communicationType.value
+        };
+    }
+
     public get id(): UserId {
         return this._id;
     }
@@ -32,5 +53,11 @@ export class UserAggregate extends AggregateRoot {
 
     public get communicationType(): CommunicationType {
         return this._communicationType;
+    }
+
+    public update(name?: UserName, communicationType?: CommunicationType): UserAggregate {
+        const newName = name || this._name;
+        const newCommunicationType = communicationType || this._communicationType;
+        return UserAggregate.create(this._id, newName, newCommunicationType);
     }
 } 

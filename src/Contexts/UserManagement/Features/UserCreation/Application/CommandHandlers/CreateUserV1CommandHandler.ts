@@ -21,13 +21,7 @@ export class CreateUserV1CommandHandler implements ICommandHandler<CreateUserV1C
             const communicationType = CommunicationType.create(command.communicationType);
 
             const userAggregate = UserAggregate.create(userId, userName, communicationType);
-
-            await this.userRepository.create({
-                id: userId.value,
-                name: userName.value,
-                communicationType: communicationType.value
-            });
-
+            await this.userRepository.create(userAggregate);
             await this.eventBus.publish(userAggregate.getUncommittedEvents());
         } catch (error) {
             console.error('Error en CreateUserV1CommandHandler:', error);

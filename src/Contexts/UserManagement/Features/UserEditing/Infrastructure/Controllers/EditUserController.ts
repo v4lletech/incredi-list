@@ -12,8 +12,8 @@ export class EditUserController {
             const { id } = req.params;
             const { name, communicationType } = req.body || {};
 
-            if (!id || !req.body || !name || !communicationType) {
-                res.status(500).json({ error: 'Error interno del servidor' });
+            if (!id) {
+                res.status(400).json({ error: 'El ID es requerido' });
                 return;
             }
 

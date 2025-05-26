@@ -1,16 +1,10 @@
 import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
 import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
 
-export interface User {
-    id: string;
-    name: string;
-    communicationType: string;
-}
-
 export interface IUserRepository {
-    create(user: User): Promise<User>;
-    findById(id: string): Promise<User | null>;
-    findAll(): Promise<User[]>;
-    update(id: string, user: Partial<User>): Promise<User>;
-    delete(id: string): Promise<void>;
+    create(user: UserAggregate): Promise<UserAggregate>;
+    findById(id: UserId): Promise<UserAggregate | null>;
+    findAll(): Promise<UserAggregate[]>;
+    update(id: UserId, user: UserAggregate): Promise<UserAggregate>;
+    delete(id: UserId): Promise<void>;
 } 

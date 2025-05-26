@@ -2,7 +2,10 @@ import { CreateUserV1CommandHandler } from '../Application/CommandHandlers/Creat
 import { CreateUserV1Command } from '../Application/Commands/CreateUserV1Command';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
-import { DomainEvent } from '@shared/Domain/Common/DomainEvent';
+import { UserAggregate } from '../Domain/Aggregates/UserAggregate';
+import { UserId } from '../Domain/ValueObjects/UserId';
+import { UserName } from '../Domain/ValueObjects/UserName';
+import { CommunicationType } from '../Domain/ValueObjects/CommunicationType';
 
 describe('CreateUserV1CommandHandler', () => {
     let handler: CreateUserV1CommandHandler;
@@ -11,11 +14,7 @@ describe('CreateUserV1CommandHandler', () => {
 
     beforeEach(() => {
         mockUserRepository = {
-            create: jest.fn().mockResolvedValue({
-                id: '123',
-                name: 'John Doe',
-                communicationType: 'EMAIL'
-            }),
+            create: jest.fn().mockImplementation(async (user: UserAggregate) => user),
             findById: jest.fn(),
             findAll: jest.fn(),
             update: jest.fn(),
@@ -35,7 +34,27 @@ describe('CreateUserV1CommandHandler', () => {
         
         await handler.execute(command);
 
-        expect(mockUserRepository.create).toHaveBeenCalled();
+        expect(mockUserRepository.create).toHaveBeenCalledWith(
+            expect.any(UserAggregate)
+        );
         expect(mockEventBus.publish).toHaveBeenCalled();
+    });
+
+    it('should handle repository errors', async () => {
+        const error = new Error('Database error');
+        mockUserRepository.create.mockRejectedValue(error);
+
+        const command = new CreateUserV1Command('John Doe', 'EMAIL');
+        
+        await expect(handler.execute(command)).rejects.toThrow('Database error');
+    });
+
+    it('should handle event bus errors', async () => {
+        const error = new Error('Event bus error');
+        mockEventBus.publish.mockRejectedValue(error);
+
+        const command = new CreateUserV1Command('John Doe', 'EMAIL');
+        
+        await expect(handler.execute(command)).rejects.toThrow('Event bus error');
     });
 }); 

@@ -1,35 +1,35 @@
-import { IUserRepository, User } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
+import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
+import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
+import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
 
 export class InMemoryUserRepository implements IUserRepository {
-    private users: Map<string, User> = new Map();
+    private users: Map<string, UserAggregate> = new Map();
 
-    async create(user: User): Promise<User> {
-        if (this.users.has(user.id)) {
+    async create(user: UserAggregate): Promise<UserAggregate> {
+        if (this.users.has(user.id.value)) {
             throw new Error('User with this ID already exists');
         }
-        this.users.set(user.id, user);
+        this.users.set(user.id.value, user);
         return user;
     }
 
-    async findById(id: string): Promise<User | null> {
-        return this.users.get(id) || null;
+    async findById(id: UserId): Promise<UserAggregate | null> {
+        return this.users.get(id.value) || null;
     }
 
-    async findAll(): Promise<User[]> {
+    async findAll(): Promise<UserAggregate[]> {
         return Array.from(this.users.values());
     }
 
-    async update(id: string, userData: Partial<User>): Promise<User> {
-        const existingUser = await this.findById(id);
-        if (!existingUser) {
+    async update(id: UserId, user: UserAggregate): Promise<UserAggregate> {
+        if (!this.users.has(id.value)) {
             throw new Error('User not found');
         }
-        const updatedUser = { ...existingUser, ...userData };
-        this.users.set(id, updatedUser);
-        return updatedUser;
+        this.users.set(id.value, user);
+        return user;
     }
 
-    async delete(id: string): Promise<void> {
-        this.users.delete(id);
+    async delete(id: UserId): Promise<void> {
+        this.users.delete(id.value);
     }
 } 

@@ -20,15 +20,8 @@ export class CreateUserV2CommandHandler implements CommandHandler<CreateUserV2Co
             const communicationType = CommunicationType.create(command.communicationType);
 
             const userAggregate = UserAggregate.create(userId, userName, communicationType);
-
-            await this.userRepository.create({
-                id: userAggregate.id.value,
-                name: userAggregate.name.value,
-                communicationType: userAggregate.communicationType.value
-            });
-
-            const uncommittedEvents = userAggregate.getUncommittedEvents();
-            await this.eventBus.publish(uncommittedEvents);
+            await this.userRepository.create(userAggregate);
+            await this.eventBus.publish(userAggregate.getUncommittedEvents());
         } catch (error) {
             console.error('Error in CreateUserV2CommandHandler:', error);
             throw error;

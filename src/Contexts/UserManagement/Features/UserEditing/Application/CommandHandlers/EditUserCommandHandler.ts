@@ -1,6 +1,7 @@
 import { CommandHandler } from '@shared/Domain/Common/CommandHandler';
 import { EditUserCommand } from '../Commands/EditUserCommand';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
+import { UserNotFoundError } from '../../Domain/Errors/UserNotFoundError';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
 import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
@@ -8,9 +9,9 @@ import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/
 import { InvalidUserIdError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserIdError';
 import { InvalidUserNameError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserNameError';
 import { InvalidCommunicationTypeError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidCommunicationTypeError';
-import { UserNotFoundError } from '@userManagement/Features/UserEditing/Domain/Errors/UserNotFoundError';
 import { InvalidInputError } from '@userManagement/Features/UserEditing/Domain/Errors/InvalidInputError';
 import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
+import { UserEditedEvent } from '../../Domain/Events/UserEditedEvent';
 
 export class EditUserCommandHandler implements CommandHandler<EditUserCommand> {
     constructor(
@@ -20,28 +21,31 @@ export class EditUserCommandHandler implements CommandHandler<EditUserCommand> {
 
     async execute(command: EditUserCommand): Promise<void> {
         try {
-            if (!command.id || !command.name || !command.communicationType) {
-                throw new InvalidInputError('Todos los campos son requeridos');
+            if (!command.id) {
+                throw new InvalidInputError('El ID es requerido');
             }
 
             const userId = UserId.create(command.id);
-            const user = await this.userRepository.findById(userId.value);
+            const user = await this.userRepository.findById(userId);
 
             if (!user) {
-                throw new UserNotFoundError('Usuario no encontrado');
+                throw new UserNotFoundError(command.id);
             }
 
-            const newName = UserName.create(command.name);
-            const newCommunicationType = CommunicationType.create(command.communicationType);
+            const updatedUser = user.update(
+                command.name && command.name.trim() !== '' ? UserName.create(command.name) : undefined,
+                command.communicationType && command.communicationType.trim() !== '' ? CommunicationType.create(command.communicationType) : undefined
+            );
 
-            const userAggregate = UserAggregate.create(userId, newName, newCommunicationType);
-            await this.userRepository.update(userId.value, {
-                id: userId.value,
-                name: newName.value,
-                communicationType: newCommunicationType.value
-            });
-
-            await this.eventBus.publish(userAggregate.getUncommittedEvents());
+            await this.userRepository.update(userId, updatedUser);
+            
+            const event = new UserEditedEvent(
+                updatedUser.id,
+                updatedUser.name,
+                updatedUser.communicationType
+            );
+            
+            await this.eventBus.publish([event]);
         } catch (error) {
             if (error instanceof InvalidInputError || 
                 error instanceof InvalidUserIdError || 
