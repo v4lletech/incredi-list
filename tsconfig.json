@@ -12,7 +12,8 @@
     "baseUrl": ".",
     "paths": {
       "@shared/*": ["src/Contexts/Shared/*"],
-      "@userManagement/*": ["src/Contexts/UserManagement/*"]
+      "@userManagement/*": ["src/Contexts/UserManagement/*"],
+      "@messaging/*": ["src/Contexts/Messaging/*"]
     }
   },
   "include": ["src/**/*"],

@@ -30,6 +30,7 @@
   },
   "_moduleAliases": {
     "@shared": "dist/Contexts/Shared",
-    "@userManagement": "dist/Contexts/UserManagement"
+    "@userManagement": "dist/Contexts/UserManagement",
+    "@messaging": "dist/Contexts/Messaging"
   }
 }

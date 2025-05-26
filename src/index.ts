@@ -8,6 +8,7 @@ import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { createEditUserRoutes } from '@userManagement/Features/UserEditing/Infrastructure/Routes/editUserRoutes';
 import { UserEditingContainer } from '@userManagement/Features/UserEditing/Infrastructure/Container/UserEditingContainer';
+import { WelcomeMessageContainer } from '@messaging/Features/WelcomeMessage/Infrastructure/Container/WelcomeMessageContainer';
 
 const app = express();
 const port = process.env.PORT || 3080;
@@ -38,6 +39,11 @@ function configureUserEditingModule(userRepository: IUserRepository, eventBus: I
     return createEditUserRoutes(container);
 }
 
+function configureWelcomeMessageModule(eventBus: IEventBus): void {
+    const container = new WelcomeMessageContainer(eventBus);
+    container.initialize();
+}
+
 // Routes
 app.use('/api/users', configureUserCreationModule(
     // Aquí se inyectarían las implementaciones concretas de IUserRepository e IEventBus
@@ -56,6 +62,9 @@ app.use('/api/users', configureUserEditingModule(
     {} as IUserRepository,
     {} as IEventBus
 ));
+
+// Inicializar el módulo de mensajes de bienvenida
+configureWelcomeMessageModule({} as IEventBus);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
