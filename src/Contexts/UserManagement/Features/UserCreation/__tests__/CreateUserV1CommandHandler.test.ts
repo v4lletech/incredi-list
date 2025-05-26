@@ -11,10 +11,15 @@ describe('CreateUserV1CommandHandler', () => {
 
     beforeEach(() => {
         mockUserRepository = {
-            save: jest.fn(),
+            create: jest.fn().mockResolvedValue({
+                id: '123',
+                name: 'John Doe',
+                communicationType: 'EMAIL'
+            }),
             findById: jest.fn(),
             findAll: jest.fn(),
-            count: jest.fn()
+            update: jest.fn(),
+            delete: jest.fn()
         };
 
         mockEventBus = {
@@ -28,9 +33,9 @@ describe('CreateUserV1CommandHandler', () => {
     it('should create and save a new user', async () => {
         const command = new CreateUserV1Command('John Doe', 'EMAIL');
         
-        await handler.handle(command);
+        await handler.execute(command);
 
-        expect(mockUserRepository.save).toHaveBeenCalled();
+        expect(mockUserRepository.create).toHaveBeenCalled();
         expect(mockEventBus.publish).toHaveBeenCalled();
     });
 }); 

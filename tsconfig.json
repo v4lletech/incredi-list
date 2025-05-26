@@ -14,7 +14,8 @@
       "@shared/*": ["src/Contexts/Shared/*"],
       "@userManagement/*": ["src/Contexts/UserManagement/*"],
       "@messaging/*": ["src/Contexts/Messaging/*"]
-    }
+    },
+    "moduleResolution": "node"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

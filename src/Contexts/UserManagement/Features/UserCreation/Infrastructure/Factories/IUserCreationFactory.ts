@@ -5,7 +5,7 @@ import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Appli
 import { ICommandHandler } from '@shared/Infrastructure/CommandBus/ICommandHandler';
 
 export interface IUserCreationFactory {
-    createController(version: string): CreateUserV1Controller | CreateUserV2Controller;
-    createCommandHandler(version: string): ICommandHandler<CreateUserV1Command | CreateUserV2Command>;
-    createCommand(version: string, data: any): CreateUserV1Command | CreateUserV2Command;
+    createController(version: 'v1' | 'v2'): CreateUserV1Controller | CreateUserV2Controller;
+    createCommandHandler(version: 'v1' | 'v2'): ICommandHandler<CreateUserV1Command | CreateUserV2Command>;
+    createCommand(version: 'v1' | 'v2', data: any): CreateUserV1Command | CreateUserV2Command;
 } 

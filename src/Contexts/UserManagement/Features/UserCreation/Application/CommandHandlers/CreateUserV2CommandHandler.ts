@@ -1,38 +1,37 @@
-import { ICommandHandler } from '@shared/Infrastructure/CommandBus/ICommandHandler';
+import { CommandHandler } from '@shared/Domain/Common/CommandHandler';
 import { CreateUserV2Command } from '../Commands/CreateUserV2Command';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
-import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
 import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
 import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
 import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
-import { v4 as uuidv4 } from 'uuid';
-import { UserCreatedEvent } from '@userManagement/Features/UserCreation/Domain/Events/UserCreatedEvent';
+import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
 
-export class CreateUserV2CommandHandler implements ICommandHandler<CreateUserV2Command> {
+export class CreateUserV2CommandHandler implements CommandHandler<CreateUserV2Command> {
     constructor(
         private readonly userRepository: IUserRepository,
         private readonly eventBus: IEventBus
     ) {}
 
-    async handle(command: CreateUserV2Command): Promise<void> {
-        const userId = uuidv4();
-        
-        const user = await this.userRepository.create({
-            name: command.name,
-            communicationType: command.communicationType,
-            preferences: command.preferences
-        });
+    async execute(command: CreateUserV2Command): Promise<void> {
+        try {
+            const userId = UserId.create(command.id);
+            const userName = UserName.create(command.name);
+            const communicationType = CommunicationType.create(command.communicationType);
 
-        if (!user.id || !user.name || !user.communicationType) {
-            throw new Error('Usuario creado con datos incompletos');
+            const userAggregate = UserAggregate.create(userId, userName, communicationType);
+
+            await this.userRepository.create({
+                id: userAggregate.id.value,
+                name: userAggregate.name.value,
+                communicationType: userAggregate.communicationType.value
+            });
+
+            const uncommittedEvents = userAggregate.getUncommittedEvents();
+            await this.eventBus.publish(uncommittedEvents);
+        } catch (error) {
+            console.error('Error in CreateUserV2CommandHandler:', error);
+            throw error;
         }
-
-        const event = new UserCreatedEvent(
-            UserId.create(user.id),
-            UserName.create(user.name),
-            CommunicationType.create(user.communicationType)
-        );
-        await this.eventBus.publish([event]);
     }
 } 

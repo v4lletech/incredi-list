@@ -10,6 +10,7 @@ import { InvalidUserNameError } from '@userManagement/Features/UserCreation/Doma
 import { InvalidCommunicationTypeError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidCommunicationTypeError';
 import { UserNotFoundError } from '@userManagement/Features/UserEditing/Domain/Errors/UserNotFoundError';
 import { InvalidInputError } from '@userManagement/Features/UserEditing/Domain/Errors/InvalidInputError';
+import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
 
 export class EditUserCommandHandler implements CommandHandler<EditUserCommand> {
     constructor(
@@ -24,18 +25,23 @@ export class EditUserCommandHandler implements CommandHandler<EditUserCommand> {
             }
 
             const userId = UserId.create(command.id);
-            const user = await this.userRepository.findById(userId);
+            const user = await this.userRepository.findById(userId.value);
 
             if (!user) {
-                throw new UserNotFoundError(`Usuario con ID ${command.id} no encontrado`);
+                throw new UserNotFoundError('Usuario no encontrado');
             }
 
             const newName = UserName.create(command.name);
             const newCommunicationType = CommunicationType.create(command.communicationType);
 
-            // Aquí se actualizarían los valores del usuario
-            // Por ahora solo publicamos el evento
-            await this.eventBus.publish(user.getUncommittedEvents());
+            const userAggregate = UserAggregate.create(userId, newName, newCommunicationType);
+            await this.userRepository.update(userId.value, {
+                id: userId.value,
+                name: newName.value,
+                communicationType: newCommunicationType.value
+            });
+
+            await this.eventBus.publish(userAggregate.getUncommittedEvents());
         } catch (error) {
             if (error instanceof InvalidInputError || 
                 error instanceof InvalidUserIdError || 

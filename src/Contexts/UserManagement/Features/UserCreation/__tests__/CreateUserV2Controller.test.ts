@@ -16,9 +16,9 @@ describe('CreateUserV2Controller', () => {
 
         mockRequest = {
             body: {
+                id: '123',
                 name: 'Test User',
-                communicationType: 'EMAIL',
-                preferences: { theme: 'dark' }
+                communicationType: 'EMAIL'
             }
         };
 
@@ -47,7 +47,7 @@ describe('CreateUserV2Controller', () => {
 
         expect(mockResponse.status).toHaveBeenCalledWith(400);
         expect(mockResponse.json).toHaveBeenCalledWith({ 
-            error: 'Name and communicationType are required' 
+            error: 'ID, name and communicationType are required' 
         });
     });
 

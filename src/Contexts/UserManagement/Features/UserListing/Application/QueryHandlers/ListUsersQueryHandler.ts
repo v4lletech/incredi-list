@@ -11,18 +11,21 @@ export class ListUsersQueryHandler {
         const { page, limit } = query;
         const skip = (page - 1) * limit;
 
-        const [users, total] = await Promise.all([
-            this.userRepository.findAll(skip, limit),
-            this.userRepository.count()
-        ]);
-
+        // Obtener todos los usuarios y manejar la paginación en memoria
+        const allUsers = await this.userRepository.findAll();
+        const total = allUsers.length;
         const totalPages = Math.ceil(total / limit);
 
-        const userDTOs = users.map(user => new UserDTO(
-            user.id.toString(),
-            user.name.toString(),
-            user.communicationType.toString()
-        ));
+        // Aplicar paginación
+        const paginatedUsers = allUsers.slice(skip, skip + limit);
+
+        const userDTOs = paginatedUsers
+            .filter(user => user.id !== undefined)
+            .map(user => new UserDTO(
+                user.id!,
+                user.name,
+                user.communicationType
+            ));
 
         return new ListUsersResponseDTO(
             userDTOs,

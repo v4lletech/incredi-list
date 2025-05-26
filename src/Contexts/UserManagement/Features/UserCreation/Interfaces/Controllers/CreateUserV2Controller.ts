@@ -7,17 +7,17 @@ export class CreateUserV2Controller {
 
     async handle(req: Request, res: Response): Promise<void> {
         try {
-            const { name, communicationType, preferences } = req.body;
+            const { id, name, communicationType } = req.body;
 
-            if (!name || !communicationType) {
-                res.status(400).json({ error: 'Name and communicationType are required' });
+            if (!id || !name || !communicationType) {
+                res.status(400).json({ error: 'ID, name and communicationType are required' });
                 return;
             }
 
             const command = new CreateUserV2Command(
+                id,
                 name,
-                communicationType.toUpperCase(),
-                preferences || {}
+                communicationType.toUpperCase()
             );
             await this.commandBus.dispatch(command);
 

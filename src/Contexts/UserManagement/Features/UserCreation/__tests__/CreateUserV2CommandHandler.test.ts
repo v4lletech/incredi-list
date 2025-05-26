@@ -1,7 +1,11 @@
 import { CreateUserV2CommandHandler } from '../Application/CommandHandlers/CreateUserV2CommandHandler';
 import { CreateUserV2Command } from '../Application/Commands/CreateUserV2Command';
-import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
+import { IUserRepository, User } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
+import { UserId } from '../Domain/ValueObjects/UserId';
+import { UserName } from '../Domain/ValueObjects/UserName';
+import { CommunicationType } from '../Domain/ValueObjects/CommunicationType';
+import { UserAggregate } from '../Domain/Aggregates/UserAggregate';
 
 describe('CreateUserV2CommandHandler', () => {
     let handler: CreateUserV2CommandHandler;
@@ -13,8 +17,7 @@ describe('CreateUserV2CommandHandler', () => {
             create: jest.fn().mockResolvedValue({
                 id: '123',
                 name: 'John Doe',
-                communicationType: 'EMAIL',
-                preferences: { theme: 'dark' }
+                communicationType: 'EMAIL'
             }),
             findById: jest.fn(),
             findAll: jest.fn(),
@@ -30,19 +33,19 @@ describe('CreateUserV2CommandHandler', () => {
         handler = new CreateUserV2CommandHandler(mockUserRepository, mockEventBus);
     });
 
-    it('should create a new user with preferences', async () => {
+    it('should create a new user', async () => {
         const command = new CreateUserV2Command(
+            '123',
             'John Doe',
-            'EMAIL',
-            { theme: 'dark' }
+            'EMAIL'
         );
         
-        await handler.handle(command);
+        await handler.execute(command);
 
         expect(mockUserRepository.create).toHaveBeenCalledWith({
+            id: '123',
             name: 'John Doe',
-            communicationType: 'EMAIL',
-            preferences: { theme: 'dark' }
+            communicationType: 'EMAIL'
         });
         expect(mockEventBus.publish).toHaveBeenCalled();
     });

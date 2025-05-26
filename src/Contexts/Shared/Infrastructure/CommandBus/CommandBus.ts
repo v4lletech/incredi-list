@@ -24,7 +24,7 @@ export class CommandBus {
         }
 
         try {
-            await handler.handle(command);
+            await handler.execute(command);
         } catch (error) {
             console.error(`Error dispatching command ${commandName}:`, error);
             throw error;

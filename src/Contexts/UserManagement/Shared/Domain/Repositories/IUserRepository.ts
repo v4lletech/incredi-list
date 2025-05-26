@@ -2,14 +2,13 @@ import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggr
 import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
 
 export interface User {
-    id?: string;
+    id: string;
     name: string;
     communicationType: string;
-    preferences?: Record<string, any>;
 }
 
 export interface IUserRepository {
-    create(user: Omit<User, 'id'>): Promise<User>;
+    create(user: User): Promise<User>;
     findById(id: string): Promise<User | null>;
     findAll(): Promise<User[]>;
     update(id: string, user: Partial<User>): Promise<User>;

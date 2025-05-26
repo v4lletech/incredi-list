@@ -45,7 +45,7 @@ describe('UserCreationFactory', () => {
         });
 
         it('debería lanzar error para versión no soportada', () => {
-            expect(() => factory.createController('v3')).toThrow('Invalid version: v3');
+            expect(() => factory.createController('v3' as any)).toThrow('Invalid version: v3');
         });
     });
 
@@ -61,7 +61,7 @@ describe('UserCreationFactory', () => {
         });
 
         it('debería lanzar error para versión no soportada', () => {
-            expect(() => factory.createCommandHandler('v3')).toThrow('Invalid version: v3');
+            expect(() => factory.createCommandHandler('v3' as any)).toThrow('Invalid version: v3');
         });
     });
 
@@ -78,19 +78,19 @@ describe('UserCreationFactory', () => {
 
         it('debería crear un comando para la versión 2', () => {
             const command = factory.createCommand('v2', {
+                id: '123',
                 name: 'John Doe',
-                communicationType: 'EMAIL',
-                preferences: { theme: 'dark' }
+                communicationType: 'EMAIL'
             }) as CreateUserV2Command;
             
             expect(command).toBeInstanceOf(CreateUserV2Command);
+            expect(command.id).toBe('123');
             expect(command.name).toBe('John Doe');
             expect(command.communicationType).toBe('EMAIL');
-            expect(command.preferences).toEqual({ theme: 'dark' });
         });
 
         it('debería lanzar error para versión no soportada', () => {
-            expect(() => factory.createCommand('v3', {})).toThrow('Invalid version: v3');
+            expect(() => factory.createCommand('v3' as any, {})).toThrow('Invalid version: v3');
         });
     });
 }); 
