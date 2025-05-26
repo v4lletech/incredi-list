@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import 'module-alias/register';
 import { createUserRoutes } from '@userManagement/Features/UserCreation/Interfaces/Routes/userRoutes';
 import { UserCreationContainer } from '@userManagement/Features/UserCreation/Infrastructure/Container/UserCreationContainer';
@@ -6,6 +6,8 @@ import { createUserListingRoutes } from '@userManagement/Features/UserListing/In
 import { UserListingContainer } from '@userManagement/Features/UserListing/Infrastructure/Container/UserListingContainer';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
+import { createEditUserRoutes } from '@userManagement/Features/UserEditing/Infrastructure/Routes/editUserRoutes';
+import { UserEditingContainer } from '@userManagement/Features/UserEditing/Infrastructure/Container/UserEditingContainer';
 
 const app = express();
 const port = process.env.PORT || 3080;
@@ -31,6 +33,11 @@ const configureUserListingModule = (
     return createUserListingRoutes(listUsersController);
 };
 
+function configureUserEditingModule(userRepository: IUserRepository, eventBus: IEventBus): Router {
+    const container = new UserEditingContainer(userRepository, eventBus);
+    return createEditUserRoutes(container);
+}
+
 // Routes
 app.use('/api/users', configureUserCreationModule(
     // Aquí se inyectarían las implementaciones concretas de IUserRepository e IEventBus
@@ -42,6 +49,12 @@ app.use('/api/users', configureUserCreationModule(
 app.use('/api/users', configureUserListingModule(
     // Aquí se inyectaría la implementación concreta de IUserRepository
     {} as IUserRepository
+));
+
+app.use('/api/users', configureUserEditingModule(
+    // Aquí se inyectaría la implementación concreta de IUserRepository
+    {} as IUserRepository,
+    {} as IEventBus
 ));
 
 // Health check endpoint
