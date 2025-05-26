@@ -1,35 +1,52 @@
 import { Request, Response } from 'express';
-import { CreateUserCommand } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserCommand';
-import { CommandHandler } from '@shared/Domain/Common/CommandHandler';
+import { CreateUserV1Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV1Command';
+import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV2Command';
+import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
+import { InvalidUserIdError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserIdError';
 import { InvalidUserNameError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserNameError';
 import { InvalidCommunicationTypeError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidCommunicationTypeError';
-import { InvalidUserIdError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserIdError';
 
 export class CreateUserController {
-    constructor(
-        private readonly createUserCommandHandler: CommandHandler<CreateUserCommand>
-    ) {}
+    constructor(private readonly commandBus: CommandBus) {}
 
-    async handle(req: Request, res: Response): Promise<void> {
+    async execute(req: Request, res: Response): Promise<void> {
         try {
-            const { id, name, communicationType } = req.body || {};
-
-            if (!req.body || !id || !name || !communicationType) {
+            if (!req.body || !req.body.name || !req.body.communicationType) {
                 res.status(400).json({ error: 'Datos de usuario inválidos' });
                 return;
             }
 
-            const command = new CreateUserCommand(id, name, communicationType);
-            await this.createUserCommandHandler.execute(command);
+            const { id, name, communicationType } = req.body;
+            const apiVersion = req.params.version || '1';
 
-            res.status(201).json({ message: 'Usuario creado exitosamente' });
+            let command;
+            if (apiVersion === '1') {
+                command = new CreateUserV1Command(name, communicationType);
+            } else if (apiVersion === '2') {
+                if (!id) {
+                    res.status(400).json({ error: 'El ID es requerido para la versión 2' });
+                    return;
+                }
+                command = new CreateUserV2Command(id, name, communicationType);
+            } else {
+                res.status(400).json({ error: 'Versión de API no soportada' });
+                return;
+            }
+
+            await this.commandBus.dispatch(command);
+
+            res.status(201).json({
+                message: 'Usuario creado exitosamente',
+                data: { id: apiVersion === '1' ? 'ID generado automáticamente' : id }
+            });
         } catch (error) {
-            if (error instanceof InvalidUserIdError || 
-                error instanceof InvalidUserNameError || 
-                error instanceof InvalidCommunicationTypeError) {
+            if (error instanceof InvalidUserIdError) {
+                res.status(400).json({ error: error.message });
+            } else if (error instanceof InvalidUserNameError) {
+                res.status(400).json({ error: error.message });
+            } else if (error instanceof InvalidCommunicationTypeError) {
                 res.status(400).json({ error: error.message });
             } else {
-                console.error('Error inesperado:', error);
                 res.status(500).json({ error: 'Error interno del servidor' });
             }
         }

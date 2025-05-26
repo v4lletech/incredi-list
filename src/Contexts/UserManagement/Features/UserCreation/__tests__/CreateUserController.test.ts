@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { CreateUserController } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserController';
-import { CommandHandler } from '@shared/Domain/Common/CommandHandler';
-import { CreateUserCommand } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserCommand';
+import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
+import { CreateUserV1Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV1Command';
+import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV2Command';
 import { InvalidUserNameError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserNameError';
 import { InvalidCommunicationTypeError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidCommunicationTypeError';
 
 describe('CreateUserController', () => {
-    let mockCommandHandler: jest.Mocked<CommandHandler<CreateUserCommand>>;
+    let mockCommandBus: jest.Mocked<CommandBus>;
     let controller: CreateUserController;
     let mockRequest: Partial<Request>;
     let mockResponse: Partial<Response>;
@@ -14,9 +15,10 @@ describe('CreateUserController', () => {
     let mockStatus: jest.Mock;
 
     beforeEach(() => {
-        mockCommandHandler = {
-            execute: jest.fn()
-        };
+        mockCommandBus = {
+            dispatch: jest.fn(),
+            register: jest.fn()
+        } as unknown as jest.Mocked<CommandBus>;
 
         mockJson = jest.fn();
         mockStatus = jest.fn().mockReturnValue({ json: mockJson });
@@ -26,6 +28,9 @@ describe('CreateUserController', () => {
                 id: '123',
                 name: 'John Doe',
                 communicationType: 'EMAIL'
+            },
+            params: {
+                version: '1'
             }
         };
 
@@ -34,26 +39,41 @@ describe('CreateUserController', () => {
             json: mockJson
         };
 
-        controller = new CreateUserController(mockCommandHandler);
+        controller = new CreateUserController(mockCommandBus);
     });
 
-    it('debería crear un usuario exitosamente', async () => {
-        await controller.handle(mockRequest as Request, mockResponse as Response);
+    it('debería crear un usuario exitosamente con versión 1', async () => {
+        await controller.execute(mockRequest as Request, mockResponse as Response);
 
-        expect(mockCommandHandler.execute).toHaveBeenCalledWith(
-            expect.any(CreateUserCommand)
+        expect(mockCommandBus.dispatch).toHaveBeenCalledWith(
+            expect.any(CreateUserV1Command)
         );
         expect(mockStatus).toHaveBeenCalledWith(201);
         expect(mockJson).toHaveBeenCalledWith({
-            message: 'Usuario creado exitosamente'
+            message: 'Usuario creado exitosamente',
+            data: { id: 'ID generado automáticamente' }
+        });
+    });
+
+    it('debería crear un usuario exitosamente con versión 2', async () => {
+        mockRequest.params = { version: '2' };
+        await controller.execute(mockRequest as Request, mockResponse as Response);
+
+        expect(mockCommandBus.dispatch).toHaveBeenCalledWith(
+            expect.any(CreateUserV2Command)
+        );
+        expect(mockStatus).toHaveBeenCalledWith(201);
+        expect(mockJson).toHaveBeenCalledWith({
+            message: 'Usuario creado exitosamente',
+            data: { id: '123' }
         });
     });
 
     it('debería manejar error de nombre inválido', async () => {
         const error = new InvalidUserNameError('El nombre debe tener al menos 3 caracteres');
-        mockCommandHandler.execute.mockRejectedValueOnce(error);
+        mockCommandBus.dispatch.mockRejectedValueOnce(error);
 
-        await controller.handle(mockRequest as Request, mockResponse as Response);
+        await controller.execute(mockRequest as Request, mockResponse as Response);
 
         expect(mockStatus).toHaveBeenCalledWith(400);
         expect(mockJson).toHaveBeenCalledWith({
@@ -63,9 +83,9 @@ describe('CreateUserController', () => {
 
     it('debería manejar error de tipo de comunicación inválido', async () => {
         const error = new InvalidCommunicationTypeError('El tipo de comunicación debe ser SMS, EMAIL o CONSOLE');
-        mockCommandHandler.execute.mockRejectedValueOnce(error);
+        mockCommandBus.dispatch.mockRejectedValueOnce(error);
 
-        await controller.handle(mockRequest as Request, mockResponse as Response);
+        await controller.execute(mockRequest as Request, mockResponse as Response);
 
         expect(mockStatus).toHaveBeenCalledWith(400);
         expect(mockJson).toHaveBeenCalledWith({
@@ -75,9 +95,9 @@ describe('CreateUserController', () => {
 
     it('debería manejar errores inesperados', async () => {
         const error = new Error('Error inesperado');
-        mockCommandHandler.execute.mockRejectedValueOnce(error);
+        mockCommandBus.dispatch.mockRejectedValueOnce(error);
 
-        await controller.handle(mockRequest as Request, mockResponse as Response);
+        await controller.execute(mockRequest as Request, mockResponse as Response);
 
         expect(mockStatus).toHaveBeenCalledWith(500);
         expect(mockJson).toHaveBeenCalledWith({
@@ -86,9 +106,11 @@ describe('CreateUserController', () => {
     });
 
     it('debería manejar request sin body', async () => {
-        mockRequest = {};
+        mockRequest = {
+            params: { version: '1' }
+        };
 
-        await controller.handle(mockRequest as Request, mockResponse as Response);
+        await controller.execute(mockRequest as Request, mockResponse as Response);
 
         expect(mockStatus).toHaveBeenCalledWith(400);
         expect(mockJson).toHaveBeenCalledWith({
@@ -102,10 +124,11 @@ describe('CreateUserController', () => {
                 id: '123',
                 name: 'John Doe'
                 // Falta communicationType
-            }
+            },
+            params: { version: '1' }
         };
 
-        await controller.handle(mockRequest as Request, mockResponse as Response);
+        await controller.execute(mockRequest as Request, mockResponse as Response);
 
         expect(mockStatus).toHaveBeenCalledWith(400);
         expect(mockJson).toHaveBeenCalledWith({
@@ -113,16 +136,13 @@ describe('CreateUserController', () => {
         });
     });
 
-    it('debería manejar request con body vacío', async () => {
-        mockRequest = {
-            body: {}
-        };
-
-        await controller.handle(mockRequest as Request, mockResponse as Response);
+    it('debería manejar versión de API no soportada', async () => {
+        mockRequest.params = { version: '3' };
+        await controller.execute(mockRequest as Request, mockResponse as Response);
 
         expect(mockStatus).toHaveBeenCalledWith(400);
         expect(mockJson).toHaveBeenCalledWith({
-            error: 'Datos de usuario inválidos'
+            error: 'Versión de API no soportada'
         });
     });
 }); 

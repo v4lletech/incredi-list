@@ -9,8 +9,10 @@ import { createUserListingRoutes } from '@userManagement/Features/UserListing/In
 import { createEditUserRoutes } from '@userManagement/Features/UserEditing/Infrastructure/Routes/editUserRoutes';
 
 export class UserManagementModule extends BaseModule {
-    private readonly API_VERSION = 'v1';
-    private readonly BASE_PATH = `/api/${this.API_VERSION}/users`;
+    private readonly API_V1 = 'v1';
+    private readonly API_V2 = 'v2';
+    private readonly BASE_PATH_V1 = `/api/${this.API_V1}/users`;
+    private readonly BASE_PATH_V2 = `/api/${this.API_V2}/users`;
 
     constructor(
         private readonly userRepository: IUserRepository,
@@ -20,24 +22,36 @@ export class UserManagementModule extends BaseModule {
     }
 
     initialize(): void {
-        // Configurar creación de usuarios
-        const userCreationContainer = new UserCreationContainer(
+        // Configurar creación de usuarios v1 (UUID generado automáticamente)
+        const userCreationContainerV1 = new UserCreationContainer(
             this.userRepository,
-            this.eventBus
+            this.eventBus,
+            true // autoGenerateId = true
         );
-        const createUserController = userCreationContainer.getCreateUserController();
-        this.router.use(this.BASE_PATH, createUserRoutes(createUserController));
+        const createUserControllerV1 = userCreationContainerV1.getCreateUserController();
+        this.router.use(this.BASE_PATH_V1, createUserRoutes(createUserControllerV1));
 
-        // Configurar listado de usuarios
+        // Configurar creación de usuarios v2 (ID proporcionado)
+        const userCreationContainerV2 = new UserCreationContainer(
+            this.userRepository,
+            this.eventBus,
+            false // autoGenerateId = false
+        );
+        const createUserControllerV2 = userCreationContainerV2.getCreateUserController();
+        this.router.use(this.BASE_PATH_V2, createUserRoutes(createUserControllerV2));
+
+        // Configurar listado de usuarios (compartido entre versiones)
         const userListingContainer = new UserListingContainer(this.userRepository);
         const listUsersController = userListingContainer.getListUsersController();
-        this.router.use(this.BASE_PATH, createUserListingRoutes(listUsersController));
+        this.router.use(this.BASE_PATH_V1, createUserListingRoutes(listUsersController));
+        this.router.use(this.BASE_PATH_V2, createUserListingRoutes(listUsersController));
 
-        // Configurar edición de usuarios
+        // Configurar edición de usuarios (compartido entre versiones)
         const userEditingContainer = new UserEditingContainer(
             this.userRepository,
             this.eventBus
         );
-        this.router.use(this.BASE_PATH, createEditUserRoutes(userEditingContainer));
+        this.router.use(this.BASE_PATH_V1, createEditUserRoutes(userEditingContainer));
+        this.router.use(this.BASE_PATH_V2, createEditUserRoutes(userEditingContainer));
     }
 } 
