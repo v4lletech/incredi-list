@@ -14,10 +14,11 @@ describe('UserCreationContainer', () => {
 
     beforeEach(() => {
         mockUserRepository = {
-            save: jest.fn(),
+            create: jest.fn(),
             findById: jest.fn(),
             findAll: jest.fn(),
-            count: jest.fn()
+            update: jest.fn(),
+            delete: jest.fn()
         };
 
         mockEventBus = {
@@ -41,24 +42,24 @@ describe('UserCreationContainer', () => {
     });
 
     it('debería crear y retornar el controlador V1', () => {
-        const v1Controller = container.getV1Controller();
+        const v1Controller = container.getController('v1');
         expect(v1Controller).toBeInstanceOf(CreateUserV1Controller);
     });
 
     it('debería crear y retornar el controlador V2', () => {
-        const v2Controller = container.getV2Controller();
+        const v2Controller = container.getController('v2');
         expect(v2Controller).toBeInstanceOf(CreateUserV2Controller);
     });
 
     it('debería reutilizar los controladores cuando se solicitan múltiples veces', () => {
-        const v1Controller1 = container.getV1Controller();
-        const v1Controller2 = container.getV1Controller();
+        const v1Controller1 = container.getController('v1');
+        const v1Controller2 = container.getController('v1');
         
         expect(v1Controller1).toBe(v1Controller2);
     });
 
     it('debería inicializar los command handlers al construirse', async () => {
-        const v1Controller = container.getV1Controller();
+        const v1Controller = container.getController('v1');
         
         // Intentar crear un usuario debería funcionar sin errores
         await expect(

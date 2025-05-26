@@ -6,6 +6,6 @@ import { ICommandHandler } from '@shared/Infrastructure/CommandBus/ICommandHandl
 
 export interface IUserCreationFactory {
     createController(version: string): CreateUserV1Controller | CreateUserV2Controller;
-    createCommandHandler(version: string): ICommandHandler<any>;
+    createCommandHandler(version: string): ICommandHandler<CreateUserV1Command | CreateUserV2Command>;
     createCommand(version: string, data: any): CreateUserV1Command | CreateUserV2Command;
 } 

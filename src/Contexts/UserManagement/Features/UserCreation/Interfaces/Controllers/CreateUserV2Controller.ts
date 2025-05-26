@@ -1,27 +1,30 @@
 import { Request, Response } from 'express';
 import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
-import { IUserCreationFactory } from '@userManagement/Features/UserCreation/Infrastructure/Factories/IUserCreationFactory';
+import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV2Command';
 
 export class CreateUserV2Controller {
-    constructor(
-        private readonly commandBus: CommandBus,
-        private readonly factory: IUserCreationFactory
-    ) {}
+    constructor(private readonly commandBus: CommandBus) {}
 
     async handle(req: Request, res: Response): Promise<void> {
         try {
-            const command = this.factory.createCommand('v2', {
-                id: req.body.id,
-                name: req.body.name,
-                communicationType: req.body.communicationType
-            });
+            const { name, communicationType, preferences } = req.body;
 
+            if (!name || !communicationType) {
+                res.status(400).json({ error: 'Name and communicationType are required' });
+                return;
+            }
+
+            const command = new CreateUserV2Command(
+                name,
+                communicationType.toUpperCase(),
+                preferences || {}
+            );
             await this.commandBus.dispatch(command);
+
             res.status(201).json({ message: 'Usuario creado exitosamente' });
         } catch (error) {
-            res.status(400).json({ 
-                error: error instanceof Error ? error.message : 'Error desconocido' 
-            });
+            console.error('Error creating user:', error);
+            res.status(500).json({ error: 'Error creating user' });
         }
     }
 } 

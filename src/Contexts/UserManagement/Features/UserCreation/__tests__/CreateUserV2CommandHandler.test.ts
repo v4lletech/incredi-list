@@ -2,7 +2,6 @@ import { CreateUserV2CommandHandler } from '../Application/CommandHandlers/Creat
 import { CreateUserV2Command } from '../Application/Commands/CreateUserV2Command';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
-import { DomainEvent } from '@shared/Domain/Common/DomainEvent';
 
 describe('CreateUserV2CommandHandler', () => {
     let handler: CreateUserV2CommandHandler;
@@ -11,10 +10,16 @@ describe('CreateUserV2CommandHandler', () => {
 
     beforeEach(() => {
         mockUserRepository = {
-            save: jest.fn(),
+            create: jest.fn().mockResolvedValue({
+                id: '123',
+                name: 'John Doe',
+                communicationType: 'EMAIL',
+                preferences: { theme: 'dark' }
+            }),
             findById: jest.fn(),
             findAll: jest.fn(),
-            count: jest.fn()
+            update: jest.fn(),
+            delete: jest.fn()
         };
 
         mockEventBus = {
@@ -25,12 +30,20 @@ describe('CreateUserV2CommandHandler', () => {
         handler = new CreateUserV2CommandHandler(mockUserRepository, mockEventBus);
     });
 
-    it('should create and save a new user', async () => {
-        const command = new CreateUserV2Command('123', 'John Doe', 'EMAIL');
+    it('should create a new user with preferences', async () => {
+        const command = new CreateUserV2Command(
+            'John Doe',
+            'EMAIL',
+            { theme: 'dark' }
+        );
         
         await handler.handle(command);
 
-        expect(mockUserRepository.save).toHaveBeenCalled();
+        expect(mockUserRepository.create).toHaveBeenCalledWith({
+            name: 'John Doe',
+            communicationType: 'EMAIL',
+            preferences: { theme: 'dark' }
+        });
         expect(mockEventBus.publish).toHaveBeenCalled();
     });
 }); 

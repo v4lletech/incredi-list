@@ -17,25 +17,33 @@ export class UserCreationContainer {
         private readonly eventBus: IEventBus
     ) {
         this.commandBus = new CommandBus();
-        this.factory = new UserCreationFactory(userRepository, eventBus);
+        this.factory = new UserCreationFactory(userRepository, eventBus, this.commandBus);
         this.controllers = new Map();
         this.initializeCommandHandlers();
     }
 
     private initializeCommandHandlers(): void {
-        const v1Handler = this.factory.createCommandHandler('v1');
-        const v2Handler = this.factory.createCommandHandler('v2');
+        try {
+            // Crear y registrar los manejadores de comandos
+            const v1Handler = this.factory.createCommandHandler('v1');
+            const v2Handler = this.factory.createCommandHandler('v2');
 
-        this.commandBus.register(CreateUserV1Command.name, v1Handler);
-        this.commandBus.register(CreateUserV2Command.name, v2Handler);
+            // Registrar los manejadores usando el nombre de la clase del comando
+            this.commandBus.register(CreateUserV1Command.name, v1Handler);
+            this.commandBus.register(CreateUserV2Command.name, v2Handler);
+
+            console.log('Command handlers initialized successfully');
+        } catch (error) {
+            console.error('Error initializing command handlers:', error);
+            throw error;
+        }
     }
 
     getController(version: string): CreateUserV1Controller | CreateUserV2Controller {
         if (!this.controllers.has(version)) {
-            const controller = this.factory.createController(version);
-            if (!(controller instanceof CreateUserV1Controller || controller instanceof CreateUserV2Controller)) {
-                throw new Error(`Invalid controller type for version ${version}`);
-            }
+            const controller = version === 'v1' 
+                ? new CreateUserV1Controller(this.commandBus)
+                : new CreateUserV2Controller(this.commandBus);
             this.controllers.set(version, controller);
         }
         return this.controllers.get(version)!;

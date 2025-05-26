@@ -15,15 +15,20 @@ export class CreateUserV1CommandHandler implements ICommandHandler<CreateUserV1C
     ) {}
 
     async handle(command: CreateUserV1Command): Promise<void> {
-        const userId = uuidv4();
-        
-        const user = UserAggregate.create(
-            UserId.create(userId),
-            UserName.create(command.name),
-            CommunicationType.create(command.communicationType)
-        );
+        try {
+            const userId = uuidv4();
+            
+            const user = UserAggregate.create(
+                UserId.create(userId),
+                UserName.create(command.name),
+                CommunicationType.create(command.communicationType)
+            );
 
-        await this.userRepository.save(user);
-        await this.eventBus.publish(user.getUncommittedEvents());
+            await this.userRepository.save(user);
+            await this.eventBus.publish(user.getUncommittedEvents());
+        } catch (error) {
+            console.error('Error en CreateUserV1CommandHandler:', error);
+            throw error;
+        }
     }
 } 
