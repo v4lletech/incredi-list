@@ -10,15 +10,10 @@ export class EditUserController {
     async handle(req: Request, res: Response): Promise<void> {
         try {
             const { id } = req.params;
-            const { name, communicationType } = req.body;
+            const { name, communicationType } = req.body || {};
 
-            if (!id) {
+            if (!id || !req.body || !name || !communicationType) {
                 res.status(500).json({ error: 'Error interno del servidor' });
-                return;
-            }
-
-            if (!req.body || !name || !communicationType) {
-                res.status(400).json({ error: 'Datos de usuario inválidos' });
                 return;
             }
 

@@ -3,6 +3,7 @@ import { CreateUserCommand } from '@userManagement/Features/UserCreation/Applica
 import { CommandHandler } from '@shared/Domain/Common/CommandHandler';
 import { InvalidUserNameError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserNameError';
 import { InvalidCommunicationTypeError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidCommunicationTypeError';
+import { InvalidUserIdError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserIdError';
 
 export class CreateUserController {
     constructor(
@@ -11,19 +12,21 @@ export class CreateUserController {
 
     async handle(req: Request, res: Response): Promise<void> {
         try {
-            if (!req.body || !req.body.id || !req.body.name || !req.body.communicationType) {
+            const { id, name, communicationType } = req.body || {};
+
+            if (!req.body || !id || !name || !communicationType) {
                 res.status(400).json({ error: 'Datos de usuario inválidos' });
                 return;
             }
-
-            const { id, name, communicationType } = req.body;
 
             const command = new CreateUserCommand(id, name, communicationType);
             await this.createUserCommandHandler.execute(command);
 
             res.status(201).json({ message: 'Usuario creado exitosamente' });
         } catch (error) {
-            if (error instanceof InvalidUserNameError || error instanceof InvalidCommunicationTypeError) {
+            if (error instanceof InvalidUserIdError || 
+                error instanceof InvalidUserNameError || 
+                error instanceof InvalidCommunicationTypeError) {
                 res.status(400).json({ error: error.message });
             } else {
                 console.error('Error inesperado:', error);

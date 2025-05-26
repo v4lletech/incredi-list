@@ -12,13 +12,20 @@ export class ListUsersController {
             const page = parseInt(req.query.page as string) || 1;
             const limit = parseInt(req.query.limit as string) || 10;
 
+            if (page < 1 || limit < 1) {
+                res.status(400).json({ error: 'Parámetros de paginación inválidos' });
+                return;
+            }
+
             const query = new ListUsersQuery(page, limit);
             const result = await this.listUsersQueryHandler.execute(query);
 
             res.status(200).json(result);
         } catch (error) {
             console.error('Error al listar usuarios:', error);
-            res.status(500).json({ error: 'Error interno del servidor' });
+            res.status(500).json({ 
+                error: 'Error interno del servidor'
+            });
         }
     }
 } 
