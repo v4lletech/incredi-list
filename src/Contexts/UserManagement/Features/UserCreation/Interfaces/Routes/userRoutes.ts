@@ -12,11 +12,17 @@ export function userRoutes(
     const router = Router();
     const container = new UserCreationContainer(userRepository, eventBus);
 
-    const v1Controller = container.getV1Controller();
-    const v2Controller = container.getV2Controller();
+    // Rutas para v1
+    router.post('/v1/users', (req, res) => {
+        const controller = container.getController('v1');
+        controller.handle(req, res);
+    });
 
-    router.post('/v1/users', (req, res) => v1Controller.handle(req, res));
-    router.post('/v2/users', (req, res) => v2Controller.handle(req, res));
+    // Rutas para v2
+    router.post('/v2/users', (req, res) => {
+        const controller = container.getController('v2');
+        controller.handle(req, res);
+    });
 
     return router;
 } 

@@ -12,8 +12,7 @@ import { createEditUserRoutes } from '@userManagement/Features/UserEditing/Infra
 export class UserManagementModule extends BaseModule {
     private readonly API_V1 = 'v1';
     private readonly API_V2 = 'v2';
-    private readonly BASE_PATH_V1 = `/api/${this.API_V1}/users`;
-    private readonly BASE_PATH_V2 = `/api/${this.API_V2}/users`;
+    private readonly BASE_PATH = '/api';
 
     constructor(
         private readonly commandBus: CommandBus,
@@ -24,16 +23,16 @@ export class UserManagementModule extends BaseModule {
     }
 
     initialize(): void {
-        // Configurar rutas de creación de usuarios
+        // Configurar rutas de creación de usuarios (v1 y v2)
         const userCreationRoutes = userRoutes(this.commandBus, this.userRepository, this.eventBus);
-        this.router.use('/api', userCreationRoutes);
+        this.router.use(this.BASE_PATH, userCreationRoutes);
 
         // Configurar listado de usuarios (compartido entre versiones)
         const userListingContainer = new UserListingContainer(this.userRepository);
         const listUsersController = userListingContainer.getListUsersController();
         const userListingRoutes = createUserListingRoutes(listUsersController);
-        this.router.use(this.BASE_PATH_V1, userListingRoutes);
-        this.router.use(this.BASE_PATH_V2, userListingRoutes);
+        this.router.use(`${this.BASE_PATH}/${this.API_V1}/users`, userListingRoutes);
+        this.router.use(`${this.BASE_PATH}/${this.API_V2}/users`, userListingRoutes);
 
         // Configurar edición de usuarios (compartido entre versiones)
         const userEditingContainer = new UserEditingContainer(
@@ -41,7 +40,7 @@ export class UserManagementModule extends BaseModule {
             this.eventBus
         );
         const editUserRoutes = createEditUserRoutes(userEditingContainer);
-        this.router.use(this.BASE_PATH_V1, editUserRoutes);
-        this.router.use(this.BASE_PATH_V2, editUserRoutes);
+        this.router.use(`${this.BASE_PATH}/${this.API_V1}/users`, editUserRoutes);
+        this.router.use(`${this.BASE_PATH}/${this.API_V2}/users`, editUserRoutes);
     }
 } 

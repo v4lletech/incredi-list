@@ -30,26 +30,15 @@ export class UserCreationContainer {
         this.commandBus.register(CreateUserV2Command.name, v2Handler);
     }
 
-    getV1Controller(): CreateUserV1Controller {
-        if (!this.controllers.has('v1')) {
-            const controller = this.factory.createController('v1');
-            if (!(controller instanceof CreateUserV1Controller)) {
-                throw new Error('Invalid controller type for V1');
+    getController(version: string): CreateUserV1Controller | CreateUserV2Controller {
+        if (!this.controllers.has(version)) {
+            const controller = this.factory.createController(version);
+            if (!(controller instanceof CreateUserV1Controller || controller instanceof CreateUserV2Controller)) {
+                throw new Error(`Invalid controller type for version ${version}`);
             }
-            this.controllers.set('v1', controller);
+            this.controllers.set(version, controller);
         }
-        return this.controllers.get('v1') as CreateUserV1Controller;
-    }
-
-    getV2Controller(): CreateUserV2Controller {
-        if (!this.controllers.has('v2')) {
-            const controller = this.factory.createController('v2');
-            if (!(controller instanceof CreateUserV2Controller)) {
-                throw new Error('Invalid controller type for V2');
-            }
-            this.controllers.set('v2', controller);
-        }
-        return this.controllers.get('v2') as CreateUserV2Controller;
+        return this.controllers.get(version)!;
     }
 
     public static create(
