@@ -9,6 +9,9 @@ import { createUserListingRoutes } from '@userManagement/Features/UserListing/In
 import { createEditUserRoutes } from '@userManagement/Features/UserEditing/Infrastructure/Routes/editUserRoutes';
 
 export class UserManagementModule extends BaseModule {
+    private readonly API_VERSION = 'v1';
+    private readonly BASE_PATH = `/api/${this.API_VERSION}/users`;
+
     constructor(
         private readonly userRepository: IUserRepository,
         private readonly eventBus: IEventBus
@@ -23,18 +26,18 @@ export class UserManagementModule extends BaseModule {
             this.eventBus
         );
         const createUserController = userCreationContainer.getCreateUserController();
-        this.router.use('/', createUserRoutes(createUserController));
+        this.router.use(this.BASE_PATH, createUserRoutes(createUserController));
 
         // Configurar listado de usuarios
         const userListingContainer = new UserListingContainer(this.userRepository);
         const listUsersController = userListingContainer.getListUsersController();
-        this.router.use('/', createUserListingRoutes(listUsersController));
+        this.router.use(this.BASE_PATH, createUserListingRoutes(listUsersController));
 
         // Configurar edición de usuarios
         const userEditingContainer = new UserEditingContainer(
             this.userRepository,
             this.eventBus
         );
-        this.router.use('/', createEditUserRoutes(userEditingContainer));
+        this.router.use(this.BASE_PATH, createEditUserRoutes(userEditingContainer));
     }
 } 
