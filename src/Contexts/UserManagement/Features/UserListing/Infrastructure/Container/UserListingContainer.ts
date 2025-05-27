@@ -1,4 +1,4 @@
-import { IUserRepository } from '@userManagement/Features/UserCreation/Domain/Repositories/IUserRepository';
+import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { ListUsersQueryHandler } from '@userManagement/Features/UserListing/Application/QueryHandlers/ListUsersQueryHandler';
 import { ListUsersController } from '@userManagement/Features/UserListing/Interfaces/Controllers/ListUsersController';
 

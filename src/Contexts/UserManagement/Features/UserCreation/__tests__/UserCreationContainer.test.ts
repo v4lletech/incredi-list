@@ -1,8 +1,8 @@
-import { UserCreationContainer } from '../Infrastructure/Container/UserCreationContainer';
+import { UserCreationContainer } from '@userManagement/Features/UserCreation/Infrastructure/Container/UserCreationContainer';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
-import { CreateUserV1Controller } from '../Interfaces/Controllers/CreateUserV1Controller';
-import { CreateUserV2Controller } from '../Interfaces/Controllers/CreateUserV2Controller';
+import { CreateUserV1Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV1Controller';
+import { CreateUserV2Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV2Controller';
 import { Request, Response } from 'express';
 
 describe('UserCreationContainer', () => {
@@ -23,7 +23,8 @@ describe('UserCreationContainer', () => {
 
         mockEventBus = {
             publish: jest.fn(),
-            subscribe: jest.fn()
+            subscribe: jest.fn(),
+            unsubscribe: jest.fn()
         };
 
         mockRequest = {

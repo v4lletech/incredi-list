@@ -1,11 +1,8 @@
-import { CreateUserV2CommandHandler } from '../Application/CommandHandlers/CreateUserV2CommandHandler';
-import { CreateUserV2Command } from '../Application/Commands/CreateUserV2Command';
+import { CreateUserV2CommandHandler } from '@userManagement/Features/UserCreation/Application/CommandHandlers/CreateUserV2CommandHandler';
+import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV2Command';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
-import { UserId } from '../Domain/ValueObjects/UserId';
-import { UserName } from '../Domain/ValueObjects/UserName';
-import { CommunicationType } from '../Domain/ValueObjects/CommunicationType';
-import { UserAggregate } from '../Domain/Aggregates/UserAggregate';
+import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
 
 describe('CreateUserV2CommandHandler', () => {
     let handler: CreateUserV2CommandHandler;
@@ -23,7 +20,8 @@ describe('CreateUserV2CommandHandler', () => {
 
         mockEventBus = {
             publish: jest.fn(),
-            subscribe: jest.fn()
+            subscribe: jest.fn(),
+            unsubscribe: jest.fn()
         };
 
         handler = new CreateUserV2CommandHandler(mockUserRepository, mockEventBus);

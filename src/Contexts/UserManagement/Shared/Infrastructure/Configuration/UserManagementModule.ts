@@ -1,4 +1,3 @@
-import { Router } from 'express';
 import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
 import { userRoutes } from '@userManagement/Features/UserCreation/Interfaces/Routes/userRoutes';
 import { BaseModule } from '@shared/Infrastructure/Configuration/BaseModule';

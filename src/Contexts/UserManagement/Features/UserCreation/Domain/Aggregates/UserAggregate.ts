@@ -1,4 +1,4 @@
-import { AggregateRoot } from '@shared/Domain/Common/AggregateRoot';
+import { AggregateRoot } from '@shared/Domain/Aggregates/AggregateRoot';
 import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
 import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
 import { UserCreatedEvent } from '@userManagement/Features/UserCreation/Domain/Events/UserCreatedEvent';

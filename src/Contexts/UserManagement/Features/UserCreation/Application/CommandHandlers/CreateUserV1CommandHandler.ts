@@ -1,5 +1,5 @@
 import { ICommandHandler } from '@shared/Infrastructure/CommandBus/ICommandHandler';
-import { CreateUserV1Command } from '../Commands/CreateUserV1Command';
+import { CreateUserV1Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV1Command';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
@@ -22,7 +22,7 @@ export class CreateUserV1CommandHandler implements ICommandHandler<CreateUserV1C
 
             const userAggregate = UserAggregate.create(userId, userName, communicationType);
             await this.userRepository.create(userAggregate);
-            await this.eventBus.publish(userAggregate.getUncommittedEvents());
+            await Promise.all(userAggregate.getUncommittedEvents().map(event => this.eventBus.publish(event)));
         } catch (error) {
             console.error('Error en CreateUserV1CommandHandler:', error);
             throw error;

@@ -1,7 +1,7 @@
-import { CommandHandler } from '@shared/Domain/Common/CommandHandler';
-import { EditUserCommand } from '../Commands/EditUserCommand';
+import { CommandHandler } from '@shared/Infrastructure/CommandBus/CommandHandler';
+import { EditUserCommand } from '@userManagement/Features/UserEditing/Application/Commands/EditUserCommand';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
-import { UserNotFoundError } from '../../Domain/Errors/UserNotFoundError';
+import { UserNotFoundError } from '@userManagement/Features/UserEditing/Domain/Errors/UserNotFoundError';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
 import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
@@ -10,7 +10,6 @@ import { InvalidUserIdError } from '@userManagement/Features/UserCreation/Domain
 import { InvalidUserNameError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserNameError';
 import { InvalidCommunicationTypeError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidCommunicationTypeError';
 import { InvalidInputError } from '@userManagement/Features/UserEditing/Domain/Errors/InvalidInputError';
-import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
 import { UserEditedEvent } from '../../Domain/Events/UserEditedEvent';
 
 export class EditUserCommandHandler implements CommandHandler<EditUserCommand> {
@@ -24,7 +23,7 @@ export class EditUserCommandHandler implements CommandHandler<EditUserCommand> {
             if (!command.id) {
                 throw new InvalidInputError('El ID es requerido');
             }
-
+            // TODO: refactor use UserAggregate
             const userId = UserId.create(command.id);
             const user = await this.userRepository.findById(userId);
 
@@ -45,7 +44,7 @@ export class EditUserCommandHandler implements CommandHandler<EditUserCommand> {
                 updatedUser.communicationType
             );
             
-            await this.eventBus.publish([event]);
+            await this.eventBus.publish(event);
         } catch (error) {
             if (error instanceof InvalidInputError || 
                 error instanceof InvalidUserIdError || 

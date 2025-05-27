@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
-import { CreateUserV2Controller } from '../Interfaces/Controllers/CreateUserV2Controller';
+import { CreateUserV2Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV2Controller';
 import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV2Command';
 
 describe('CreateUserV2Controller', () => {

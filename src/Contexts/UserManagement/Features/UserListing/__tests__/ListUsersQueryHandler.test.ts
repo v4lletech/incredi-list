@@ -1,5 +1,5 @@
-import { ListUsersQueryHandler } from '../Application/QueryHandlers/ListUsersQueryHandler';
-import { ListUsersQuery } from '../Application/Queries/ListUsersQuery';
+import { ListUsersQueryHandler } from '@userManagement/Features/UserListing/Application/QueryHandlers/ListUsersQueryHandler';
+import { ListUsersQuery } from '@userManagement/Features/UserListing/Application/Queries/ListUsersQuery';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
 import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
