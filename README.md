@@ -7,6 +7,7 @@
 [![CQRS](https://img.shields.io/badge/CQRS-Enabled-purple)](https://martinfowler.com/bliki/CQRS.html)
 [![Event Sourcing](https://img.shields.io/badge/Event%20Sourcing-Enabled-yellow)](https://martinfowler.com/eaaDev/EventSourcing.html)
 
+
 ## 📋 Descripción
 
 Incredi-List es una aplicación de gestión de tareas (Todo List) desarrollada siguiendo los principios de Domain-Driven Design (DDD), CQRS y Event Sourcing. El proyecto está diseñado como una plataforma de aprendizaje y práctica para implementar patrones de arquitectura de software modernos.
@@ -54,7 +55,7 @@ npm test
 ## 📊 Estado del Proyecto
 
 [![GitHub Actions](https://github.com/v4lletech/incredi-list/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/v4lletech/incredi-list/actions)
-[![Code Coverage](https://img.shields.io/badge/coverage-85%25-green)](https://github.com/v4lletech/incredi-list)
+[![Code Coverage](https://github.com/v4lletech/incredi-list/actions/workflows/coverage.yml/badge.svg)](https://v4lletech.github.io/incredi-list/)
 [![Issues](https://img.shields.io/github/issues/v4lletech/incredi-list)](https://github.com/v4lletech/incredi-list/issues)
 [![Pull Requests](https://img.shields.io/github/issues-pr/v4lletech/incredi-list)](https://github.com/v4lletech/incredi-list/pulls)
 

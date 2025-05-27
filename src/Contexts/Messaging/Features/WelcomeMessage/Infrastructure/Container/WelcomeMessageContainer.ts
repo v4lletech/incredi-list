@@ -27,7 +27,7 @@ export class WelcomeMessageContainer {
         this.eventBus.subscribe(UserCreatedEvent.name, async (event: DomainEvent) => {
             if (event instanceof UserCreatedEvent) {
                 try {
-                    await this.welcomeMessageService.handleUserCreated(event);
+                await this.welcomeMessageService.handleUserCreated(event);
                 } catch (error) {
                     console.error('Error handling UserCreated event:', error);
                 }

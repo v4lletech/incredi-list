@@ -69,7 +69,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - Inicialización del proyecto
 - Configuración básica de TypeScript
 - Estructura de directorios inicial
-- Configuración de Docker
+- Configuración de Docker 
 
 ## [1.0.1] - 2024-03-21
 
