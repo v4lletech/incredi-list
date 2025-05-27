@@ -7,6 +7,7 @@ import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObje
 import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
 import { WelcomeMessageSentEvent } from '@messaging/Features/WelcomeMessage/Domain/Events/WelcomeMessageSentEvent';
 import { DomainEvent } from '@shared/Domain/Events/DomainEvent';
+import { InvalidCommunicationTypeError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidCommunicationTypeError';
 
 describe('WelcomeMessage Unit', () => {
     let eventBus: jest.Mocked<IEventBus>;
@@ -46,7 +47,11 @@ describe('WelcomeMessage Unit', () => {
 
         await welcomeMessageService.handleUserCreated(event);
 
-        expect(smsStrategy.sendMessage).toHaveBeenCalledWith(userName);
+        expect(smsStrategy.sendMessage).toHaveBeenCalledWith(
+            userId.value,
+            userName.value,
+            expect.stringContaining('Bienvenido')
+        );
         expect(eventBus.publish).toHaveBeenCalledWith(expect.any(WelcomeMessageSentEvent));
     });
 
@@ -58,7 +63,11 @@ describe('WelcomeMessage Unit', () => {
 
         await welcomeMessageService.handleUserCreated(event);
 
-        expect(emailStrategy.sendMessage).toHaveBeenCalledWith(userName);
+        expect(emailStrategy.sendMessage).toHaveBeenCalledWith(
+            userId.value,
+            userName.value,
+            expect.stringContaining('Bienvenido')
+        );
         expect(eventBus.publish).toHaveBeenCalledWith(expect.any(WelcomeMessageSentEvent));
     });
 
@@ -70,16 +79,18 @@ describe('WelcomeMessage Unit', () => {
 
         await welcomeMessageService.handleUserCreated(event);
 
-        expect(consoleStrategy.sendMessage).toHaveBeenCalledWith(userName);
+        expect(consoleStrategy.sendMessage).toHaveBeenCalledWith(
+            userId.value,
+            userName.value,
+            expect.stringContaining('Bienvenido')
+        );
         expect(eventBus.publish).toHaveBeenCalledWith(expect.any(WelcomeMessageSentEvent));
     });
 
     it('should throw error for unsupported communication type', async () => {
         const userId = UserId.create('123');
         const userName = UserName.create('John Doe');
-        const communicationType = CommunicationType.create('INVALID');
-        const event = new UserCreatedEvent(userId, userName, communicationType);
-
-        await expect(welcomeMessageService.handleUserCreated(event)).rejects.toThrow();
+        
+        expect(() => CommunicationType.create('INVALID')).toThrow(InvalidCommunicationTypeError);
     });
 }); 

@@ -15,7 +15,7 @@ export class WelcomeMessageService {
     async handleUserCreated(event: UserCreatedEvent): Promise<void> {
         try {
             const strategy = this.getStrategyForCommunicationType(event.communicationType);
-            await strategy.sendMessage(event.name);
+            await strategy.sendMessage(event.id.value, event.name.value, `¡Bienvenido ${event.name.value} a nuestra plataforma!`);
 
             const welcomeMessage = `¡Bienvenido ${event.name.value} a nuestra plataforma!`;
             await this.eventBus.publish(

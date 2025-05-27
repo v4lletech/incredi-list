@@ -8,6 +8,7 @@ import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObje
 import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
 import { WelcomeMessageSentEvent } from '@messaging/Features/WelcomeMessage/Domain/Events/WelcomeMessageSentEvent';
 import { DomainEvent } from '@shared/Domain/Events/DomainEvent';
+import { MessagingModule } from '@messaging/Shared/Infrastructure/Configuration/MessagingModule';
 
 jest.mock('@userManagement/Features/UserCreation/Infrastructure/Container/UserCreationContainer');
 jest.mock('@userManagement/Features/UserListing/Infrastructure/Container/UserListingContainer');
@@ -18,6 +19,7 @@ describe('UserManagementModule Integration', () => {
     let eventBus: InMemoryEventBus;
     let commandBus: CommandBus;
     let userManagementModule: UserManagementModule;
+    let messagingModule: MessagingModule;
 
     beforeEach(() => {
         userRepository = {
@@ -30,7 +32,9 @@ describe('UserManagementModule Integration', () => {
         eventBus = new InMemoryEventBus();
         commandBus = new CommandBus();
         userManagementModule = new UserManagementModule(commandBus, userRepository, eventBus);
+        messagingModule = new MessagingModule(eventBus);
         userManagementModule.initialize();
+        messagingModule.initialize();
     });
 
     it('should handle user creation event and send welcome message', async () => {

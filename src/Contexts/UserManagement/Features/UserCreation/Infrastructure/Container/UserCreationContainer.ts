@@ -9,15 +9,14 @@ import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Appli
 
 export class UserCreationContainer {
     private readonly factory: UserCreationFactory;
-    private readonly commandBus: CommandBus;
     private readonly controllers: Map<string, CreateUserV1Controller | CreateUserV2Controller>;
 
     constructor(
         private readonly userRepository: IUserRepository,
-        private readonly eventBus: IEventBus
+        private readonly eventBus: IEventBus,
+        private readonly commandBus: CommandBus
     ) {
-        this.commandBus = new CommandBus();
-        this.factory = new UserCreationFactory(userRepository, eventBus, this.commandBus);
+        this.factory = new UserCreationFactory(userRepository, eventBus, commandBus);
         this.controllers = new Map();
         this.initializeCommandHandlers();
     }
@@ -51,8 +50,9 @@ export class UserCreationContainer {
 
     public static create(
         userRepository: IUserRepository,
-        eventBus: IEventBus
+        eventBus: IEventBus,
+        commandBus: CommandBus
     ): UserCreationContainer {
-        return new UserCreationContainer(userRepository, eventBus);
+        return new UserCreationContainer(userRepository, eventBus, commandBus);
     }
 } 

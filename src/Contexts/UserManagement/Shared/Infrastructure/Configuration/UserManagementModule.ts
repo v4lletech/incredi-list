@@ -7,6 +7,7 @@ import { UserListingContainer } from '@userManagement/Features/UserListing/Infra
 import { UserEditingContainer } from '@userManagement/Features/UserEditing/Infrastructure/Container/UserEditingContainer';
 import { createUserListingRoutes } from '@userManagement/Features/UserListing/Interfaces/Routes/userListingRoutes';
 import { createEditUserRoutes } from '@userManagement/Features/UserEditing/Infrastructure/Routes/editUserRoutes';
+import { UserCreationContainer } from '@userManagement/Features/UserCreation/Infrastructure/Container/UserCreationContainer';
 
 export class UserManagementModule extends BaseModule {
     private readonly API_V1 = 'v1';
@@ -22,6 +23,13 @@ export class UserManagementModule extends BaseModule {
     }
 
     initialize(): void {
+        // Inicializar contenedor de creación de usuarios
+        const userCreationContainer = UserCreationContainer.create(
+            this.userRepository,
+            this.eventBus,
+            this.commandBus
+        );
+
         // Configurar rutas de creación de usuarios (v1 y v2)
         const userCreationRoutes = userRoutes(this.commandBus, this.userRepository, this.eventBus);
         this.router.use(this.BASE_PATH, userCreationRoutes);

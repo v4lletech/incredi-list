@@ -3,6 +3,7 @@ import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUse
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { UserManagementModule } from '@userManagement/Shared/Infrastructure/Configuration/UserManagementModule';
 import { MessagingModule } from '@messaging/Shared/Infrastructure/Configuration/MessagingModule';
+import express from 'express';
 
 jest.mock('@userManagement/Shared/Infrastructure/Configuration/UserManagementModule');
 jest.mock('@messaging/Shared/Infrastructure/Configuration/MessagingModule');
@@ -48,9 +49,7 @@ describe('ApplicationModule', () => {
 
     it('debería retornar un router con las rutas de los módulos', () => {
         // Arrange
-        const mockRouter = {
-            use: jest.fn()
-        };
+        const mockRouter = express.Router();
         (UserManagementModule.prototype.getRoutes as jest.Mock).mockReturnValue(mockRouter);
 
         // Act

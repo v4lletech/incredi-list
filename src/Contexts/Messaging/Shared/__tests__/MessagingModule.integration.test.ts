@@ -7,8 +7,6 @@ import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/
 import { WelcomeMessageSentEvent } from '@messaging/Features/WelcomeMessage/Domain/Events/WelcomeMessageSentEvent';
 import { DomainEvent } from '@shared/Domain/Events/DomainEvent';
 
-jest.mock('@messaging/Features/WelcomeMessage/Infrastructure/Container/WelcomeMessageContainer');
-
 describe('MessagingModule Integration', () => {
     let eventBus: InMemoryEventBus;
     let messagingModule: MessagingModule;
@@ -26,7 +24,7 @@ describe('MessagingModule Integration', () => {
         const event = new UserCreatedEvent(userId, userName, communicationType);
         let welcomeMessageSentEvent: WelcomeMessageSentEvent | undefined;
 
-        eventBus.subscribe('WelcomeMessageSentEvent', async (event: DomainEvent) => {
+        eventBus.subscribe(WelcomeMessageSentEvent.name, async (event: DomainEvent) => {
             if (event instanceof WelcomeMessageSentEvent) {
                 welcomeMessageSentEvent = event;
             }
@@ -63,7 +61,7 @@ describe('MessagingModule Integration', () => {
 
         const welcomeMessageSentEvents: WelcomeMessageSentEvent[] = [];
 
-        eventBus.subscribe('WelcomeMessageSentEvent', async (event) => {
+        eventBus.subscribe(WelcomeMessageSentEvent.name, async (event) => {
             if (event instanceof WelcomeMessageSentEvent) {
                 welcomeMessageSentEvents.push(event);
             }

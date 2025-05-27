@@ -51,7 +51,7 @@ describe('EditUserCommandHandler', () => {
         // Assert
         expect(mockUserRepository.findById).toHaveBeenCalledWith(userId);
         expect(mockUserRepository.update).toHaveBeenCalledWith(userId, expect.any(UserAggregate));
-        expect(mockEventBus.publish).toHaveBeenCalledWith([expect.any(UserEditedEvent)]);
+        expect(mockEventBus.publish).toHaveBeenCalledWith(expect.any(UserEditedEvent));
     });
 
     it('debería lanzar error cuando el usuario no existe', async () => {
@@ -83,7 +83,7 @@ describe('EditUserCommandHandler', () => {
 
         // Assert
         expect(mockUserRepository.update).toHaveBeenCalledWith(userId, expect.any(UserAggregate));
-        expect(mockEventBus.publish).toHaveBeenCalledWith([expect.any(UserEditedEvent)]);
+        expect(mockEventBus.publish).toHaveBeenCalledWith(expect.any(UserEditedEvent));
     });
 
     it('debería manejar errores del repositorio', async () => {

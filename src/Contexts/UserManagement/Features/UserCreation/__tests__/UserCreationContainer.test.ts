@@ -4,10 +4,12 @@ import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { CreateUserV1Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV1Controller';
 import { CreateUserV2Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV2Controller';
 import { Request, Response } from 'express';
+import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
 
 describe('UserCreationContainer', () => {
     let mockUserRepository: jest.Mocked<IUserRepository>;
     let mockEventBus: jest.Mocked<IEventBus>;
+    let commandBus: CommandBus;
     let container: UserCreationContainer;
     let mockRequest: Partial<Request>;
     let mockResponse: Partial<Response>;
@@ -27,6 +29,8 @@ describe('UserCreationContainer', () => {
             unsubscribe: jest.fn()
         };
 
+        commandBus = new CommandBus();
+
         mockRequest = {
             body: {
                 name: 'Test User',
@@ -39,7 +43,7 @@ describe('UserCreationContainer', () => {
             json: jest.fn()
         };
 
-        container = UserCreationContainer.create(mockUserRepository, mockEventBus);
+        container = UserCreationContainer.create(mockUserRepository, mockEventBus, commandBus);
     });
 
     it('debería crear y retornar el controlador V1', () => {

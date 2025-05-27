@@ -24,9 +24,13 @@ export class WelcomeMessageContainer {
 
     initialize(): void {
         // Suscribir el servicio al evento UserCreated
-        this.eventBus.subscribe('UserCreatedEvent', async (event: DomainEvent) => {
+        this.eventBus.subscribe(UserCreatedEvent.name, async (event: DomainEvent) => {
             if (event instanceof UserCreatedEvent) {
-                await this.welcomeMessageService.handleUserCreated(event);
+                try {
+                    await this.welcomeMessageService.handleUserCreated(event);
+                } catch (error) {
+                    console.error('Error handling UserCreated event:', error);
+                }
             }
         });
     }

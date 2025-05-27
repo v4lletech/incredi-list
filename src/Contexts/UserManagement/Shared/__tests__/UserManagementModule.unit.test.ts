@@ -37,7 +37,7 @@ describe('UserManagementModule', () => {
     it('should initialize user creation container', () => {
         userManagementModule.initialize();
 
-        expect(UserCreationContainer).toHaveBeenCalledWith(userRepository, eventBus);
+        expect(UserCreationContainer).toHaveBeenCalledWith(userRepository, eventBus, commandBus);
     });
 
     it('should initialize user listing container', () => {
