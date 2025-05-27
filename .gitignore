@@ -42,15 +42,14 @@ pnpm-lock.yaml
 .idea/
 *.swp
 *.swo
-.DS_Store
-Thumbs.db
-lost+found/
 
-# Archivos temporales
+# Archivos temporales y caché
 *.tmp
 *.temp
 .cache/
 .temp/
+.debug/
+debug.log
 
 # Archivos de sistema
 .DS_Store
@@ -60,6 +59,7 @@ lost+found/
 .Trashes
 ehthumbs.db
 Thumbs.db
+lost+found/
 
 # Archivos de desarrollo
 .devcontainer/
@@ -70,6 +70,5 @@ tsconfig.tsbuildinfo
 .eslintcache
 .prettiercache
 
-# Archivos de debug
-.debug/
-debug.log
+# Cursor AI config
+.cursor/
