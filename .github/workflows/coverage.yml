@@ -9,6 +9,10 @@ on:
 jobs:
   coverage:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
 
     steps:
     - uses: actions/checkout@v4
@@ -38,7 +42,11 @@ jobs:
         
         COLOR=$(if [ $(echo "$COVERAGE >= 80" | bc) -eq 1 ]; then echo "green"; elif [ $(echo "$COVERAGE >= 60" | bc) -eq 1 ]; then echo "yellow"; else echo "red"; fi)
         
-        echo "{\"schemaVersion\": 1, \"label\": \"coverage\", \"message\": \"$COVERAGE%\", \"color\": \"$COLOR\"}" > coverage/badge.json
+        MESSAGE="${COVERAGE}%"
+        
+        echo "{\"schemaVersion\": 1, \"label\": \"coverage\", \"message\": \"$MESSAGE\", \"color\": \"$COLOR\"}" > coverage/badge.json
+        
+        cat coverage/badge.json
     
     - name: Upload coverage to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
