@@ -29,7 +29,7 @@ build/
 *.tsbuildinfo
 
 # Lockfiles
-package-lock.json
+# package-lock.json  # Comentado para permitir el uso de npm ci en CI/CD
 yarn.lock
 pnpm-lock.yaml
 
