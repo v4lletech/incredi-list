@@ -55,7 +55,7 @@ npm test
 ## 📊 Estado del Proyecto
 
 [![GitHub Actions](https://github.com/v4lletech/incredi-list/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/v4lletech/incredi-list/actions)
-[![Code Coverage](https://github.com/v4lletech/incredi-list/actions/workflows/coverage.yml/badge.svg)](https://v4lletech.github.io/incredi-list/)
+[![Code Coverage](https://v4lletech.github.io/incredi-list/badge.json)](https://v4lletech.github.io/incredi-list/)
 [![Issues](https://img.shields.io/github/issues/v4lletech/incredi-list)](https://github.com/v4lletech/incredi-list/issues)
 [![Pull Requests](https://img.shields.io/github/issues-pr/v4lletech/incredi-list)](https://github.com/v4lletech/incredi-list/pulls)
 
