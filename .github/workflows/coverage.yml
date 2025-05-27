@@ -25,6 +25,11 @@ jobs:
     - name: Run tests with coverage
       run: npm test -- --coverage
     
+    - name: Generate coverage badge
+      run: |
+        COVERAGE=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
+        echo "{\"schemaVersion\": 1, \"label\": \"coverage\", \"message\": \"$COVERAGE%\", \"color\": \"green\"}" > coverage/badge.json
+    
     - name: Upload coverage to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
