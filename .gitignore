@@ -1,38 +1,75 @@
 # Dependencias
 node_modules/
+.pnp/
+.pnp.js
 
 # Registros y reportes
 logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
+yarn-error.log*
 lerna-debug.log*
+.pnpm-debug.log*
 
 # Variables de entorno
 .env
-.env.*.local
+.env.*
+!.env.example
+.envbuilder.tmp/
 
 # Cobertura de tests
 coverage/
+.nyc_output/
 *.lcov
 
 # Archivos de compilación/bundles
 dist/
 build/
+*.tsbuildinfo
 
 # Lockfiles
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# IDEs y sistema operativo
-.vscode/
+# IDEs y editores
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
 .idea/
+*.swp
+*.swo
 .DS_Store
 Thumbs.db
 lost+found/
-.envbuilder.tmp/
 
-# Generados por el contenedor de desarrollo
-# Debe arreglarse desde la plantilla de terraform
-/devcontainer.json
+# Archivos temporales
+*.tmp
+*.temp
+.cache/
+.temp/
+
+# Archivos de sistema
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Archivos de desarrollo
+.devcontainer/
+docker-compose.override.yml
+
+# Archivos de configuración local
+tsconfig.tsbuildinfo
+.eslintcache
+.prettiercache
+
+# Archivos de debug
+.debug/
+debug.log
