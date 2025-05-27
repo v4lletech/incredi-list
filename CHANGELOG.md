@@ -5,80 +5,62 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2024-03-20
+## [0.4.0] - 2025-05-27
 
 ### Añadido
-- Implementación inicial del proyecto Incredi-List
-- Arquitectura base con DDD, CQRS y Event Sourcing
-- Contexto de UserManagement con las siguientes características:
-  - Creación de usuarios (API v1 y v2)
-  - Edición de usuarios
-  - Listado de usuarios con paginación
-- Contexto de Messaging con:
-  - Sistema de mensajería con múltiples estrategias (SMS, Email, Console)
-  - Mensajes de bienvenida
-- Implementación de Event Sourcing
-  - Almacenamiento de eventos
-  - Reconstrucción de estado
-  - Proyecciones
-- Tests unitarios con Jest
-- Configuración de Docker para desarrollo
-- CI/CD con GitHub Actions
-- Documentación:
-  - README.md
-  - CONTRIBUTING.md
-  - ARCHITECTURE.md
-  - CHANGELOG.md
+- Implementación de la licencia MIT
+- Configuración de GitHub Actions para cobertura de código
+- Badge dinámico de cobertura en README.md
+- Soporte para reportes de cobertura en formato JSON
 
 ### Cambiado
-- Refactorización de la estructura del proyecto para seguir DDD
-- Mejora en la implementación de repositorios
-- Actualización de la documentación
+- Actualización de .gitignore para optimizar el control de versiones
+- Mejora en la configuración de pruebas y cobertura
+- Refactorización del servicio de mensajes de bienvenida
+- Actualización de la guía de contribución
 
-### Corregido
-- Errores en la validación de usuarios
-- Problemas de consistencia en el Event Store
-- Bugs en la paginación de usuarios
-
-## [0.2.0] - 2024-03-15
+## [0.3.0] - 2025-05-26
 
 ### Añadido
-- Implementación de CQRS
-- Sistema de mensajería
-- Tests de integración
+- Implementación de enrutamiento versionado de API
+- Nuevo contenedor de contexto de aplicación
+- Mejora en el módulo de mensajería con eventos de dominio compartidos
+- Refactorización del manejo de comandos
 
 ### Cambiado
-- Refactorización de la capa de aplicación
-- Mejora en el manejo de errores
+- Refactorización de la gestión de usuarios
+- Simplificación de la creación y edición de usuarios
+- Mejora en la estructura del proyecto
+- Actualización de las dependencias de importación
 
-## [0.1.0] - 2024-03-10
+## [0.2.0] - 2025-05-25
 
 ### Añadido
-- Estructura inicial del proyecto
-- Implementación básica de DDD
-- Gestión de usuarios básica
-- Tests unitarios iniciales
+- Migración del proyecto a TypeScript
+- Implementación de pruebas unitarias
+- Mejora del módulo de mensajería
+- Configuración de devcontainer con extensiones recomendadas
 
 ### Cambiado
-- Configuración inicial del proyecto
-- Estructura de directorios
+- Refactorización de dependencias
+- Optimización de rutas relativas
+- Mejora en la configuración de Docker
 
-## [0.0.1] - 2024-03-01
+## [0.1.0] - 2025-05-24
+
+### Añadido
+- Implementación inicial de DDD
+- Estructura básica del proyecto
+- Configuración inicial de pruebas
+- Configuración de Docker
+
+### Cambiado
+- Optimización de rutas y dependencias
+- Mejora en la estructura del proyecto
+
+## [0.0.1] - 2025-05-23
 
 ### Añadido
 - Inicialización del proyecto
-- Configuración básica de TypeScript
-- Estructura de directorios inicial
-- Configuración de Docker 
-
-## [1.0.1] - 2024-03-21
-
-### Corregido
-- Errores en las pruebas de integración de los módulos MessagingModule y ApplicationModule
-- Problemas con eventos no definidos en las pruebas de integración
-- Conteos incorrectos de eventos esperados en las pruebas
-
-### Cambiado
-- Refactorización de las pruebas de integración para usar implementaciones reales en lugar de mocks
-- Mejora en la estructura de las pruebas de integración para mejor mantenibilidad
-- Actualización de la documentación de arquitectura 
+- Configuración básica de Docker
+- Estructura inicial del proyecto 
