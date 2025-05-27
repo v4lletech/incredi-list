@@ -61,7 +61,6 @@ src/
 │   │       └── Infrastructure/
 │   └── Shared/
 │       ├── Domain/
-│       │   ├── Common/
 │       │   └── Events/
 │       └── Infrastructure/
 │           ├── CommandBus/
@@ -131,8 +130,31 @@ src/
                     ├── [Nombre]Aggregate.test.ts
                     ├── [Nombre]CommandHandler.test.ts
                     ├── [Nombre]Controller.test.ts
-                    └── [Nombre]Repository.test.ts
+                    ├── [Nombre]Repository.test.ts
+                    └── [Nombre].integration.test.ts
 ```
+
+#### 3.4.1 Tests Unitarios
+- Los tests deben reflejar la misma estructura que el código fuente
+- Usar mocks para dependencias externas
+- Seguir el patrón AAA (Arrange, Act, Assert)
+- Mantener los tests enfocados y atómicos
+- Cubrir casos de éxito y error
+
+#### 3.4.2 Tests de Integración
+- Probar flujos completos entre componentes
+- Usar implementaciones reales en lugar de mocks cuando sea posible
+- Verificar interacciones entre módulos
+- Validar el comportamiento del sistema en conjunto
+- Asegurar la correcta propagación de eventos
+- Verificar la consistencia de los datos
+
+#### 3.4.3 Convenciones de Testing
+- Nombres descriptivos que indiquen el comportamiento esperado
+- Organización por tipo de test (unit, integration)
+- Uso de fixtures y helpers para reducir duplicación
+- Documentación clara de los casos de prueba
+- Mantenimiento de la cobertura de código
 
 ## 4. Patrones de Diseño
 

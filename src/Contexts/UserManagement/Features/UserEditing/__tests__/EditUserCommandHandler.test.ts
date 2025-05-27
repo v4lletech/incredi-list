@@ -1,13 +1,13 @@
-import { EditUserCommandHandler } from '../Application/CommandHandlers/EditUserCommandHandler';
-import { EditUserCommand } from '../Application/Commands/EditUserCommand';
+import { EditUserCommandHandler } from '@userManagement/Features/UserEditing/Application/CommandHandlers/EditUserCommandHandler';
+import { EditUserCommand } from '@userManagement/Features/UserEditing/Application/Commands/EditUserCommand';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
+import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
 import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
 import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
 import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
 import { UserNotFoundError } from '@userManagement/Features/UserEditing/Domain/Errors/UserNotFoundError';
-import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
-import { UserEditedEvent } from '../Domain/Events/UserEditedEvent';
+import { UserEditedEvent } from '@userManagement/Features/UserEditing/Domain/Events/UserEditedEvent';
 
 describe('EditUserCommandHandler', () => {
     let handler: EditUserCommandHandler;
@@ -25,7 +25,8 @@ describe('EditUserCommandHandler', () => {
 
         mockEventBus = {
             publish: jest.fn(),
-            subscribe: jest.fn()
+            subscribe: jest.fn(),
+            unsubscribe: jest.fn()
         };
 
         handler = new EditUserCommandHandler(mockUserRepository, mockEventBus);
@@ -50,7 +51,7 @@ describe('EditUserCommandHandler', () => {
         // Assert
         expect(mockUserRepository.findById).toHaveBeenCalledWith(userId);
         expect(mockUserRepository.update).toHaveBeenCalledWith(userId, expect.any(UserAggregate));
-        expect(mockEventBus.publish).toHaveBeenCalledWith([expect.any(UserEditedEvent)]);
+        expect(mockEventBus.publish).toHaveBeenCalledWith(expect.any(UserEditedEvent));
     });
 
     it('debería lanzar error cuando el usuario no existe', async () => {
@@ -82,7 +83,7 @@ describe('EditUserCommandHandler', () => {
 
         // Assert
         expect(mockUserRepository.update).toHaveBeenCalledWith(userId, expect.any(UserAggregate));
-        expect(mockEventBus.publish).toHaveBeenCalledWith([expect.any(UserEditedEvent)]);
+        expect(mockEventBus.publish).toHaveBeenCalledWith(expect.any(UserEditedEvent));
     });
 
     it('debería manejar errores del repositorio', async () => {

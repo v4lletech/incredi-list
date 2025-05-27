@@ -10,7 +10,7 @@ export function userRoutes(
     eventBus: IEventBus
 ): Router {
     const router = Router();
-    const container = new UserCreationContainer(userRepository, eventBus);
+    const container = new UserCreationContainer(userRepository, eventBus, commandBus);
 
     // Rutas para v1
     router.post('/v1/users', (req, res) => {

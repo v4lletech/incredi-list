@@ -1,6 +1,6 @@
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
-import { ListUsersQuery } from '../Queries/ListUsersQuery';
-import { ListUsersResponseDTO, UserDTO } from '../DTOs/UserDTO';
+import { ListUsersQuery } from '@userManagement/Features/UserListing/Application/Queries/ListUsersQuery';
+import { ListUsersResponseDTO, UserDTO } from '@userManagement/Features/UserListing/Application/DTOs/UserDTO';
 
 export class ListUsersQueryHandler {
     constructor(

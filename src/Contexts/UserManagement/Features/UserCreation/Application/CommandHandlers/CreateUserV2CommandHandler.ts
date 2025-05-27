@@ -1,5 +1,5 @@
-import { CommandHandler } from '@shared/Domain/Common/CommandHandler';
-import { CreateUserV2Command } from '../Commands/CreateUserV2Command';
+import { CommandHandler } from '@shared/Infrastructure/CommandBus/CommandHandler';
+import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV2Command';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
@@ -21,7 +21,7 @@ export class CreateUserV2CommandHandler implements CommandHandler<CreateUserV2Co
 
             const userAggregate = UserAggregate.create(userId, userName, communicationType);
             await this.userRepository.create(userAggregate);
-            await this.eventBus.publish(userAggregate.getUncommittedEvents());
+            await Promise.all(userAggregate.getUncommittedEvents().map(event => this.eventBus.publish(event)));
         } catch (error) {
             console.error('Error in CreateUserV2CommandHandler:', error);
             throw error;

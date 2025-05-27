@@ -1,4 +1,4 @@
-import { ValueObject } from '@shared/Domain/Common/ValueObject';
+import { ValueObject } from '@shared/Domain/ValueObjects/ValueObject';
 import { InvalidUserIdError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserIdError';
 
 export class UserId extends ValueObject<string> {

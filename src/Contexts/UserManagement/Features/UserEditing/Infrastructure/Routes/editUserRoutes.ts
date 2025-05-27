@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { UserEditingContainer } from '../Container/UserEditingContainer';
+import { UserEditingContainer } from '@userManagement/Features/UserEditing/Infrastructure/Container/UserEditingContainer';
 
 export function createEditUserRoutes(container: UserEditingContainer): Router {
     const router = Router();

@@ -1,4 +1,4 @@
-import { ICommandHandler } from './ICommandHandler';
+import { ICommandHandler } from '@shared/Infrastructure/CommandBus/ICommandHandler';
 
 export class CommandBus {
     private handlers: Map<string, ICommandHandler<any>> = new Map();

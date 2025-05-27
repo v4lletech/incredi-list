@@ -1,6 +1,6 @@
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
-import { UserCreationFactory } from '../Factories/UserCreationFactory';
+import { UserCreationFactory } from '@userManagement/Features/UserCreation/Infrastructure/Factories/UserCreationFactory';
 import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
 import { CreateUserV1Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV1Controller';
 import { CreateUserV2Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV2Controller';
@@ -9,15 +9,14 @@ import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Appli
 
 export class UserCreationContainer {
     private readonly factory: UserCreationFactory;
-    private readonly commandBus: CommandBus;
     private readonly controllers: Map<string, CreateUserV1Controller | CreateUserV2Controller>;
 
     constructor(
         private readonly userRepository: IUserRepository,
-        private readonly eventBus: IEventBus
+        private readonly eventBus: IEventBus,
+        private readonly commandBus: CommandBus
     ) {
-        this.commandBus = new CommandBus();
-        this.factory = new UserCreationFactory(userRepository, eventBus, this.commandBus);
+        this.factory = new UserCreationFactory(userRepository, eventBus, commandBus);
         this.controllers = new Map();
         this.initializeCommandHandlers();
     }
@@ -51,8 +50,9 @@ export class UserCreationContainer {
 
     public static create(
         userRepository: IUserRepository,
-        eventBus: IEventBus
+        eventBus: IEventBus,
+        commandBus: CommandBus
     ): UserCreationContainer {
-        return new UserCreationContainer(userRepository, eventBus);
+        return new UserCreationContainer(userRepository, eventBus, commandBus);
     }
 } 

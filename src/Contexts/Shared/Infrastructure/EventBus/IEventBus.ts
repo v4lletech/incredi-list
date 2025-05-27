@@ -1,6 +1,7 @@
-import { DomainEvent } from '../../Domain/Common/DomainEvent';
+import { DomainEvent } from '@shared/Domain/Events/DomainEvent';
 
 export interface IEventBus {
-    publish(events: DomainEvent[]): Promise<void>;
+    publish(event: DomainEvent): Promise<void>;
     subscribe(eventName: string, handler: (event: DomainEvent) => Promise<void>): void;
+    unsubscribe(eventName: string, handler: (event: DomainEvent) => Promise<void>): void;
 } 

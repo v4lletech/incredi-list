@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { IModule } from './IModule';
+import { IModule } from '@shared/Infrastructure/Configuration/IModule';
 
 export abstract class BaseModule implements IModule {
     protected router: Router;

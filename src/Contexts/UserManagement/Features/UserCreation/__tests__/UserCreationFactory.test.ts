@@ -1,12 +1,10 @@
-import { UserCreationFactory } from '../Infrastructure/Factories/UserCreationFactory';
+import { UserCreationFactory } from '@userManagement/Features/UserCreation/Infrastructure/Factories/UserCreationFactory';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
-import { CreateUserV1Controller } from '../Interfaces/Controllers/CreateUserV1Controller';
-import { CreateUserV2Controller } from '../Interfaces/Controllers/CreateUserV2Controller';
-import { CreateUserV1CommandHandler } from '../Application/CommandHandlers/CreateUserV1CommandHandler';
-import { CreateUserV2CommandHandler } from '../Application/CommandHandlers/CreateUserV2CommandHandler';
-import { CreateUserV1Command } from '../Application/Commands/CreateUserV1Command';
-import { CreateUserV2Command } from '../Application/Commands/CreateUserV2Command';
+import { CreateUserV1Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV1Controller';
+import { CreateUserV2Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV2Controller';
+import { CreateUserV1Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV1Command';
+import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV2Command';
 import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
 
 describe('UserCreationFactory', () => {
@@ -26,7 +24,8 @@ describe('UserCreationFactory', () => {
 
         mockEventBus = {
             publish: jest.fn(),
-            subscribe: jest.fn()
+            subscribe: jest.fn(),
+            unsubscribe: jest.fn()
         };
 
         commandBus = new CommandBus();

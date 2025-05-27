@@ -3,12 +3,13 @@ import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObject
 import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
 import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
 
-export class UserCreatedEvent extends DomainEvent {
+export class WelcomeMessageSentEvent extends DomainEvent {
     constructor(
-        public readonly id: UserId,
-        public readonly name: UserName,
-        public readonly communicationType: CommunicationType
+        public readonly userId: UserId,
+        public readonly userName: UserName,
+        public readonly communicationType: CommunicationType,
+        public readonly message: string
     ) {
-        super('UserCreatedEvent');
+        super('WelcomeMessageSentEvent');
     }
 } 
