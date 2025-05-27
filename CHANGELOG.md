@@ -5,6 +5,22 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025-05-27
+
+### Añadido
+- Reorganización del README para mejor legibilidad
+- Mejora en la documentación de badges y estado del proyecto
+- Actualización de enlaces a documentación
+
+### Cambiado
+- Simplificación de la estructura del README
+- Eliminación de contenido redundante
+- Mejora en la organización visual con emojis
+
+### Eliminado
+- Badge de Docker Pulls por redundancia
+- Secciones duplicadas de documentación
+
 ## [0.4.0] - 2025-05-27
 
 ### Añadido
