@@ -69,4 +69,16 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 - Inicialización del proyecto
 - Configuración básica de TypeScript
 - Estructura de directorios inicial
-- Configuración de Docker 
+- Configuración de Docker
+
+## [1.0.1] - 2024-03-21
+
+### Corregido
+- Errores en las pruebas de integración de los módulos MessagingModule y ApplicationModule
+- Problemas con eventos no definidos en las pruebas de integración
+- Conteos incorrectos de eventos esperados en las pruebas
+
+### Cambiado
+- Refactorización de las pruebas de integración para usar implementaciones reales en lugar de mocks
+- Mejora en la estructura de las pruebas de integración para mejor mantenibilidad
+- Actualización de la documentación de arquitectura 
