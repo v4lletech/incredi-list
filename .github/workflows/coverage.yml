@@ -23,12 +23,21 @@ jobs:
       run: npm ci
     
     - name: Run tests with coverage
-      run: npm test -- --coverage
+      run: npm test -- --coverage --coverageReporters="json-summary" --coverageReporters="lcov" --coverageReporters="text"
     
     - name: Generate coverage badge
       run: |
-        COVERAGE=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
+        if [ -f "coverage/coverage-summary.json" ]; then
+          COVERAGE=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
+          if [ "$COVERAGE" = "null" ] || [ -z "$COVERAGE" ]; then
+            COVERAGE=0
+          fi
+        else
+          COVERAGE=0
+        fi
+        
         COLOR=$(if [ $(echo "$COVERAGE >= 80" | bc) -eq 1 ]; then echo "green"; elif [ $(echo "$COVERAGE >= 60" | bc) -eq 1 ]; then echo "yellow"; else echo "red"; fi)
+        
         echo "{\"schemaVersion\": 1, \"label\": \"coverage\", \"message\": \"$COVERAGE%\", \"color\": \"$COLOR\"}" > coverage/badge.json
     
     - name: Upload coverage to GitHub Pages
