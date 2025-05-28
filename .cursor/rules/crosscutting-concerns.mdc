@@ -18,3 +18,41 @@ alwaysApply: false
 # 12. Monitoreo y Logging
 - Cada `DomainEvent` registra un log de nivel INFO.  
 - Capturar excepciones de dominio con logs de nivel ERROR.
+
+# 14. Control de Versiones y Repositorios
+- Los commit debe seguir `Conventional Commit`
+- Los mensajes del commit deben estructurarse en dos tipos; cortos y largos como se muestra aquí:
+## 14.1 Estructura general
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+## 14.2 Commit Corto
+- Pocos cambios en archivos que reportar al CVS
+- Ideal para fixes, chore y otros cambios menores de menor impacto
+
+### 14.2.1 Ejemplo Commit Corto
+````
+feat(lang): add Polish language
+````
+
+## 14.2 Commit Largo
+- Pocos cambios en archivos que reportar al CVS
+- Ideal para fixes, chore y otros cambios menores de menor impacto
+
+### 14.2.1 Ejemplo Commit Largo
+````
+fix: prevent racing of requests
+
+Introduce a request id and a reference to latest request. Dismiss
+incoming responses other than from latest request.
+
+Remove timeouts which were used to mitigate the racing issue but are
+obsolete now.
+
+Reviewed-by: Z
+Refs: #123
+````
