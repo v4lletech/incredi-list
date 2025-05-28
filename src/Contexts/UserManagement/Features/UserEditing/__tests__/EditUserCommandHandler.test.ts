@@ -99,6 +99,7 @@ describe('EditUserCommandHandler', () => {
         const error = new Error('Error al actualizar usuario');
         mockUserRepository.update.mockRejectedValue(error);
 
+
         // Act & Assert
         const command = new EditUserCommand('1', 'Jane Smith', 'SMS');
         await expect(handler.execute(command)).rejects.toThrow('Error al actualizar usuario');

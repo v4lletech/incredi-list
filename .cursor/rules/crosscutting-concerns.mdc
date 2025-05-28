@@ -63,3 +63,7 @@ Refs: #123
 - Si, los `Test Unitarios` y `Test de Integración` fallán pero los `Test E2E` no fallan, entonces modifica los `Test Unitarios` y `Test de Integración`.
 - Si, fallan los `Test E2E` entonces ya puedes modificar el código.
 
+# 17. Refactorizado
+- Antes de crear cualquier archivo mapea a profundidad la estructura del proyecto, puede que ya exista la carpeta o archivo.
+- Antes de realizar cualquier modificación valida la responsabilidad que tiene y reevalua donde debe estar esa porción de código propuesto.
+
