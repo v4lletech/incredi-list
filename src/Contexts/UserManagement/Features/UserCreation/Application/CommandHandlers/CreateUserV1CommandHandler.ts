@@ -16,9 +16,9 @@ export class CreateUserV1CommandHandler implements ICommandHandler<CreateUserV1C
     ) {}
 
     async execute(command: CreateUserV1Command): Promise<UserAggregate> {
-        const userId = UserId.create(uuidv4());
-        const userName = UserName.create(command.name);
-        const communicationType = CommunicationType.create(command.communicationType);
+            const userId = UserId.create(uuidv4());
+            const userName = UserName.create(command.name);
+            const communicationType = CommunicationType.create(command.communicationType);
 
         const user = UserAggregate.create(userId, userName, communicationType);
         const createdUser = await this.userRepository.create(user);

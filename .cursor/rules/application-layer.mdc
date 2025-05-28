@@ -29,11 +29,11 @@ alwaysApply: false
 ```
 src/
 └── Contexts/
-    └── UserManagement/
+    └── [BoudedContext]/
         ├──__tests__/
         │   └── [Nombre].integration.test.ts
         └── Features/
-            └── UserCreation/
+            └── [Feature]/
                 └── __tests__/
                     ├── [Nombre]Aggregate.test.ts
                     ├── [Nombre]CommandHandler.test.ts
@@ -67,3 +67,7 @@ src/
 - Se realizaran con Cypress
 - Estaran en la raiz del Workspace en la carpeta `cypress` "cypress/e2e/**/*.cy.ts"
 - Los archivos de prueba siguen el patrón `*.cy.ts` para cada caso de uso y contenidos en una carpeta con el nombre al modulo probado
+
+## 4.5 Proporción de Test
+- Debe haber una covertura de código del 80% al menos.
+- La proporción entre `Test Unitarios`, `Test de Integración` y `Test E2E` debe ser 70%, 20% y 10% respectivamente en ese orden.
