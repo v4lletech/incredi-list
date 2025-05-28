@@ -62,7 +62,6 @@ Thumbs.db
 lost+found/
 
 # Archivos de desarrollo
-.devcontainer/
 docker-compose.override.yml
 
 # Archivos de configuración local
