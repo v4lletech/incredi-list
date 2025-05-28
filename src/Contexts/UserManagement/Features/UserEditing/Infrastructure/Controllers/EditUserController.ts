@@ -4,6 +4,77 @@ import { EditUserCommandHandler } from '@userManagement/Features/UserEditing/App
 import { InvalidInputError } from '@userManagement/Features/UserEditing/Domain/Errors/InvalidInputError';
 import { UserNotFoundError } from '@userManagement/Features/UserEditing/Domain/Errors/UserNotFoundError';
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     EditUserRequest:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *           description: Nuevo nombre del usuario
+ *           example: "Juan Pérez Actualizado"
+ *         communicationType:
+ *           type: string
+ *           description: Nuevo tipo de comunicación preferida
+ *           enum: [SMS, EMAIL, CONSOLE]
+ *           example: "SMS"
+ *     EditUserResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: Mensaje de confirmación
+ *           example: "Usuario actualizado exitosamente"
+ */
+
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   put:
+ *     summary: Actualiza un usuario existente
+ *     description: Actualiza el nombre y/o tipo de comunicación de un usuario existente
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/EditUserRequest'
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/EditUserResponse'
+ *       400:
+ *         description: Datos de entrada inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Usuario no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
 export class EditUserController {
     constructor(private readonly editUserCommandHandler: EditUserCommandHandler) {}
 
