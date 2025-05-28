@@ -56,3 +56,10 @@ obsolete now.
 Reviewed-by: Z
 Refs: #123
 ````
+
+# 16. Probar antes de proponer cambios
+- Ejecuta los `Test Unitarios`, `Test de Integración` y `Test E2E` con `npm test` y `npm run cypress:run` para concer el estado del código.
+- Si, los `Test Unitarios`, `Test de Integración` y `Test E2E` fallán ya puedes modificar el código base.
+- Si, los `Test Unitarios` y `Test de Integración` fallán pero los `Test E2E` no fallan, entonces modifica los `Test Unitarios` y `Test de Integración`.
+- Si, fallan los `Test E2E` entonces ya puedes modificar el código.
+
