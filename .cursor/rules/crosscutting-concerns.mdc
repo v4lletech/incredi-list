@@ -20,7 +20,7 @@ alwaysApply: false
 - Capturar excepciones de dominio con logs de nivel ERROR.
 
 # 14. Control de Versiones y Repositorios
-- Los commit debe seguir `Conventional Commit`
+- Los commit debe seguir `Conventional Commit`.
 - Los mensajes del commit deben estructurarse en dos tipos; cortos y largos como se muestra aquí:
 ## 14.1 Estructura general
 ```
@@ -31,8 +31,8 @@ alwaysApply: false
 [optional footer(s)]
 ```
 ## 14.2 Commit Corto
-- Pocos cambios en archivos que reportar al CVS
-- Ideal para fixes, chore y otros cambios menores de menor impacto
+- Pocos cambios en archivos que reportar al CVS.
+- Ideal para fixes, chore y otros cambios menores de menor impacto.
 
 ### 14.2.1 Ejemplo Commit Corto
 ````
@@ -40,8 +40,8 @@ feat(lang): add Polish language
 ````
 
 ## 14.2 Commit Largo
-- Pocos cambios en archivos que reportar al CVS
-- Ideal para fixes, chore y otros cambios menores de menor impacto
+- Grandes cambios que reportar sulen ser mayores a un fix o patch de version.
+- Ideal para nuevas caracteristicas o grandes modificaciones en el código.
 
 ### 14.2.1 Ejemplo Commit Largo
 ````

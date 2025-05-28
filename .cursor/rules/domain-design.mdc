@@ -20,3 +20,10 @@ alwaysApply: false
 - Eventos de dominio (`UserCreatedEvent`) deben extender `DomainEvent`.  
 - Cada evento se persiste en el `EventStore`.  
 - Proyecciones actualizan modelos de lectura (ReadModels) en cascada.  
+
+# 15. La Capa de Dominio
+- El `Domain` es la verdad del negocio y debe ser inmutable a menos que el desarrollador la modifique.
+- Si existe algún error con la implementación del dominio se notifica al programador.
+- Se deben modificar las capas de `Application`, `Application` y `Infraestructure` antes que `Domain` en todo caso.
+- La unica refactorización admitida para `Domain` es abstraer las implementaciones y subirlas desde la `Feature` al `Bounded Context` en la carpeta `Shared`.
+- Las implementaciones o definiciones de `Domain` de mayor nivel deben estar en `Shared` a lado de las carpeta de cada `Bounded Context`.
