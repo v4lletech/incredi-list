@@ -2,11 +2,14 @@ import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUse
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { EditUserCommandHandler } from '@userManagement/Features/UserEditing/Application/CommandHandlers/EditUserCommandHandler';
 import { EditUserController } from '@userManagement/Features/UserEditing/Interfaces/Controllers/EditUserController';
+import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
+import { EditUserCommand } from '@userManagement/Features/UserEditing/Application/Commands/EditUserCommand';
 
 export class UserEditingContainer {
     constructor(
         private readonly userRepository: IUserRepository,
-        private readonly eventBus: IEventBus
+        private readonly eventBus: IEventBus,
+        private readonly commandBus: CommandBus
     ) {}
 
     getEditUserController(): EditUserController {
@@ -14,6 +17,9 @@ export class UserEditingContainer {
             this.userRepository,
             this.eventBus
         );
-        return new EditUserController(editUserCommandHandler);
+
+        this.commandBus.register(EditUserCommand.name, editUserCommandHandler);
+
+        return new EditUserController(this.commandBus);
     }
 } 

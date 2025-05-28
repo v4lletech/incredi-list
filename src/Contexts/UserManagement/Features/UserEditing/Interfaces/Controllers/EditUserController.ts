@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
+import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
 import { EditUserCommand } from '@userManagement/Features/UserEditing/Application/Commands/EditUserCommand';
-import { EditUserCommandHandler } from '@userManagement/Features/UserEditing/Application/CommandHandlers/EditUserCommandHandler';
-import { InvalidInputError } from '@userManagement/Features/UserEditing/Domain/Errors/InvalidInputError';
-import { UserNotFoundError } from '@userManagement/Features/UserEditing/Domain/Errors/UserNotFoundError';
 import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
+import { UserDTO } from '@userManagement/Features/UserListing/Application/DTOs/UserDTO';
+import { UserNotFoundError } from '@userManagement/Features/UserEditing/Domain/Errors/UserNotFoundError';
 
 /**
  * @swagger
@@ -77,32 +77,30 @@ import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggr
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 export class EditUserController {
-    constructor(private readonly editUserCommandHandler: EditUserCommandHandler) {}
+    constructor(private readonly commandBus: CommandBus) {}
 
     async handle(req: Request, res: Response): Promise<void> {
         try {
             const { id } = req.params;
-            const { name, communicationType } = req.body || {};
-
-            if (!id) {
-                res.status(400).json({ error: 'El ID es requerido' });
-                return;
-            }
+            const { name, communicationType } = req.body;
 
             const command = new EditUserCommand(id, name, communicationType);
-            //await this.editUserCommandHandler.execute(command);
-            const userAggregate = <UserAggregate>(await this.editUserCommandHandler.execute(command));
+            const updatedUser = await this.commandBus.dispatch(command) as UserAggregate;
 
-            //res.status(200).json({ message: 'Usuario actualizado exitosamente' });
-            
-            res.status(200).json({ message: 'Usuario actualizado exitosamente', id: userAggregate.id.value, user: { ...userAggregate.toDTO() } });
+            res.status(200).json({
+                message: 'Usuario actualizado exitosamente',
+                user: new UserDTO(
+                    updatedUser.id.value,
+                    updatedUser.name.value,
+                    updatedUser.communicationType.value
+                )
+            });
         } catch (error) {
-            if (error instanceof InvalidInputError) {
-                res.status(400).json({ error: error.message });
-            } else if (error instanceof UserNotFoundError) {
+            if (error instanceof UserNotFoundError) {
                 res.status(404).json({ error: error.message });
+            } else if (error instanceof Error) {
+                res.status(400).json({ error: error.message });
             } else {
-                console.error('Error inesperado:', error);
                 res.status(500).json({ error: 'Error interno del servidor' });
             }
         }

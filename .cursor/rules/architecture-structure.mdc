@@ -1,0 +1,31 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: "Reglas de estructura general: Bounded Contexts, Layered Architecture y flujo de datos"
+globs:
+  - "src/Contexts/**"
+  - "src/**"
+alwaysApply: true
+---
+
+# 1. Estructura de Contextos Acotados
+- Cada carpeta bajo `src/Contexts/` debe contener subcarpetas: `Domain`, `Application`, `Infrastructure` y `Interfaces`.  
+- Los contextos deben definirse en carpetas separadas con nombres PascalCase.
+
+# 2. Estructura en Capas (Layered Architecture)
+- `Domain/`: Entidades, ValueObjects, Agregados, Servicios de dominio, Repositorios (interfaces).  
+- `Application/`: Caso de uso (Commands, CommandHandlers, Queries, QueryHandlers, DTOs).  
+- `Infrastructure/`: Implementaciones técnicas (persistencia, APIs externas, configuraciones).  
+- `Interfaces/`: Puntos de entrada (controladores, rutas, vistas, API).
+
+# 3. Flujo de Datos (Casos de Uso)
+1. HTTP → Controller → Command / Query  
+2. CommandHandler → Repository → EventStore → EventBus  
+3. EventBus → Proyección → ReadModel → Response
+
+# 4. Comunicación entre Contextos
+- Use un `EventBus` central para publicar `IntegrationEvents`.  
+- Los eventos de integración deben tener payloads completos para sincronización eventual.  

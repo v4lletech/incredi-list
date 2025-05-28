@@ -1,0 +1,22 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: "Reglas de diseño de dominio: tácticas DDD y Event Sourcing"
+globs:
+  - "src/Contexts/**/Domain/**/*.ts"
+alwaysApply: false
+---
+
+# 5. Patrones DDD (Domain-Driven Design)
+- `Aggregates/` contiene clases que extienden `AggregateRoot`.  
+- `Entities/` solo entidades con identidad propia.  
+- `ValueObjects/` inmutables, validan datos en el constructor.
+- Los agregados no deben asumir la responsabilidade de la propagación de los eventos esto lo asumen los `CommandHandlers`
+
+# 7. Event Sourcing
+- Eventos de dominio (`UserCreatedEvent`) deben extender `DomainEvent`.  
+- Cada evento se persiste en el `EventStore`.  
+- Proyecciones actualizan modelos de lectura (ReadModels) en cascada.  

@@ -44,7 +44,8 @@ export class UserManagementModule extends BaseModule {
         // Configurar edición de usuarios (compartido entre versiones)
         const userEditingContainer = new UserEditingContainer(
             this.userRepository,
-            this.eventBus
+            this.eventBus,
+            this.commandBus
         );
         const editUserRoutes = createEditUserRoutes(userEditingContainer);
         this.router.use(`${this.BASE_PATH}/${this.API_V1}/users`, editUserRoutes);

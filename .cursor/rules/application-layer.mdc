@@ -1,0 +1,69 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: "Reglas de la capa de aplicación: CQRS, validación y estructura de tests"
+globs:
+  - "src/Contexts/**/Application/**/*.ts"
+  - "**/__tests__/**/*.test.ts"
+alwaysApply: false
+---
+
+# 6. Patrones CQRS
+- `Commands/`: definición de comandos (e.g. `CreateUserCommand.ts`).  
+- `CommandHandlers/`: lógica de mutación y persistencia de agregados.  
+- `Queries/`: DTOs de lectura y filtros.  
+- `QueryHandlers/`: lógica de consulta y construcción de modelos de lectura.
+
+# 11. Seguridad y Validación
+- Validar entradas en `CommandHandlers` usando librerías (e.g. Zod).  
+- Value Objects rechazan valores inválidos en su constructor.
+
+# 4. Estructura de Tests
+- Cada Feature y Contexto debe tener su carpeta `__tests__` junto al código.  
+- Los archivos de prueba siguen el patrón `*.unit.test.ts` o `*.integration.test.ts` y reflejan la clase, handler o cotexto bajo prueba, e.g. `UserAggregate.unit.test.ts`.  
+
+## 4.1 Ejemplo de estructura Test
+```
+src/
+└── Contexts/
+    └── UserManagement/
+        ├──__tests__/
+        │   └── [Nombre].integration.test.ts
+        └── Features/
+            └── UserCreation/
+                └── __tests__/
+                    ├── [Nombre]Aggregate.test.ts
+                    ├── [Nombre]CommandHandler.test.ts
+                    ├── [Nombre]Controller.test.ts
+                    └── [Nombre]Repository.test.ts
+```
+
+### 4.2.1 Tests Unitarios
+- Los tests deben reflejar la misma estructura que el código fuente
+- Usar mocks para dependencias externas
+- Seguir el patrón AAA (Arrange, Act, Assert)
+- Mantener los tests enfocados y atómicos
+- Cubrir casos de éxito y error
+
+### 4.2.2 Tests de Integración
+- Probar flujos completos entre componentes (contexto o modulos)
+- Usar implementaciones reales en lugar de mocks cuando sea posible
+- Verificar interacciones entre componentes (contexto o modulos) enfocandose principalmenet en los Eventos de Dominio
+- Validar el comportamiento del sistema en conjunto
+- Asegurar la correcta propagación de eventos
+- Verificar la consistencia de los datos
+
+## 4.3 Convenciones de Testing
+- Nombres descriptivos que indiquen el comportamiento esperado
+- Organización por tipo de test (unit, integration)
+- Uso de fixtures y helpers para reducir duplicación
+- Documentación clara de los casos de prueba
+- Mantenimiento de la cobertura de código
+
+## 4.4 Test E2E
+- Se realizaran con Cypress
+- Estaran en la raiz del Workspace en la carpeta `cypress` "cypress/e2e/**/*.cy.ts"
+- Los archivos de prueba siguen el patrón `*.cy.ts` para cada caso de uso y contenidos en una carpeta con el nombre al modulo probado

@@ -1,0 +1,20 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: "Reglas de infraestructura: persistencia, read models y pipelines CI/CD"
+globs:
+  - "src/Contexts/**/Infrastructure/**/*.ts"
+  - ".github/workflows/**/*.yml"
+alwaysApply: false
+---
+
+# 9. Persistencia y Read Models
+- `Infrastructure/Persistence/`: implementaciones concretas de `IRepository`.  
+- `Infrastructure/ReadModels/`: definiciones de modelos de lectura actualizados por proyecciones.
+
+# 13. Despliegue y CI/CD
+- Use Docker multi-stage builds y gestione variables de entorno con secretos seguros.  
+- Pipelines en GitHub Actions deben incluir build, test y deploy automáticos.  

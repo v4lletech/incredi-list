@@ -9,6 +9,9 @@ import { InvalidCommunicationTypeError } from '@userManagement/Shared/Domain/Err
 import { InvalidInputError } from '@userManagement/Features/UserEditing/Domain/Errors/InvalidInputError';
 import { UserEditedEvent } from '../../Domain/Events/UserEditedEvent';
 import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
+import { UserId } from '@userManagement/Shared/Domain/ValueObjects/UserId';
+import { UserName } from '@userManagement/Shared/Domain/ValueObjects/UserName';
+import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/CommunicationType';
 
 export class EditUserCommandHandler implements ICommandHandler<EditUserCommand> {
     constructor(
@@ -22,37 +25,29 @@ export class EditUserCommandHandler implements ICommandHandler<EditUserCommand> 
                 throw new InvalidInputError('El ID es requerido');
             }
             
-            const userAggregate = UserAggregate.fromDTO({
-                id: command.id,
-                name: command.name ?? '',
-                communicationType: command.communicationType ?? ''
-            });
-            
-            //const userId = UserId.create(command.id);
-            const user = await this.userRepository.findById(userAggregate.id);
+            const userId = UserId.create(command.id);
+            const user = await this.userRepository.findById(userId);
 
             if (!user) {
-                throw new UserNotFoundError(userAggregate.id.value);
+                throw new UserNotFoundError(userId.value);
             }
 
-            // TODO: refactor to use UserEditedEvent; no se debe lanzar el evento desde el constructor
-            // const updatedUser = user.update(
-            //     command.name && command.name.trim() !== '' ? UserName.create(command.name) : undefined,
-            //     command.communicationType && command.communicationType.trim() !== '' ? CommunicationType.create(command.communicationType) : undefined
-            // );
-            const updatedUser = user.update(userAggregate.name, userAggregate.communicationType);
+            const updatedName = command.name ? UserName.create(command.name) : undefined;
+            const updatedCommunicationType = command.communicationType ? 
+                CommunicationType.create(command.communicationType) : undefined;
 
-            await this.userRepository.update(userAggregate.id, updatedUser);
+            const updatedUser = user.update(updatedName, updatedCommunicationType);
+            const savedUser = await this.userRepository.update(userId, updatedUser);
             
             const event = new UserEditedEvent(
-                updatedUser.id,
-                updatedUser.name,
-                updatedUser.communicationType
+                savedUser.id,
+                savedUser.name,
+                savedUser.communicationType
             );
             
             await this.eventBus.publish(event);
 
-            return updatedUser;
+            return savedUser;
         } catch (error) {
             if (error instanceof InvalidInputError || 
                 error instanceof InvalidUserIdError || 

@@ -69,6 +69,3 @@ docker-compose.override.yml
 tsconfig.tsbuildinfo
 .eslintcache
 .prettiercache
-
-# Cursor AI config
-.cursor/

@@ -1,0 +1,20 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: "Reglas de preocupaciones transversales: convención de nombres y logging"
+globs:
+  - "src/**/*.ts"
+alwaysApply: false
+---
+
+# 3. Convenciones de Nombres
+- PascalCase para tipos, clases y enums.  
+- camelCase para funciones, propiedades y variables.  
+- No anteponer `I` a las interfaces (use `UserRepository`, no `IUserRepository`).
+
+# 12. Monitoreo y Logging
+- Cada `DomainEvent` registra un log de nivel INFO.  
+- Capturar excepciones de dominio con logs de nivel ERROR.

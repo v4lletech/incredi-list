@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
 import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV2Command';
+import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
 
 /**
  * @swagger
@@ -92,9 +93,13 @@ export class CreateUserV2Controller {
                 name,
                 communicationType.toUpperCase()
             );
-            await this.commandBus.dispatch(command);
+            const userAggregate = await this.commandBus.dispatch(command) as UserAggregate;
 
-            res.status(201).json({ message: 'Usuario creado exitosamente' });
+            res.status(201).json({
+                message: 'Usuario creado exitosamente',
+                id: userAggregate.id.value,
+                user: userAggregate.toDTO()
+            });
         } catch (error) {
             console.error('Error creating user:', error);
             res.status(500).json({ error: 'Error creating user' });
