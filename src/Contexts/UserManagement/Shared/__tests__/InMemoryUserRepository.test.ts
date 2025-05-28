@@ -1,8 +1,8 @@
 import { InMemoryUserRepository } from '@userManagement/Shared/Infrastructure/Persistence/InMemoryUserRepository';
-import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
-import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
-import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
-import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
+import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
+import { UserId } from '@userManagement/Shared/Domain/ValueObjects/UserId';
+import { UserName } from '@userManagement/Shared/Domain/ValueObjects/UserName';
+import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/CommunicationType';
 
 describe('InMemoryUserRepository', () => {
     let repository: InMemoryUserRepository;

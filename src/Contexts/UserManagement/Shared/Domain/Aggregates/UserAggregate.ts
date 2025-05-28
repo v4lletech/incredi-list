@@ -1,8 +1,8 @@
 import { AggregateRoot } from '@shared/Domain/Aggregates/AggregateRoot';
-import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
-import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
+import { UserName } from '@userManagement/Shared/Domain/ValueObjects/UserName';
+import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/CommunicationType';
 import { UserCreatedEvent } from '@userManagement/Features/UserCreation/Domain/Events/UserCreatedEvent';
-import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
+import { UserId } from '@userManagement/Shared/Domain/ValueObjects/UserId';
 
 export interface UserDTO {
     id: string;
@@ -24,6 +24,7 @@ export class UserAggregate extends AggregateRoot {
 
     public static create(id: UserId, name: UserName, communicationType: CommunicationType): UserAggregate {
         const user = new UserAggregate(id, name, communicationType);
+        //TODO: refactor to use UserCreatedEvent; no se debe lanzar el evento desde el constructor
         user.addDomainEvent(new UserCreatedEvent(id, name, communicationType));
         return user;
     }

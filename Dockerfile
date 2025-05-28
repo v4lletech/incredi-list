@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/javascript-node:0-18
+FROM mcr.microsoft.com/devcontainers/javascript-node:18-bullseye
 
 USER root
 # Opción recomendada: omitimos la creación forzada

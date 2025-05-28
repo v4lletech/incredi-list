@@ -1,6 +1,6 @@
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
-import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
-import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
+import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
+import { UserId } from '@userManagement/Shared/Domain/ValueObjects/UserId';
 
 export class InMemoryUserRepository implements IUserRepository {
     private users: Map<string, UserAggregate> = new Map();

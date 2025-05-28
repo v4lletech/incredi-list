@@ -1,9 +1,9 @@
 import { WelcomeMessageService } from '../Application/Services/WelcomeMessageService';
 import { IMessageStrategy } from '@messaging/Shared/Domain/Strategies/IMessageStrategy';
 import { UserCreatedEvent } from '@userManagement/Features/UserCreation/Domain/Events/UserCreatedEvent';
-import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
-import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
-import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
+import { UserId } from '@userManagement/Shared/Domain/ValueObjects/UserId';
+import { UserName } from '@userManagement/Shared/Domain/ValueObjects/UserName';
+import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/CommunicationType';
 
 describe('WelcomeMessageService', () => {
     let welcomeMessageService: WelcomeMessageService;

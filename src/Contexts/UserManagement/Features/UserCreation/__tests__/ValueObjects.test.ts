@@ -1,7 +1,7 @@
-import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
-import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
-import { InvalidUserNameError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserNameError';
-import { InvalidCommunicationTypeError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidCommunicationTypeError';
+import { UserName } from '@userManagement/Shared/Domain/ValueObjects/UserName';
+import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/CommunicationType';
+import { InvalidUserNameError } from '@userManagement/Shared/Domain/Errors/InvalidUserNameError';
+import { InvalidCommunicationTypeError } from '@userManagement/Shared/Domain/Errors/InvalidCommunicationTypeError';
 
 describe('Value Objects', () => {
     describe('UserName', () => {

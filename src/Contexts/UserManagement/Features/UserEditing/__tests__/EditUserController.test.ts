@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { EditUserController } from '@userManagement/Features/UserEditing/Infrastructure/Controllers/EditUserController';
+import { EditUserController } from '@userManagement/Features/UserEditing/Interfaces/Controllers/EditUserController';
 import { EditUserCommandHandler } from '@userManagement/Features/UserEditing/Application/CommandHandlers/EditUserCommandHandler';
 import { InvalidInputError } from '@userManagement/Features/UserEditing/Domain/Errors/InvalidInputError';
 import { UserNotFoundError } from '@userManagement/Features/UserEditing/Domain/Errors/UserNotFoundError';

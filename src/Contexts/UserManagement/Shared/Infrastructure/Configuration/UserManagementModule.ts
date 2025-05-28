@@ -6,7 +6,7 @@ import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { UserListingContainer } from '@userManagement/Features/UserListing/Infrastructure/Container/UserListingContainer';
 import { UserEditingContainer } from '@userManagement/Features/UserEditing/Infrastructure/Container/UserEditingContainer';
 import { createUserListingRoutes } from '@userManagement/Features/UserListing/Interfaces/Routes/userListingRoutes';
-import { createEditUserRoutes } from '@userManagement/Features/UserEditing/Infrastructure/Routes/editUserRoutes';
+import { createEditUserRoutes } from '@userManagement/Features/UserEditing/Interfaces/Routes/editUserRoutes';
 import { UserCreationContainer } from '@userManagement/Features/UserCreation/Infrastructure/Container/UserCreationContainer';
 
 export class UserManagementModule extends BaseModule {

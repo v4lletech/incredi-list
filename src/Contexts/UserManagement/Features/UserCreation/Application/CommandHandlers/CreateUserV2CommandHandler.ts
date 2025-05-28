@@ -2,10 +2,10 @@ import { CommandHandler } from '@shared/Infrastructure/CommandBus/CommandHandler
 import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV2Command';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
-import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
-import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
-import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
-import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
+import { UserId } from '@userManagement/Shared/Domain/ValueObjects/UserId';
+import { UserName } from '@userManagement/Shared/Domain/ValueObjects/UserName';
+import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/CommunicationType';
+import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
 
 export class CreateUserV2CommandHandler implements CommandHandler<CreateUserV2Command> {
     constructor(

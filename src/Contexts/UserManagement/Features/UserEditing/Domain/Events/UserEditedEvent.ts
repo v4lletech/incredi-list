@@ -1,7 +1,7 @@
 import { DomainEvent } from '@shared/Domain/Events/DomainEvent';
-import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
-import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
-import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
+import { UserId } from '@userManagement/Shared/Domain/ValueObjects/UserId';
+import { UserName } from '@userManagement/Shared/Domain/ValueObjects/UserName';
+import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/CommunicationType';
 
 export class UserEditedEvent extends DomainEvent {
     constructor(

@@ -1,5 +1,5 @@
 import { ValueObject } from '@shared/Domain/ValueObjects/ValueObject';
-import { InvalidUserIdError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidUserIdError';
+import { InvalidUserIdError } from '@userManagement/Shared/Domain/Errors/InvalidUserIdError';
 
 export class UserId extends ValueObject<string> {
     private constructor(value: string) {

@@ -1,3 +1,4 @@
+import { AggregateRoot } from '@shared/Domain/Aggregates/AggregateRoot';
 import { ICommandHandler } from '@shared/Infrastructure/CommandBus/ICommandHandler';
 
 export class CommandBus {
@@ -11,7 +12,7 @@ export class CommandBus {
         console.log(`Handler registered for command ${commandName}`);
     }
 
-    async dispatch(command: any): Promise<void> {
+    async dispatch(command: any): Promise<AggregateRoot> {
         const commandName = command.constructor.name;
         console.log(`Dispatching command: ${commandName}`);
         
@@ -24,7 +25,7 @@ export class CommandBus {
         }
 
         try {
-            await handler.execute(command);
+            return await handler.execute(command);
         } catch (error) {
             console.error(`Error dispatching command ${commandName}:`, error);
             throw error;

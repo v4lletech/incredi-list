@@ -1,10 +1,10 @@
 import { ListUsersQueryHandler } from '@userManagement/Features/UserListing/Application/QueryHandlers/ListUsersQueryHandler';
 import { ListUsersQuery } from '@userManagement/Features/UserListing/Application/Queries/ListUsersQuery';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
-import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
-import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
-import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
-import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
+import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
+import { UserId } from '@userManagement/Shared/Domain/ValueObjects/UserId';
+import { UserName } from '@userManagement/Shared/Domain/ValueObjects/UserName';
+import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/CommunicationType';
 
 describe('ListUsersQueryHandler', () => {
     let handler: ListUsersQueryHandler;

@@ -1,7 +1,7 @@
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { EditUserCommandHandler } from '@userManagement/Features/UserEditing/Application/CommandHandlers/EditUserCommandHandler';
-import { EditUserController } from '@userManagement/Features/UserEditing/Infrastructure/Controllers/EditUserController';
+import { EditUserController } from '@userManagement/Features/UserEditing/Interfaces/Controllers/EditUserController';
 
 export class UserEditingContainer {
     constructor(

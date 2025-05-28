@@ -1,6 +1,6 @@
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
-import { IUserCreationFactory } from '@userManagement/Features/UserCreation/Infrastructure/Factories/IUserCreationFactory';
+import { IUserCreationFactory } from '@userManagement/Features/UserCreation/Infrastructure/Factories/oldIUserCreationFactory';
 import { CreateUserV1Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV1Controller';
 import { CreateUserV2Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV2Controller';
 import { CreateUserV1Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV1Command';

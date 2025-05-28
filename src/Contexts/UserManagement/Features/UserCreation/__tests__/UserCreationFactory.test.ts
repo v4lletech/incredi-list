@@ -1,4 +1,4 @@
-import { UserCreationFactory } from '@userManagement/Features/UserCreation/Infrastructure/Factories/UserCreationFactory';
+import { UserCreationFactory } from '@userManagement/Features/UserCreation/Infrastructure/Factories/oldUserCreationFactory';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { CreateUserV1Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV1Controller';

@@ -2,7 +2,7 @@ import { CreateUserV2CommandHandler } from '@userManagement/Features/UserCreatio
 import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV2Command';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
-import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
+import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
 
 describe('CreateUserV2CommandHandler', () => {
     let handler: CreateUserV2CommandHandler;

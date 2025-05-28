@@ -2,12 +2,12 @@ import { WelcomeMessageService } from '@messaging/Features/WelcomeMessage/Applic
 import { IMessageStrategy } from '@messaging/Shared/Domain/Strategies/IMessageStrategy';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { UserCreatedEvent } from '@userManagement/Features/UserCreation/Domain/Events/UserCreatedEvent';
-import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
-import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
-import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
+import { UserId } from '@userManagement/Shared/Domain/ValueObjects/UserId';
+import { UserName } from '@userManagement/Shared/Domain/ValueObjects/UserName';
+import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/CommunicationType';
 import { WelcomeMessageSentEvent } from '@messaging/Features/WelcomeMessage/Domain/Events/WelcomeMessageSentEvent';
 import { DomainEvent } from '@shared/Domain/Events/DomainEvent';
-import { InvalidCommunicationTypeError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidCommunicationTypeError';
+import { InvalidCommunicationTypeError } from '@userManagement/Shared/Domain/Errors/InvalidCommunicationTypeError';
 
 describe('WelcomeMessage Unit', () => {
     let eventBus: jest.Mocked<IEventBus>;

@@ -3,9 +3,9 @@ import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUse
 import { InMemoryEventBus } from '@shared/Infrastructure/EventBus/InMemoryEventBus';
 import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
 import { UserCreatedEvent } from '@userManagement/Features/UserCreation/Domain/Events/UserCreatedEvent';
-import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
-import { UserName } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserName';
-import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
+import { UserId } from '@userManagement/Shared/Domain/ValueObjects/UserId';
+import { UserName } from '@userManagement/Shared/Domain/ValueObjects/UserName';
+import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/CommunicationType';
 import { WelcomeMessageSentEvent } from '@messaging/Features/WelcomeMessage/Domain/Events/WelcomeMessageSentEvent';
 import { DomainEvent } from '@shared/Domain/Events/DomainEvent';
 import { MessagingModule } from '@messaging/Shared/Infrastructure/Configuration/MessagingModule';

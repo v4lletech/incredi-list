@@ -1,11 +1,12 @@
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
-import { UserCreationFactory } from '@userManagement/Features/UserCreation/Infrastructure/Factories/UserCreationFactory';
+import { UserCreationFactory } from '@userManagement/Features/UserCreation/Infrastructure/Factories/oldUserCreationFactory';
 import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
 import { CreateUserV1Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV1Controller';
 import { CreateUserV2Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV2Controller';
 import { CreateUserV1Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV1Command';
 import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV2Command';
+import ICreateUserController from '../../../../../Shared/Interfaces/Controllers/IController';
 
 export class UserCreationContainer {
     private readonly factory: UserCreationFactory;
@@ -38,7 +39,7 @@ export class UserCreationContainer {
         }
     }
 
-    getController(version: string): CreateUserV1Controller | CreateUserV2Controller {
+    getController(version: string): ICreateUserController {
         if (!this.controllers.has(version)) {
             const controller = version === 'v1' 
                 ? new CreateUserV1Controller(this.commandBus)

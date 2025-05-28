@@ -1,5 +1,5 @@
 import { ValueObject } from '@shared/Domain/ValueObjects/ValueObject';
-import { InvalidCommunicationTypeError } from '@userManagement/Features/UserCreation/Domain/Errors/InvalidCommunicationTypeError';
+import { InvalidCommunicationTypeError } from '@userManagement/Shared/Domain/Errors/InvalidCommunicationTypeError';
 
 export class CommunicationType extends ValueObject<string> {
     private constructor(value: string) {

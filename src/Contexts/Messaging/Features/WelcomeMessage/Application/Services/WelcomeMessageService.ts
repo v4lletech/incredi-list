@@ -2,7 +2,7 @@ import { IMessageStrategy } from '@messaging/Shared/Domain/Strategies/IMessageSt
 import { UserCreatedEvent } from '@userManagement/Features/UserCreation/Domain/Events/UserCreatedEvent';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { WelcomeMessageSentEvent } from '@messaging/Features/WelcomeMessage/Domain/Events/WelcomeMessageSentEvent';
-import { CommunicationType } from '@userManagement/Features/UserCreation/Domain/ValueObjects/CommunicationType';
+import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/CommunicationType';
 
 export class WelcomeMessageService {
     constructor(

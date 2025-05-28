@@ -3,6 +3,7 @@ import { EditUserCommand } from '@userManagement/Features/UserEditing/Applicatio
 import { EditUserCommandHandler } from '@userManagement/Features/UserEditing/Application/CommandHandlers/EditUserCommandHandler';
 import { InvalidInputError } from '@userManagement/Features/UserEditing/Domain/Errors/InvalidInputError';
 import { UserNotFoundError } from '@userManagement/Features/UserEditing/Domain/Errors/UserNotFoundError';
+import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
 
 /**
  * @swagger
@@ -89,9 +90,12 @@ export class EditUserController {
             }
 
             const command = new EditUserCommand(id, name, communicationType);
-            await this.editUserCommandHandler.execute(command);
+            //await this.editUserCommandHandler.execute(command);
+            const userAggregate = <UserAggregate>(await this.editUserCommandHandler.execute(command));
 
-            res.status(200).json({ message: 'Usuario actualizado exitosamente' });
+            //res.status(200).json({ message: 'Usuario actualizado exitosamente' });
+            
+            res.status(200).json({ message: 'Usuario actualizado exitosamente', id: userAggregate.id.value, user: { ...userAggregate.toDTO() } });
         } catch (error) {
             if (error instanceof InvalidInputError) {
                 res.status(400).json({ error: error.message });
