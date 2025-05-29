@@ -99,21 +99,41 @@ export class ListUsersController {
 
     async handle(req: Request, res: Response): Promise<void> {
         try {
-            const page = parseInt(req.query.page as string) || 1;
-            const limit = parseInt(req.query.limit as string) || 10;
+            // Validar parámetros de paginación primero
+            const pageParam = req.query.page as string;
+            const limitParam = req.query.limit as string;
 
-            if (page < 1 || limit < 1) {
-                res.status(400).json({ error: 'Parámetros de paginación inválidos' });
+            // Si se proporcionan parámetros, deben ser números válidos
+            if (pageParam && (isNaN(Number(pageParam)) || Number(pageParam) < 1)) {
+                res.status(400).json({
+                    error: 'Parámetros de paginación inválidos'
+                });
                 return;
             }
+
+            if (limitParam && (isNaN(Number(limitParam)) || Number(limitParam) < 1)) {
+                res.status(400).json({
+                    error: 'Parámetros de paginación inválidos'
+                });
+                return;
+            }
+
+            const page = pageParam ? Number(pageParam) : 1;
+            const limit = limitParam ? Number(limitParam) : 10;
 
             const query = new ListUsersQuery(page, limit);
             const result = await this.listUsersQueryHandler.execute(query);
 
-            res.status(200).json(result);
+            res.status(200).json({
+                users: result.users,
+                total: result.total,
+                page: result.page,
+                limit: result.limit,
+                totalPages: result.totalPages
+            });
         } catch (error) {
             console.error('Error al listar usuarios:', error);
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'Error interno del servidor'
             });
         }
