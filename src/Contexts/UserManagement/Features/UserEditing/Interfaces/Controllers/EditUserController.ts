@@ -4,6 +4,10 @@ import { EditUserCommand } from '@userManagement/Features/UserEditing/Applicatio
 import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
 import { UserDTO } from '@userManagement/Features/UserListing/Application/DTOs/UserDTO';
 import { UserNotFoundError } from '@userManagement/Features/UserEditing/Domain/Errors/UserNotFoundError';
+import { InvalidInputError } from '@userManagement/Features/UserEditing/Domain/Errors/InvalidInputError';
+import { InvalidUserIdError } from '@userManagement/Shared/Domain/Errors/InvalidUserIdError';
+import { InvalidUserNameError } from '@userManagement/Shared/Domain/Errors/InvalidUserNameError';
+import { InvalidCommunicationTypeError } from '@userManagement/Shared/Domain/Errors/InvalidCommunicationTypeError';
 
 /**
  * @swagger
@@ -84,6 +88,11 @@ export class EditUserController {
             const { id } = req.params;
             const { name, communicationType } = req.body;
 
+            if (!id) {
+                res.status(400).json({ error: 'ID de usuario es requerido' });
+                return;
+            }
+
             const command = new EditUserCommand(id, name, communicationType);
             const updatedUser = await this.commandBus.dispatch(command) as UserAggregate;
 
@@ -98,9 +107,13 @@ export class EditUserController {
         } catch (error) {
             if (error instanceof UserNotFoundError) {
                 res.status(404).json({ error: error.message });
-            } else if (error instanceof Error) {
+            } else if (error instanceof InvalidInputError || 
+                      error instanceof InvalidUserIdError || 
+                      error instanceof InvalidUserNameError || 
+                      error instanceof InvalidCommunicationTypeError) {
                 res.status(400).json({ error: error.message });
             } else {
+                console.error('Error al actualizar usuario:', error);
                 res.status(500).json({ error: 'Error interno del servidor' });
             }
         }

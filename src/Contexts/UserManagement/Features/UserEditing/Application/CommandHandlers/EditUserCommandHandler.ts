@@ -32,9 +32,25 @@ export class EditUserCommandHandler implements ICommandHandler<EditUserCommand> 
                 throw new UserNotFoundError(userId.value);
             }
 
-            const updatedName = command.name ? UserName.create(command.name) : undefined;
-            const updatedCommunicationType = command.communicationType ? 
-                CommunicationType.create(command.communicationType) : undefined;
+            let updatedName: UserName | undefined;
+            let updatedCommunicationType: CommunicationType | undefined;
+
+            try {
+                if (command.name) {
+                    updatedName = UserName.create(command.name);
+                }
+                if (command.communicationType) {
+                    updatedCommunicationType = CommunicationType.create(command.communicationType);
+                }
+            } catch (error) {
+                if (error instanceof InvalidUserNameError) {
+                    throw new InvalidInputError('El nombre debe tener al menos 3 caracteres');
+                }
+                if (error instanceof InvalidCommunicationTypeError) {
+                    throw new InvalidInputError('El tipo de comunicación debe ser SMS, EMAIL o CONSOLE');
+                }
+                throw error;
+            }
 
             const updatedUser = user.update(updatedName, updatedCommunicationType);
             const savedUser = await this.userRepository.update(userId, updatedUser);
@@ -58,6 +74,7 @@ export class EditUserCommandHandler implements ICommandHandler<EditUserCommand> 
                 error instanceof UserNotFoundError) {
                 throw error;
             }
+            console.error('Error al editar el usuario:', error);
             throw new Error('Error al editar el usuario: ' + (error instanceof Error ? error.message : 'Error desconocido'));
         }
     }
