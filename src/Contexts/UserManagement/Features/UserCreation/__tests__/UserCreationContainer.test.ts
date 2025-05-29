@@ -1,4 +1,4 @@
-import { UserCreationContainer } from '../UserCreationContainer';
+import { UserCreationContainer } from '../Infrastructure/Container/UserCreationContainer';
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { CommandBus } from '@shared/Infrastructure/CommandBus/CommandBus';
@@ -6,8 +6,6 @@ import { CreateUserV1Controller } from '@userManagement/Features/UserCreation/In
 import { CreateUserV2Controller } from '@userManagement/Features/UserCreation/Interfaces/Controllers/CreateUserV2Controller';
 import { CreateUserV1Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV1Command';
 import { CreateUserV2Command } from '@userManagement/Features/UserCreation/Application/Commands/CreateUserV2Command';
-import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
-import { ICommandHandler } from '@shared/Infrastructure/CommandBus/ICommandHandler';
 
 describe('UserCreationContainer', () => {
     let mockUserRepository: jest.Mocked<IUserRepository>;
