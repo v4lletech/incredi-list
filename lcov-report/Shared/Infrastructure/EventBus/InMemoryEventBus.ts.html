@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64.28% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">42.85% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">61.53% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -92,27 +92,27 @@
 <a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30x</span>
-<span class="cline-any cline-yes">30x</span>
-<span class="cline-any cline-yes">30x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">18x</span>
-<span class="cline-any cline-yes">18x</span>
-<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
@@ -123,7 +123,7 @@ export class InMemoryEventBus implements IEventBus {
 &nbsp;
     async publish(event: DomainEvent): Promise&lt;void&gt; {
         const eventName = event.constructor.name;
-        const eventHandlers = this.handlers.get(eventName) || <span class="branch-1 cbranch-no" title="branch not covered" >[];</span>
+        const eventHandlers = this.handlers.get(eventName) || [];
         await Promise.all(eventHandlers.map(handler =&gt; handler(event)));
     }
 &nbsp;
@@ -133,12 +133,12 @@ export class InMemoryEventBus implements IEventBus {
         this.handlers.set(eventName, handlers);
     }
 &nbsp;
-<span class="fstat-no" title="function not covered" >    unsubscribe(</span>eventName: string, handler: (event: DomainEvent) =&gt; Promise&lt;void&gt;): void {
-        const handlers = <span class="cstat-no" title="statement not covered" >this.handlers.get(eventName) || [];</span>
-        const index = <span class="cstat-no" title="statement not covered" >handlers.indexOf(handler);</span>
-<span class="cstat-no" title="statement not covered" >        <span class="missing-if-branch" title="if path not taken" >I</span>if (index &gt; -1) {</span>
-<span class="cstat-no" title="statement not covered" >            handlers.splice(index, 1);</span>
-<span class="cstat-no" title="statement not covered" >            this.handlers.set(eventName, handlers);</span>
+    unsubscribe(eventName: string, handler: (event: DomainEvent) =&gt; Promise&lt;void&gt;): void {
+        const handlers = this.handlers.get(eventName) || [];
+        const index = handlers.indexOf(handler);
+        if (index &gt; -1) {
+            handlers.splice(index, 1);
+            this.handlers.set(eventName, handlers);
         }
     }
 } </pre></td></tr></table></pre>
@@ -148,7 +148,7 @@ export class InMemoryEventBus implements IEventBus {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-28T17:37:00.391Z
+                at 2025-05-29T02:30:52.198Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

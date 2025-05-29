@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.58% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.58% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -95,68 +95,71 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">23x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-yes">16x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ICommandHandler } from '@shared/Infrastructure/CommandBus/ICommandHandler';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { AggregateRoot } from '@shared/Domain/Aggregates/AggregateRoot';
+import { ICommandHandler } from '@shared/Infrastructure/CommandBus/ICommandHandler';
 &nbsp;
 export class CommandBus {
     private handlers: Map&lt;string, ICommandHandler&lt;any&gt;&gt; = new Map();
 &nbsp;
     register(commandName: string, handler: ICommandHandler&lt;any&gt;): void {
         if (this.handlers.has(commandName)) {
-            console.warn(`Handler already registered for command ${commandName}, overwriting...`);
+            console.warn(`Advertencia: Sobrescribiendo handler para comando ${commandName}`);
         }
         this.handlers.set(commandName, handler);
         console.log(`Handler registered for command ${commandName}`);
     }
 &nbsp;
-    async dispatch(command: any): Promise&lt;void&gt; {
+    async dispatch(command: any): Promise&lt;AggregateRoot&gt; {
         const commandName = command.constructor.name;
         console.log(`Dispatching command: ${commandName}`);
         
         const handler = this.handlers.get(commandName);
         
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (!handler) {
-<span class="cstat-no" title="statement not covered" >            console.error(`No handler registered for command ${commandName}`);</span>
-<span class="cstat-no" title="statement not covered" >            console.log('Available handlers:', Array.from(this.handlers.keys()));</span>
-<span class="cstat-no" title="statement not covered" >            throw new Error(`No handler registered for command ${commandName}`);</span>
+        if (!handler) {
+            console.error(`No hay handler registrado para el comando ${commandName}`);
+            console.log('Available handlers:', Array.from(this.handlers.keys()));
+            throw new Error(`No hay handler registrado para el comando ${commandName}`);
         }
 &nbsp;
         try {
-            await handler.execute(command);
+            return await handler.execute(command);
         } catch (error) {
-<span class="cstat-no" title="statement not covered" >            console.error(`Error dispatching command ${commandName}:`, error);</span>
-<span class="cstat-no" title="statement not covered" >            throw error;</span>
+            console.error(`Error al despachar comando ${commandName}:`, error);
+            throw error;
         }
     }
 } </pre></td></tr></table></pre>
@@ -166,7 +169,7 @@ export class CommandBus {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-28T17:37:00.391Z
+                at 2025-05-29T02:30:52.198Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
