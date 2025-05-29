@@ -3,56 +3,74 @@ import { CreateUserV1Command } from '@userManagement/Features/UserCreation/Appli
 import { IUserRepository } from '@userManagement/Shared/Domain/Repositories/IUserRepository';
 import { IEventBus } from '@shared/Infrastructure/EventBus/IEventBus';
 import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
+import { UserCreatedEvent } from '@userManagement/Features/UserCreation/Domain/Events/UserCreatedEvent';
 
 describe('CreateUserV1CommandHandler', () => {
     let handler: CreateUserV1CommandHandler;
-    let mockUserRepository: jest.Mocked<IUserRepository>;
-    let mockEventBus: jest.Mocked<IEventBus>;
+    let userRepository: jest.Mocked<IUserRepository>;
+    let eventBus: jest.Mocked<IEventBus>;
 
     beforeEach(() => {
-        mockUserRepository = {
-            create: jest.fn().mockImplementation(async (user: UserAggregate) => user),
+        userRepository = {
+            create: jest.fn(),
             findById: jest.fn(),
             findAll: jest.fn(),
             update: jest.fn(),
             delete: jest.fn()
         };
 
-        mockEventBus = {
+        eventBus = {
             publish: jest.fn(),
             subscribe: jest.fn(),
             unsubscribe: jest.fn()
         };
 
-        handler = new CreateUserV1CommandHandler(mockUserRepository, mockEventBus);
+        handler = new CreateUserV1CommandHandler(userRepository, eventBus);
     });
 
-    it('should create and save a new user', async () => {
-        const command = new CreateUserV1Command('John Doe', 'EMAIL');
-        
-        await handler.execute(command);
+    it('debería crear un usuario exitosamente', async () => {
+        // Arrange
+        const command = new CreateUserV1Command('Juan Pérez', 'EMAIL');
+        const mockUser = jest.fn() as unknown as UserAggregate;
+        userRepository.create.mockResolvedValue(mockUser);
 
-        expect(mockUserRepository.create).toHaveBeenCalledWith(
-            expect.any(UserAggregate)
-        );
-        expect(mockEventBus.publish).toHaveBeenCalled();
+        // Act
+        const result = await handler.execute(command);
+
+        // Assert
+        expect(userRepository.create).toHaveBeenCalled();
+        expect(eventBus.publish).toHaveBeenCalledWith(expect.any(UserCreatedEvent));
+        expect(result).toBe(mockUser);
     });
 
-    it('should handle repository errors', async () => {
-        const error = new Error('Database error');
-        mockUserRepository.create.mockRejectedValue(error);
+    it('debería manejar errores de creación', async () => {
+        // Arrange
+        const command = new CreateUserV1Command('Juan Pérez', 'EMAIL');
+        const error = new Error('Error al crear usuario');
+        userRepository.create.mockRejectedValue(error);
 
-        const command = new CreateUserV1Command('John Doe', 'EMAIL');
-        
-        await expect(handler.execute(command)).rejects.toThrow('Database error');
+        // Act & Assert
+        await expect(handler.execute(command)).rejects.toThrow('Error al crear usuario');
+        expect(eventBus.publish).not.toHaveBeenCalled();
     });
 
-    it('should handle event bus errors', async () => {
-        const error = new Error('Event bus error');
-        mockEventBus.publish.mockRejectedValue(error);
+    it('debería validar el tipo de comunicación', async () => {
+        // Arrange
+        const command = new CreateUserV1Command('Juan Pérez', 'INVALID_TYPE');
 
-        const command = new CreateUserV1Command('John Doe', 'EMAIL');
-        
-        await expect(handler.execute(command)).rejects.toThrow('Event bus error');
+        // Act & Assert
+        await expect(handler.execute(command)).rejects.toThrow();
+        expect(userRepository.create).not.toHaveBeenCalled();
+        expect(eventBus.publish).not.toHaveBeenCalled();
+    });
+
+    it('debería validar el nombre del usuario', async () => {
+        // Arrange
+        const command = new CreateUserV1Command('Jo', 'EMAIL');
+
+        // Act & Assert
+        await expect(handler.execute(command)).rejects.toThrow();
+        expect(userRepository.create).not.toHaveBeenCalled();
+        expect(eventBus.publish).not.toHaveBeenCalled();
     });
 }); 

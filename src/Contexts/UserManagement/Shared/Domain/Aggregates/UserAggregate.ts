@@ -25,7 +25,7 @@ export class UserAggregate extends AggregateRoot {
     public static create(id: UserId, name: UserName, communicationType: CommunicationType): UserAggregate {
         const user = new UserAggregate(id, name, communicationType);
         //TODO: refactor to use UserCreatedEvent; no se debe lanzar el evento desde el constructor
-        user.addDomainEvent(new UserCreatedEvent(id, name, communicationType));
+        //user.addDomainEvent(new UserCreatedEvent(id, name, communicationType));
         return user;
     }
 

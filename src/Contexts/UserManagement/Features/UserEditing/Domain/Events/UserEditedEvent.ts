@@ -5,9 +5,11 @@ import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/Co
 
 export class UserEditedEvent extends DomainEvent {
     constructor(
-        public readonly id: UserId,
-        public readonly name: UserName,
-        public readonly communicationType: CommunicationType
+        public readonly userId: UserId,
+        public readonly oldName: UserName,
+        public readonly newName: UserName,
+        public readonly oldCommunicationType: CommunicationType,
+        public readonly newCommunicationType: CommunicationType
     ) {
         super('UserEditedEvent');
     }

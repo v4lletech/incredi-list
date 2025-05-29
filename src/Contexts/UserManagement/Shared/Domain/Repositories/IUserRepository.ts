@@ -1,5 +1,5 @@
-import { UserAggregate } from '@userManagement/Features/UserCreation/Domain/Aggregates/UserAggregate';
-import { UserId } from '@userManagement/Features/UserCreation/Domain/ValueObjects/UserId';
+import { UserAggregate } from '@userManagement/Shared/Domain/Aggregates/UserAggregate';
+import { UserId } from '@userManagement/Shared/Domain/ValueObjects/UserId';
 
 export interface IUserRepository {
     create(user: UserAggregate): Promise<UserAggregate>;

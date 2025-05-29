@@ -41,7 +41,9 @@ export class EditUserCommandHandler implements ICommandHandler<EditUserCommand> 
             
             const event = new UserEditedEvent(
                 savedUser.id,
+                user.name,
                 savedUser.name,
+                user.communicationType,
                 savedUser.communicationType
             );
             
