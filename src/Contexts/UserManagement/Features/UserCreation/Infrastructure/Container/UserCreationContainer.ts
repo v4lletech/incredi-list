@@ -40,6 +40,10 @@ export class UserCreationContainer {
     }
 
     getController(version: string): ICreateUserController {
+        if (version !== 'v1' && version !== 'v2') {
+            throw new Error(`Versión de controlador no soportada: ${version}`);
+        }
+
         if (!this.controllers.has(version)) {
             const controller = version === 'v1' 
                 ? new CreateUserV1Controller(this.commandBus)

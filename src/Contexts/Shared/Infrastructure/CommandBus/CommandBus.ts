@@ -6,7 +6,7 @@ export class CommandBus {
 
     register(commandName: string, handler: ICommandHandler<any>): void {
         if (this.handlers.has(commandName)) {
-            console.warn(`Handler already registered for command ${commandName}, overwriting...`);
+            console.warn(`Advertencia: Sobrescribiendo handler para comando ${commandName}`);
         }
         this.handlers.set(commandName, handler);
         console.log(`Handler registered for command ${commandName}`);
@@ -19,15 +19,15 @@ export class CommandBus {
         const handler = this.handlers.get(commandName);
         
         if (!handler) {
-            console.error(`No handler registered for command ${commandName}`);
+            console.error(`No hay handler registrado para el comando ${commandName}`);
             console.log('Available handlers:', Array.from(this.handlers.keys()));
-            throw new Error(`No handler registered for command ${commandName}`);
+            throw new Error(`No hay handler registrado para el comando ${commandName}`);
         }
 
         try {
             return await handler.execute(command);
         } catch (error) {
-            console.error(`Error dispatching command ${commandName}:`, error);
+            console.error(`Error al despachar comando ${commandName}:`, error);
             throw error;
         }
     }

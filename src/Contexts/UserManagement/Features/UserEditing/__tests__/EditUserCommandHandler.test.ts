@@ -9,6 +9,9 @@ import { CommunicationType } from '@userManagement/Shared/Domain/ValueObjects/Co
 import { UserEditedEvent } from '@userManagement/Features/UserEditing/Domain/Events/UserEditedEvent';
 import { UserNotFoundError } from '@userManagement/Features/UserEditing/Domain/Errors/UserNotFoundError';
 import { InvalidInputError } from '@userManagement/Features/UserEditing/Domain/Errors/InvalidInputError';
+import { InvalidUserIdError } from '@userManagement/Shared/Domain/Errors/InvalidUserIdError';
+import { InvalidUserNameError } from '@userManagement/Shared/Domain/Errors/InvalidUserNameError';
+import { InvalidCommunicationTypeError } from '@userManagement/Shared/Domain/Errors/InvalidCommunicationTypeError';
 
 describe('EditUserCommandHandler', () => {
     let handler: EditUserCommandHandler;
@@ -99,7 +102,7 @@ describe('EditUserCommandHandler', () => {
         userRepository.findById.mockResolvedValue(mockUser);
 
         // Act & Assert
-        await expect(handler.execute(command)).rejects.toThrow();
+        await expect(handler.execute(command)).rejects.toThrow(InvalidInputError);
         expect(userRepository.update).not.toHaveBeenCalled();
         expect(eventBus.publish).not.toHaveBeenCalled();
     });
@@ -110,8 +113,60 @@ describe('EditUserCommandHandler', () => {
         userRepository.findById.mockResolvedValue(mockUser);
 
         // Act & Assert
-        await expect(handler.execute(command)).rejects.toThrow();
+        await expect(handler.execute(command)).rejects.toThrow(InvalidInputError);
         expect(userRepository.update).not.toHaveBeenCalled();
         expect(eventBus.publish).not.toHaveBeenCalled();
+    });
+
+    it('debería manejar errores del repositorio', async () => {
+        // Arrange
+        const command = new EditUserCommand('123', 'Juan Pérez Actualizado', 'SMS');
+        userRepository.findById.mockResolvedValue(mockUser);
+        userRepository.update.mockRejectedValue(new Error('Error de base de datos'));
+
+        // Act & Assert
+        await expect(handler.execute(command)).rejects.toThrow('Error al editar el usuario: Error de base de datos');
+        expect(eventBus.publish).not.toHaveBeenCalled();
+    });
+
+    it('debería manejar errores del eventBus', async () => {
+        // Arrange
+        const command = new EditUserCommand('123', 'Juan Pérez Actualizado', 'SMS');
+        userRepository.findById.mockResolvedValue(mockUser);
+        userRepository.update.mockResolvedValue(mockUser);
+        eventBus.publish.mockRejectedValue(new Error('Error al publicar evento'));
+
+        // Act & Assert
+        await expect(handler.execute(command)).rejects.toThrow('Error al editar el usuario: Error al publicar evento');
+    });
+
+    it('debería actualizar solo el nombre cuando solo se proporciona nombre', async () => {
+        // Arrange
+        const command = new EditUserCommand('123', 'Juan Pérez Actualizado', undefined);
+        userRepository.findById.mockResolvedValue(mockUser);
+        userRepository.update.mockResolvedValue(mockUser);
+
+        // Act
+        const result = await handler.execute(command);
+
+        // Assert
+        expect(userRepository.update).toHaveBeenCalled();
+        expect(eventBus.publish).toHaveBeenCalledWith(expect.any(UserEditedEvent));
+        expect(result).toBe(mockUser);
+    });
+
+    it('debería actualizar solo el tipo de comunicación cuando solo se proporciona tipo de comunicación', async () => {
+        // Arrange
+        const command = new EditUserCommand('123', undefined, 'SMS');
+        userRepository.findById.mockResolvedValue(mockUser);
+        userRepository.update.mockResolvedValue(mockUser);
+
+        // Act
+        const result = await handler.execute(command);
+
+        // Assert
+        expect(userRepository.update).toHaveBeenCalled();
+        expect(eventBus.publish).toHaveBeenCalledWith(expect.any(UserEditedEvent));
+        expect(result).toBe(mockUser);
     });
 }); 
